@@ -1,22 +1,16 @@
 /*******************************************************
-*
 *	            2.5" CIM Motor
-*
 *******************************************************/
 
 ======================
    Specifications
 ======================
 
-Physical specs
-
 Size: 2.5 inch diameter, 4.34 inch long body
 Output Shaft size: 0.313 +/- 0.0004, with 2mm keyway
 Weight: 2.82 pounds
 Mounting Holes: #10-32 tapped holes (2), on a 2" bolt circle
 Wire Gauge: 14 AWG
-
-Performance Specs:
 
 Voltage: 12 volt DC
 No load RPM: 5,310 (+/- 10%)
