@@ -3,7 +3,12 @@ project(gorgon_node)
 
 find_package(catkin REQUIRED COMPONENTS
   rospy
+  rospy
+  std_msgs
+  message_generation
 )
 
-catkin_package()
-
+find_package(message_generation)
+add_message_files(FILES custom.msg)
+generate_messages(DEPENDENCIES std_msgs)
+catkin_package(CATKIN_DEPENDS message_runtime)
