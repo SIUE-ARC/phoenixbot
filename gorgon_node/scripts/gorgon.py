@@ -46,8 +46,18 @@ def readEncoder():
 		rospy.loginfo(encoder[i])
 	joint.position = encoder
 
-
-
+def findVelocity():      #Find velocity and name of an encoder
+	velocity = range(0,8)
+	Name = range(0,8)
+	position1 = joint.position
+	rate = rospy.Rate(10)
+	readEncoder()
+	position2 = joint.position
+	for i in range(0,8):
+		velocity[i] = (position2[i]-position1[i])/0.1 #In rad/sec
+		Name[i] = "Encoder" +str(i)
+	joint.velocity = velocity
+	joint.name = Name
 
 
 
@@ -75,6 +85,7 @@ if __name__ == "__main__":
     while not rospy.is_shutdown():
 	readAnalog()
 	readEncoder()
+	findVelocity()
 	joint_state_pub.publish(joint)
         rate.sleep()
 
