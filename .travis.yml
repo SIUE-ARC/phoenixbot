@@ -1,0 +1,9 @@
+services:
+      - docker
+
+before_install:
+      - docker pull ros:kinetic-ros-base
+
+script:
+    - docker build .
+
