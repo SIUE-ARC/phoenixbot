@@ -8,9 +8,6 @@
 
 #include <geometry_msgs/TransformStamped.h>
 #include <math.h>
-#include <mavros_msgs/CommandBool.h>
-#include <mavros_msgs/SetMode.h>
-#include <mavros_msgs/State.h>
 #include <ros/ros.h>
 #include <string>
 #include <tf2/LinearMath/Quaternion.h>

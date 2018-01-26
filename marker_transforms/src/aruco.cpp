@@ -23,7 +23,7 @@ Aruco::Aruco(int dictionaryId) {
                         cv::aruco::PREDEFINED_DICTIONARY_NAME(this->dictionaryId));
         }
         this->detectorParams = cv::aruco::DetectorParameters::create();
-        this->detectorParams->doCornerRefinement = true;
+        //this->detectorParams->doCornerRefinement = true;
         if (!this->setCameraCalibration(
                     "$HOME/phoenixbot/logitech.yml")) {
                 std::cout << "Could not Open the camera calibration file" << std::endl;
