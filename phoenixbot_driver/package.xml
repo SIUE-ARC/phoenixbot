@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>phoenixbot_driver</name>
+  <version>0.0.0</version>
+  <description>The phoenixbot_driver package</description>
+
+  <maintainer email="zach.inbox@gmail.com">Zach Anderson</maintainer>
+  <author email="zach.inbox@gmail.com">Zach Anderson</author>
+
+  <license>GPLv3</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>hardware_interface</build_depend>
+  <build_depend>controller_manager</build_depend>
+
+  <exec_depend>hardware_interface</exec_depend>
+  <exec_depend>controller_manager</exec_depend>
+
+  <export></export>
+</package>
