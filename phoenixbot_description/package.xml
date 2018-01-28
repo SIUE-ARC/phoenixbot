@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>phoenixbot_description</name>
+  <version>0.0.0</version>
+  <description>The phoenixbot_description package</description>
+
+  <maintainer email="zach.inbox@gmail.com">Zach Anderson</maintainer>
+  <author email="zach.inbox@gmail.com">Zach Anderson</author>
+
+  <license>GPLv3</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>xacro</build_depend>
+
+  <export>
+  </export>
+</package>

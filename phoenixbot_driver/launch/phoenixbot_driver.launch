@@ -2,8 +2,8 @@
 <launch>
     <arg name="gazebo" default="false" /> 
 
-    <!-- TODO Create robot description -->
-    <!--<param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf" />-->
+    <!-- Load robot description -->
+    <param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf" />
 
     <!-- Spawn simulation model if running in gazebo mode -->
     <node if="$(arg gazebo)" name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
