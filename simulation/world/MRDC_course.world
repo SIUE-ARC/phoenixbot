@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<sdf version="1.4">
+  <world name="default">
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <model name="MRDC_field">
+      <pose>160 -160 35  1.5708 0 0</pose>
+      <static>true</static>
+      <link name="body">
+        <visual name="visual">
+          <geometry>
+            <mesh>
+	      <scale>1.5 1.5 1.5</scale>
+	      <uri>file://MRDC2017(0.1).dae</uri>
+	    </mesh>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>
+
+
+
+MRDC2017(0.1).dae is the one that works.
