@@ -8,13 +8,13 @@
       <uri>model://sun</uri>
     </include>
     <model name="MRDC_field">
-      <pose>160 -160 35  1.5708 0 0</pose>
+      <pose>13.75 -11.5 2  1.5708 0 0</pose>
       <static>true</static>
       <link name="body">
         <visual name="visual">
           <geometry>
             <mesh>
-	      <scale>1.5 1.5 1.5</scale>
+	      <scale>0.1 0.1 0.1</scale>
 	      <uri>file://MRDC2017(0.1).dae</uri>
 	    </mesh>
           </geometry>
@@ -27,3 +27,4 @@
 
 
 MRDC2017(0.1).dae is the one that works.
+(Pose:160 -160 35  1.5708 0 0) 
