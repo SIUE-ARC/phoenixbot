@@ -6,7 +6,7 @@ int main(int argc, char **argv) {
     ros::init(argc, argv, "phoenixbot_driver");
 
     // TODO Move to param server
-    PhoenixbotInterface interface("dev/ttyUSB0", 19200, 250);
+    PhoenixbotInterface interface("/dev/ttyACM0", 115200, 250);
     controller_manager::ControllerManager cm(&interface);
 
     // Spin off a thread to handle ROS interactions so main thread remains realtime

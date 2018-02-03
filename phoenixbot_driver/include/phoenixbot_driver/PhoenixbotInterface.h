@@ -5,6 +5,8 @@
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/robot_hw.h>
 
+#include <serial/serial.h>
+
 class PhoenixbotInterface : public hardware_interface::RobotHW {
 public:
     PhoenixbotInterface(std::string port, int baud, int timeout);
@@ -14,6 +16,7 @@ public:
     void write();
 
 private:
+    serial::Serial arduino;
     hardware_interface::JointStateInterface stateInterface;
     hardware_interface::VelocityJointInterface velocityCommandInterface;
     hardware_interface::PositionJointInterface positionCommandInterface;

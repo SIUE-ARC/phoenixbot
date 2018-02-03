@@ -1,6 +1,10 @@
 #include "phoenixbot_driver/PhoenixbotInterface.h"
 
-PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout) {
+#include <sstream>
+
+PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout)
+    : arduino(port, baud, serial::Timeout::simpleTimeout(timeout))
+{
     // Setup ros_control interfaces
     // State Handles
     hardware_interface::JointStateHandle leftStateHandle          ("left_wheel_joint",     pos + 0, vel + 0, eff + 0);
@@ -42,6 +46,10 @@ PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout
     positionCommandInterface.registerHandle(simonXAxisPositionHandle);
     positionCommandInterface.registerHandle(simonYAxisPositionHandle);
 
+    registerInterface(&stateInterface);
+    registerInterface(&velocityCommandInterface);
+    registerInterface(&positionCommandInterface);
+
     // TODO Initalize communication with arduino
 }
 
@@ -58,6 +66,14 @@ void PhoenixbotInterface::read() {
 
 // Push commands to the robot
 void PhoenixbotInterface::write() {
+    std::stringstream serialString;
+
+    serialString << "M L " << (int)(cmdVel[0] * 500) << "\r";
+    arduino.write(serialString.str());
+
+    serialString << "M R " << (int)(cmdVel[1] * 500) << "\r";
+    arduino.write(serialString.str());
+
     // TODO Convert from radiens to steps
     // TODO Send step targets to stepper motors
     // TODO Send velocity targets to drive motors

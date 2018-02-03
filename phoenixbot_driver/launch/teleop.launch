@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="joy" type="joy_node" pkg="joy"/>
+    <remap from="cmd_vel" to="/move_base_controller/cmd_vel"/>
+    <node name="teleop" type="teleop_node" pkg="teleop_twist_joy">
+        <param name="scale_linear" value="1.0"/>
+        <param name="scale_angular" value="1.0"/>
+    </node>
+</launch>
+
