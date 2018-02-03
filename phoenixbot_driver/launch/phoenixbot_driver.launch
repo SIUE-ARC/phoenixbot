@@ -1,20 +1,18 @@
 <?xml version="1.0"?>
 <launch>
-    <arg name="gazebo" default="false" /> 
+    <arg name="sim" default="false" />
 
     <!-- Load robot description -->
     <param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf" />
 
-    <!-- Spawn simulation model if running in gazebo mode -->
-    <node if="$(arg gazebo)" name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-      args="-urdf -model phoenixbot -param robot_description"/>
-
     <!-- Spawn hardware interface if running in real mode -->
-    <node unless="$(arg gazebo)" name="phoenixbot_driver" pkg="phoenixbot_driver" type="phoenixbot_driver"/>
+    <node unless="$(arg sim)" name="phoenixbot_driver" pkg="phoenixbot_driver" type="phoenixbot_driver" output="screen"/>
 
     <!-- Launch the controllers -->
     <rosparam file="$(find phoenixbot_driver)/config/controllers.yaml" command="load"/>
-    <node name="controller_spawner" pkg="controller_manager" type="spawner"
-          args="state_controller move_base_controller front_arm_controller simon_gantry_controller --shutdown-timeout 1"/>
+    <node output="screen" name="controller_spawner" pkg="controller_manager" type="spawner"
+          args="move_base_controller state_controller --shutdown-timeout 1"/>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 </launch>
 

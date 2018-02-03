@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!-- Load robot description -->
+    <param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf" />
+
+    <!-- Set use_sim_time early so no issues -->
+    <param name="use_sim_time" value="$(arg sim)"/>
+
+    <!-- Launch robot control -->
+    <group if="$(arg sim)">
+        <!-- Launch gazebo if in simulation mode-->
+        <!-- TODO Use course world -->
+        <include file="$(find gazebo_ros)/launch/empty_world.launch">
+            <arg name="gui" value="false"/>
+        </include>
+        <node if="$(arg gui)" required="true" name="gzclient" pkg="gazebo_ros" type="gzclient"/>
+
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false"
+          args="-urdf -z 2 -x 0 -y 0 -model phoenixbot -param robot_description"/>
+    </group>
+
+    <!-- Launch hardware arm control -->
+    <include file="$(find phoenixbot_driver)/launch/phoenixbot_driver.launch">
+        <arg name="sim" value="$(arg sim)"/>
+    </include>
+</launch>
+
