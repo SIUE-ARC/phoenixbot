@@ -19,14 +19,14 @@ private:
     serial::Serial arduino;
     hardware_interface::JointStateInterface stateInterface;
     hardware_interface::VelocityJointInterface velocityCommandInterface;
-    hardware_interface::PositionJointInterface positionCommandInterface;
+    hardware_interface::EffortJointInterface effortCommandInterface;
 
-    double pos[7];
-    double vel[7];
-    double eff[7];
+    double pos[5];
+    double vel[5];
+    double eff[5];
 
     double cmdVel[2];
-    double cmdPos[5];
+    double cmdEff[3];
 };
 
 #endif

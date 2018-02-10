@@ -7,50 +7,42 @@ PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout
 {
     // Setup ros_control interfaces
     // State Handles
-    hardware_interface::JointStateHandle leftStateHandle          ("left_wheel_joint",     pos + 0, vel + 0, eff + 0);
-    hardware_interface::JointStateHandle rightStateHandle         ("right_wheel_joint",    pos + 1, vel + 1, eff + 1);
-    hardware_interface::JointStateHandle gripperLiftStateHandle   ("gripper_lift_joint",   pos + 2, vel + 2, eff + 2);
-    hardware_interface::JointStateHandle mobileGripperStateHandle ("mobile_gripper_joint", pos + 3, vel + 3, eff + 3);
-    hardware_interface::JointStateHandle staticGripperStateHandle ("static_gripper_joint", pos + 4, vel + 4, eff + 4);
-    hardware_interface::JointStateHandle simonXAxisStateHandle    ("simon_x_axis_joint",   pos + 5, vel + 5, eff + 5);
-    hardware_interface::JointStateHandle simonYAxisStateHandle    ("simon_y_axis_joint",   pos + 6, vel + 6, eff + 6);
+    hardware_interface::JointStateHandle leftWheelStateHandle          ("left_wheel_joint",     pos + 0, vel + 0, eff + 0);
+    hardware_interface::JointStateHandle righWheeltStateHandle         ("right_wheel_joint",    pos + 1, vel + 1, eff + 1);
+    hardware_interface::JointStateHandle leftRopeStateHandle      ("left_rope_joint",   pos + 2, vel + 2, eff + 2);
+    hardware_interface::JointStateHandle rightRopeStateHandle     ("right_rope_joint", pos + 3, vel + 3, eff + 3);
+    hardware_interface::JointStateHandle simonPusherStateHandle   ("simon_pusher_joint", pos + 4, vel + 4, eff + 4);
 
     // Register state handles
-    stateInterface.registerHandle(leftStateHandle);
-    stateInterface.registerHandle(rightStateHandle);
-    stateInterface.registerHandle(gripperLiftStateHandle);
-    stateInterface.registerHandle(mobileGripperStateHandle);
-    stateInterface.registerHandle(staticGripperStateHandle);
-    stateInterface.registerHandle(simonXAxisStateHandle);
-    stateInterface.registerHandle(simonYAxisStateHandle);
+    stateInterface.registerHandle(leftWheelStateHandle);
+    stateInterface.registerHandle(rightWheelStateHandle);
+    stateInterface.registerHandle(leftRopeStateHandle);
+    stateInterface.registerHandle(rightRopeStateHandle);
+    stateInterface.registerHandle(simonPusherStateHandle);
 
-    // Drive handles
-    hardware_interface::JointHandle leftVelocityHandle  (leftStateHandle,  cmdVel + 0);
-    hardware_interface::JointHandle rightVelocityHandle (rightStateHandle, cmdVel + 1);
+    // Velocity handles
+    hardware_interface::JointHandle leftVelocityHandle  (leftWheelStateHandle,  cmdVel + 0);
+    hardware_interface::JointHandle rightVelocityHandle (rightWheelStateHandle, cmdVel + 1);
 
-    // Register drive handles
+    // Register velocity handles
     velocityCommandInterface.registerHandle(leftVelocityHandle);
     velocityCommandInterface.registerHandle(rightVelocityHandle);
 
-    // Stepper handles
-    hardware_interface::JointHandle gripperLiftPositionHandle   (gripperLiftStateHandle,   cmdPos + 0);
-    hardware_interface::JointHandle mobileGripperPositionHandle (mobileGripperStateHandle, cmdPos + 1);
-    hardware_interface::JointHandle staticGripperPositionHandle (staticGripperStateHandle, cmdPos + 2);
-    hardware_interface::JointHandle simonXAxisPositionHandle    (simonXAxisStateHandle,    cmdPos + 3);
-    hardware_interface::JointHandle simonYAxisPositionHandle    (simonYAxisStateHandle,    cmdPos + 4);
+	// Effort handles
+	hardware_interface::JointHandle leftRopeEffortHandle     (leftRopeStateHandle, cmdEff + 0);
+	hardware_interface::JointHandle rightRopeEffortHandle    (rightRopeStateHandle, cmdEff + 1);
+	hardware_interface::JointHandle simonPusherEffortHandle  (simonPusherStateHandle, cmdEff + 2);
 
-    // Register stepper handles
-    positionCommandInterface.registerHandle(gripperLiftPositionHandle);
-    positionCommandInterface.registerHandle(mobileGripperPositionHandle);
-    positionCommandInterface.registerHandle(staticGripperPositionHandle);
-    positionCommandInterface.registerHandle(simonXAxisPositionHandle);
-    positionCommandInterface.registerHandle(simonYAxisPositionHandle);
+	// Register effort handles
+	effortCommandInterface.registerHandle(leftRopeStateHandle);
+	effortCommandInterface.registerHandle(rightRopeStateHandle);
+	effortCommandInterface.registerHandle(simonPusherStateHandle);
+
 
     registerInterface(&stateInterface);
     registerInterface(&velocityCommandInterface);
-    registerInterface(&positionCommandInterface);
+    registerInterface(&effortCommandInterface);
 
-    // TODO Initalize communication with arduino
 }
 
 // TODO End communication and tear down
@@ -59,7 +51,23 @@ PhoenixbotInterface::~PhoenixbotInterface() {
 
 // Read the state of everything from the robot
 void PhoenixbotInterface::read() {
-    // TODO Read current steps of all stepper motors and convert to radiens
+	arduino.write("E -1\r");
+	String record = arduino.readline();
+	
+    unsigned long tick;
+	int res[2];
+	for(int j = 0; j < 2; j++)
+	{
+		res[j] = ros::param::get("enc" + j + "/resolution");
+	}
+
+	Stringstream ss(record);
+	int i = 0;
+	while(!ss.eof()) {
+		ss >> tick;
+		pos[i] = tick / res[i];
+		i++;
+	}
     // TODO Read current encoder position of drive motors
     // TODO Calculate velocity of drive motors
 }
