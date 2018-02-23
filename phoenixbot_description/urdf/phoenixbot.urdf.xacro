@@ -1,149 +1,26 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="phoenixbot">
-    <xacro:property name="IN" value="0.0254" />
-    <xacro:property name="LBS" value="0.453592" />
+    <!-- Include utility macros and variables -->
+    <xacro:include filename="$(find phoenixbot_description)/urdf/util.xacro" />
 
-    <xacro:macro name="cylinder_inertia" params="mass radius thickness">
-        <xacro:property name="INERTIA" value="${mass/12*(3*radius**2+thickness**2)}"/>
-        <inertial>
-            <mass value="${mass}"/>
-            <inertia ixx="${INERTIA}" iyy="${INERTIA}" izz="${INERTIA}" ixy="0" ixz="0" iyz="0"/>
-        </inertial>
-    </xacro:macro>
+    <!-- Include gazebo elements -->
+    <xacro:include filename="$(find phoenixbot_description)/urdf/phoenixbot.gazebo" />
 
-    <xacro:macro name="wheel" params="name">
-        <link name="${name}">
-            <visual>
-                <origin rpy="${pi/2} 0 0"/>
-                <geometry>
-                    <cylinder length="${1 * IN}" radius="${2 * IN}"/>
-                </geometry>
-            </visual>
+    <!-- Include the chassis -->
+    <xacro:include filename="$(find phoenixbot_description)/urdf/phoenixbot_chassis.xacro" />
 
-            <collision>
-                <origin rpy="${pi/2} 0 0"/>
-                <geometry>
-                    <cylinder length="${1 * IN}" radius="${2 * IN}"/>
-                </geometry>
-            </collision>
+	<link name="front_camera"/>
+	<joint name="front_camera_joint" type="fixed">
+		<parent link="base_link"/>
+		<child link="front_camera"/>
+		<origin xyz="${10.73 * IN} 0 ${24 * IN}"/>
+	</joint>
 
-            <xacro:cylinder_inertia mass="${0.31 * LBS}" radius="${2 * IN}" thickness="${1 * IN}"/>
-        </link>
-	</xacro:macro>
-
-    <gazebo>
-        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-            <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-        </plugin>
-    </gazebo>
-
-    <link name="base_link"/>
-
-    <joint name = "base_link_joint" type="fixed">
-        <parent link="base_link"/>
-        <child link="chassis"/>
-        <origin xyz="0 0 ${1 * IN}"/>
-    </joint>
-
-    <link name="chassis">
-        <visual>
-            <geometry>
-                <box size="${28.31 * IN} ${27.50 * IN} ${3.33 * IN}"/>
-            </geometry>
-        </visual>
-
-        <collision>
-            <geometry>
-                <box size="${28.31 * IN} ${27.50 * IN} ${3.33 * IN}"/>
-            </geometry>
-        </collision>
-
-        <inertial>
-            <mass value="${15 * LBS}"/>
-            <inertia ixx="${1/12*15*LBS*((3.33*IN)**2+(28.31*IN)**2)}"
-                iyy="${1/12*15*LBS*((27.50*IN)**2+(28.31*IN)**2)}"
-                izz="${1/12*15*LBS*((27.50*IN)**2+(3.33*IN)**2)}"
-            ixy="0" ixz="0" iyz="0"/>
-        </inertial>
-    </link>
-
-    <!-- Left wheels -->
-    <xacro:wheel name="left_wheel"/>
-    <xacro:wheel name="left_fwheel"/>
-    <xacro:wheel name="left_rwheel"/>
-
-    <joint name="left_wheel_joint" type="continuous">
-        <axis xyz="0 1 0"/>
-        <origin xyz="0 ${12.82 * IN} 0"/>
-        <parent link="base_link"/>
-        <child link="left_wheel"/>
-    </joint>
-
-    <joint name="left_fwheel_joint" type="continuous">
-        <axis xyz="0 1 0"/>
-        <origin xyz="${10.73 * IN} ${12.82 * IN} ${0.25 * IN}"/>
-        <parent link="base_link"/>
-        <child link="left_fwheel"/>
-        <mimic joint="left_wheel_joint"/>
-    </joint>
-
-    <joint name="left_rwheel_joint" type="continuous">
-        <axis xyz="0 1 0"/>
-        <origin xyz="${-10.73 * IN} ${12.82 * IN} ${0.25 * IN}"/>
-        <parent link="base_link"/>
-        <child link="left_rwheel"/>
-        <mimic joint="left_wheel_joint"/>
-    </joint>
-
-    <!-- Right wheels -->
-    <xacro:wheel name="right_wheel"/>
-    <xacro:wheel name="right_fwheel"/>
-    <xacro:wheel name="right_rwheel"/>
-
-    <joint name="right_wheel_joint" type="continuous">
-        <axis xyz="0 1 0"/>
-        <origin xyz="0 ${-12.82 * IN} 0"/>
-        <parent link="base_link"/>
-        <child link="right_wheel"/>
-    </joint>
-
-    <joint name="right_fwheel_joint" type="continuous">
-        <axis xyz="0 1 0"/>
-        <origin xyz="${10.73 * IN} ${-12.82 * IN} ${0.25 * IN}"/>
-        <parent link="base_link"/>
-        <child link="right_fwheel"/>
-        <mimic joint="right_wheel_joint"/>
-    </joint>
-
-    <joint name="right_rwheel_joint" type="continuous">
-        <axis xyz="0 1 0"/>
-        <origin xyz="${-10.73 * IN} ${-12.82 * IN} ${0.25 * IN}"/>
-        <parent link="base_link"/>
-        <child link="right_rwheel"/>
-        <mimic joint="right_wheel_joint"/>
-    </joint>
-
-    <transmission name="left_wheel_transmission">
-        <type>transmission_interface/SimpleTransmission</type>
-        <joint name="left_wheel_joint">
-            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-        </joint>
-        <actuator name="left_motor">
-            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-            <mechanicalReduction>1</mechanicalReduction>
-        </actuator>
-    </transmission>
-
-    <transmission name="right_wheel_transmission">
-        <type>transmission_interface/SimpleTransmission</type>
-        <joint name="right_wheel_joint">
-            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-        </joint>
-        <actuator name="right_motor">
-            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-            <mechanicalReduction>1</mechanicalReduction>
-		</actuator>
-	</transmission>
-
+	<link name="laser_link"/>
+	<joint name="laser_joint" type="fixed">
+		<parent link="base_link"/>
+		<child link="laser_link"/>
+        <origin xyz="${10.73 * IN} 0 ${5 * IN}"/>
+	</joint>
 </robot>
 
