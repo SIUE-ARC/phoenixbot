@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package>
+  <name>phoenixbot_2dnav</name>
+  <version>0.0.0</version>
+  <description>The phoenixbot_2dnav package</description>
+
+  <maintainer email="zach.inbox@gmail.com">Zach Anderson</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>move_base</run_depend>
+  <run_depend>map_server</run_depend>
+
+  <export></export>
+</package>
+

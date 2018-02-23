@@ -11,18 +11,21 @@
     <group if="$(arg sim)">
         <!-- Launch gazebo if in simulation mode-->
         <!-- TODO Use course world -->
-        <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <include file="$(find simulation)/launch/mrdc.launch">
             <arg name="gui" value="false"/>
         </include>
         <node if="$(arg gui)" required="true" name="gzclient" pkg="gazebo_ros" type="gzclient"/>
 
         <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false"
-          args="-urdf -z 2 -x 0 -y 0 -model phoenixbot -param robot_description"/>
+          args="-urdf -z 2 -x -5.5 -y -5.5 -Y 0.785398 -model phoenixbot -param robot_description"/>
     </group>
 
     <!-- Launch hardware arm control -->
     <include file="$(find phoenixbot_driver)/launch/phoenixbot_driver.launch">
         <arg name="sim" value="$(arg sim)"/>
+    </include>
+
+    <include file="$(find phoenixbot_2dnav)/launch/phoenixbot_nav.launch">
     </include>
 </launch>
 

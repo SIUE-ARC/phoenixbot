@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<sdf version="1.4">
+  <world name="mrdc">
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <model name="field">
+      <pose>13.75 -11.5 2  1.5708 0 0</pose>
+      <static>true</static>
+      <link name="body">
+        <visual name="visual">
+          <geometry>
+            <mesh>
+	          <scale>0.1 0.1 0.1</scale>
+              <uri>file://mrdc.dae</uri>
+	        </mesh>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <mesh>
+	          <scale>0.1 0.1 0.1</scale>
+              <uri>file://mrdc.dae</uri>
+	        </mesh>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+  </world>
+</sdf>
+
