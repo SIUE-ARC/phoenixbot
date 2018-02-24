@@ -1,6 +1,24 @@
 <?xml version="1.0"?>
 
 <launch>
+    <arg name="map" default="false"/>
+
+    <!-- Launch SLAM if no static map supplied -->
+    <group unless="$(arg map)">
+	<node pkg="gmapping" type="slam_gmapping" name="slam">
+	    <param name="scan" value="scan"/>
+	</node>
+    </group>
+
+    <!-- Launch map server and ACML if a static map was supplied -->
+    <group if="$(arg map)">
+	<node pkg="map_server" type="map_server" name="map_server" args="$(arg map)"/>
+	<node pkg="acml" type="acml" name="acml_localization">
+            <param name="scan" value="scan"/>
+	</node>
+    </group>
+
+    <!-- Launch move base -->
     <remap from="cmd_vel" to="move_base_controller/cmd_vel"/>
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
         <rosparam file="$(find phoenixbot_2dnav)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
