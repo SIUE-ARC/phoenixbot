@@ -10,7 +10,6 @@
     <!-- Launch robot control -->
     <group if="$(arg sim)">
         <!-- Launch gazebo if in simulation mode-->
-        <!-- TODO Use course world -->
         <include file="$(find simulation)/launch/mrdc.launch">
             <arg name="gui" value="false"/>
         </include>
