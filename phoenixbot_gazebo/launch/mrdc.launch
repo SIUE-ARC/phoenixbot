@@ -2,8 +2,8 @@
 <launch>
     <arg name="gui" default="true"/>
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
-	<env name="GAZEBO_RESOURCE_PATH" value="$(find simulation)/meshes"/>
-        <arg name="world_name" value="$(find simulation)/worlds/mrdc.world"/>
+	<env name="GAZEBO_RESOURCE_PATH" value="$(find phoenixbot_gazebo)/meshes"/>
+        <arg name="world_name" value="$(find phoenixbot_gazebo)/worlds/mrdc.world"/>
         <arg name="gui" value="$(arg gui)"/>
     </include>
 </launch>
