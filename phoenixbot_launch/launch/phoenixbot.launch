@@ -4,6 +4,9 @@
     <!-- Name of map if using static map -->
     <arg name="map" default=""/>
 
+    <!-- Name of nav map if a different map should be used-->
+    <arg name="nav_map" default=""/>
+
     <!-- Run the robot in gazebo instead of trying to connect to real hardware -->
     <arg name="sim" default="false"/>
 
@@ -38,6 +41,7 @@
 
     <include file="$(find phoenixbot_2dnav)/launch/phoenixbot_nav.launch">
         <arg name="map" value="$(arg map)"/>
+        <arg name="nav_map" value="$(arg nav_map)"/>
     </include>
 
     <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" required="true"

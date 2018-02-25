@@ -3,20 +3,29 @@
 <launch>
     <arg name="map" default=""/>
 
+    <!-- Use a different map for navigation -->
+    <arg name="nav_map" default=""/>
+
     <!-- Launch SLAM if no static map supplied -->
     <group if="$(eval map == '')">
-	<node pkg="gmapping" type="slam_gmapping" name="slam">
-	    <param name="scan" value="scan"/>
-	</node>
+        <node pkg="gmapping" type="slam_gmapping" name="slam">
+            <param name="scan" value="scan"/>
+        </node>
     </group>
 
     <!-- Launch map server and AMCL if a static map was supplied -->
     <group unless="$(eval map == '')">
-    <node pkg="map_server" type="map_server" name="map_server" args="$(find phoenixbot_2dnav)/maps/$(arg map)"/>
-	<node pkg="amcl" type="amcl" name="amcl_localization">
-            <param name="scan" value="scan"/>
-	</node>
+        <node pkg="map_server" type="map_server" name="map_server" args="$(find phoenixbot_2dnav)/maps/$(arg map)"/>
+        <node pkg="amcl" type="amcl" name="amcl_localization">
+                <param name="scan" value="scan"/>
+        </node>
     </group>
+
+    <!-- If a seperate map should be used for navigation bring it up -->
+    <node  unless="$(eval nav_map=='')" ns="nav_map" pkg="map_server" type="map_server" name="nav_map_server" args="$(find phoenixbot_2dnav)/maps/$(arg nav_map)"/>
+    <remap unless="$(eval nav_map=='')" from="map_metadata" to="nav_map/map_metadata"/>
+    <remap unless="$(eval nav_map=='')" from="map" to="nav_map/map"/>
+    <remap unless="$(eval nav_map=='')" from="static_map" to="nav_map/static_map"/>
 
     <!-- Launch move base -->
     <remap from="cmd_vel" to="move_base_controller/cmd_vel"/>
