@@ -1,5 +1,4 @@
 footprint: [[0.359537, 0.34925], [0.359537, -0.34925], [-0.359537, -0.34925], [-0.359537, 0.34925]]
-inflation_radius: 0.15
 transform_tolerance: 0.5
 
 obstacle_range: 2.5
