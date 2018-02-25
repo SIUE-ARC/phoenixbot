@@ -6,16 +6,16 @@
         </plugin>
     </gazebo>
 
-	<!--<gazebo>-->
-		<!--<plugin name="imu_plugin" filename="libgazebo_ros_imu_sensor.so">-->
-			<!--<alwaysOn>true</alwaysOn>-->
-			<!--<bodyName>base_link</bodyName>-->
-			<!--<topicName>imu_data</topicName>-->
-			<!--<serviceName>imu_service</serviceName>-->
-			<!--<gaussianNoise>0.0</gaussianNoise>-->
-			<!--<updateRate>20.0</updateRate>-->
-		<!--</plugin>-->
-	<!--</gazebo>-->
+    <gazebo>
+        <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
+            <alwaysOn>true</alwaysOn>
+            <bodyName>base_link</bodyName>
+            <topicName>imu_data</topicName>
+            <serviceName>imu_service</serviceName>
+            <gaussianNoise>0.0</gaussianNoise>
+            <updateRate>20.0</updateRate>
+        </plugin>
+    </gazebo>
 
     <gazebo reference="laser_link">
         <sensor type="ray" name="laser">

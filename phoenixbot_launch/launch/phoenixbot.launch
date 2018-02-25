@@ -39,10 +39,15 @@
         <arg name="sim" value="$(arg sim)"/>
     </include>
 
-    <include file="$(find phoenixbot_2dnav)/launch/phoenixbot_nav.launch">
+    <!-- Launch localization -->
+    <include file="$(find phoenixbot_launch)/launch/phoenixbot_localization.launch">
         <arg name="map" value="$(arg map)"/>
-        <arg name="nav_map" value="$(arg nav_map)"/>
     </include>
+
+    <!-- Launch navigation -->
+    <!--<include file="$(find phoenixbot_2dnav)/launch/phoenixbot_nav.launch">-->
+        <!--<arg name="map" value="$(arg nav_map)"/>-->
+    <!--</include>-->
 
     <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" required="true"
         args="--display-config $(find phoenixbot_launch)/config/phoenixbot.rviz"/>
