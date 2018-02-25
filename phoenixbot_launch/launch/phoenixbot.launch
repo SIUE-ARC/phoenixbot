@@ -10,6 +10,9 @@
     <!-- Display gzclient during launch -->
     <arg name="gui" default="false"/>
 
+    <!-- Display rviz with proper config during launch -->
+    <arg name="rviz" default="$(arg sim)"/>
+
     <!-- Load robot description -->
     <param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf" />
 
@@ -36,5 +39,8 @@
     <include file="$(find phoenixbot_2dnav)/launch/phoenixbot_nav.launch">
         <arg name="map" value="$(arg map)"/>
     </include>
+
+    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" required="true"
+        args="--display-config $(find phoenixbot_launch)/config/phoenixbot.rviz"/>
 </launch>
 
