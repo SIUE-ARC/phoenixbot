@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 
 <launch>
-    <arg name="map" default="false"/>
+    <arg name="map" default=""/>
 
     <!-- Launch SLAM if no static map supplied -->
-    <group unless="$(arg map)">
+    <group if="$(eval map == '')">
 	<node pkg="gmapping" type="slam_gmapping" name="slam">
 	    <param name="scan" value="scan"/>
 	</node>
     </group>
 
-    <!-- Launch map server and ACML if a static map was supplied -->
-    <group if="$(arg map)">
-	<node pkg="map_server" type="map_server" name="map_server" args="$(arg map)"/>
-	<node pkg="acml" type="acml" name="acml_localization">
+    <!-- Launch map server and AMCL if a static map was supplied -->
+    <group unless="$(eval map == '')">
+    <node pkg="map_server" type="map_server" name="map_server" args="$(find phoenixbot_2dnav)/maps/$(arg map)"/>
+	<node pkg="amcl" type="amcl" name="amcl_localization">
             <param name="scan" value="scan"/>
 	</node>
     </group>

@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 
 <launch>
+    <!-- Name of map if using static map -->
+    <arg name="map" default=""/>
+
     <!-- Load robot description -->
     <param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf" />
 
@@ -25,6 +28,7 @@
     </include>
 
     <include file="$(find phoenixbot_2dnav)/launch/phoenixbot_nav.launch">
+        <arg name="map" value="$(arg map)"/>
     </include>
 </launch>
 
