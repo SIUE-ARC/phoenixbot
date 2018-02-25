@@ -4,6 +4,12 @@
     <!-- Name of map if using static map -->
     <arg name="map" default=""/>
 
+    <!-- Run the robot in gazebo instead of trying to connect to real hardware -->
+    <arg name="sim" default="false"/>
+
+    <!-- Display gzclient during launch -->
+    <arg name="gui" default="false"/>
+
     <!-- Load robot description -->
     <param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf" />
 
