@@ -15,8 +15,8 @@
         <node pkg="amcl" type="amcl" name="amcl_localization">
                 <param name="scan" value="scan"/>
                 <param name="tf_broadcast" value="false"/>
-                <param name="initial_pose_x" value="-7"/>
-                <param name="initial_pose_y" value="-7"/>
+                <param name="initial_pose_x" value="2.4384"/>
+                <param name="initial_pose_y" value="2.4384"/>
                 <param name="initial_pose_a" value="0.785398"/>
         </node>
     </group>

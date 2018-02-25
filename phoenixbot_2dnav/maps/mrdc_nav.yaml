@@ -1,6 +1,6 @@
 image: mrdc_nav.png
-resolution: 0.00900894259
-origin: [-8.94588, -8.94588, 0.0]
+resolution: 0.00675287009
+origin: [-6.7056, -6.7056, 0.0]
 free_thresh: 0.196
 occupied_thresh: 0.65
 negate: 0

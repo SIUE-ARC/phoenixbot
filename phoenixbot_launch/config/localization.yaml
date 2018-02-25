@@ -5,7 +5,7 @@ map_frame: map
 odom_frame: odom
 base_link_frame: base_link
 
-initial_state: [-7.0,  -7.0,  0.0,
+initial_state: [2.4384,  2.4384,  0.0,
                0.0,  0.0,  0.785398,
                0.0,  0.0,  0.0,
                0.0,  0.0,  0.0,
