@@ -42,6 +42,22 @@
           </geometry>
         </collision>
       </link>
+      <link name="elements">
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file://elements.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>file://elements.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+      </link>
     </model>
   </world>
 </sdf>
