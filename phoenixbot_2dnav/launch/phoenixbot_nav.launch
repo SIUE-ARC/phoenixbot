@@ -5,7 +5,7 @@
     <arg name="map" default=""/>
 
     <!-- If a map should be used for navigation bring it up -->
-    <node  unless="$(eval map=='')" ns="nav_map" pkg="map_server" type="map_server" name="nav_map_server" args="$(find phoenixbot_2dnav)/maps/$(arg nav_map)"/>
+    <node  unless="$(eval map=='')" ns="nav_map" pkg="map_server" type="map_server" name="nav_map_server" args="$(find phoenixbot_2dnav)/maps/$(arg map)"/>
     <remap unless="$(eval map=='')" from="map_metadata" to="nav_map/map_metadata"/>
     <remap unless="$(eval map=='')" from="map" to="nav_map/map"/>
     <remap unless="$(eval map=='')" from="static_map" to="nav_map/static_map"/>
