@@ -163,7 +163,7 @@ int main(int argc, char **argv) {
     image_transport::Subscriber sub = it.subscribe(IMAGE_TOPIC, 1, colorCallback);
     pub = it.advertise("debug", 1);
 
-    posePub = node.advertise<geometry_msgs::PoseWithCovarianceStamped>("robot_pose", 5);
+    posePub = node.advertise<geometry_msgs::PoseWithCovarianceStamped>("aruco_pose", 5);
 
     ros::spin();
 }

@@ -21,6 +21,16 @@
         </node>
     </group>
 
+    <!-- Launch marker localization -->
+    <!-- TODO Move to hardware launch file -->
+    <node name="usb_cam" type="usb_cam_node" pkg="usb_cam">
+        <param name="video_device" value="/dev/video1"/>
+        <param name="camera_name" value="front_camera"/>
+    </node>
+    <node name="aruco_board" type="aruco_board" pkg="phoenixbot_localization">
+        <rosparam command="load" file="$(find phoenixbot_localization)/config/markers.yaml"/>
+    </node>
+
     <!-- Launch localization filters -->
     <!-- Odom filter -->
     <node name="odom_localization_node" type="ekf_localization_node" pkg="robot_localization">

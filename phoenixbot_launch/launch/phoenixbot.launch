@@ -34,13 +34,12 @@
           args="-urdf -z 0.6096 -x 2.4384 -y 2.4384 -Y 0.785398 -model phoenixbot -param robot_description"/>
     </group>
 
-    <!-- Launch hardware arm control -->
     <include file="$(find phoenixbot_driver)/launch/phoenixbot_driver.launch">
         <arg name="sim" value="$(arg sim)"/>
     </include>
 
     <!-- Launch localization -->
-    <include file="$(find phoenixbot_launch)/launch/phoenixbot_localization.launch">
+    <include file="$(find phoenbixbot_localization)/launch/phoenixbot_localization.launch">
         <arg name="map" value="$(arg map)"/>
     </include>
 

@@ -7,3 +7,10 @@ pose0_config: [true,  true,  false, # x, y, z
                false, false, false, # dr, dp, dy
                false, false, false] # d^2x, d^2y, d^2z
 
+pose1: aruco_pose
+pose1_config: [true,  true,  false, # x, y, z
+               false, false, true,  # r, p, y
+               false, false, false, # dx, dy, dz
+               false, false, false, # dr, dp, dy
+               false, false, false] # d^2x, d^2y, d^2z
+
