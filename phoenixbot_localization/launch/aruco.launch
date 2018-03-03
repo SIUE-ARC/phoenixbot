@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+    <node required="true" output="screen" name="aruco_board" type="aruco_board" pkg="phoenixbot_localization">
+        <rosparam command="load" file="$(find phoenixbot_localization)/config/markers.yaml"/>
+    </node>
+    <node name="usb_cam" type="usb_cam_node" pkg="usb_cam">
+        <param name="video_device" value="/dev/video1"/>
+        <param name="camera_name" value="front_camera"/>
+    </node>
+</launch>
+

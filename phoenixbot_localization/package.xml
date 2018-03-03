@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>phoenixbot_localization</name>
+  <version>0.0.0</version>
+  <description>The phoenixbot_localization package</description>
+
+  <maintainer email="zach.inbox@gmail.com">Zach Anderson</maintainer>
+  <author email="zach.inbox@gmail.com">Zach Anderson</author>
+
+  <license>GPLv3</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export></export>
+</package>
