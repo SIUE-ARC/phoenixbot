@@ -6,20 +6,20 @@ add_definitions(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
     cmake_modules
     cv_bridge
-    OpenCV
-    image_transport
-    geometry_msgs
-    tf2_eigen
     eigen_conversions
-    )
+    geometry_msgs
+    image_transport
+    tf2_eigen
+)
 find_package(Eigen REQUIRED) 
+find_package(OpenCV REQUIRED)
 
 catkin_package()
 
 include_directories(
  ${catkin_INCLUDE_DIRS}
- ${EIGEN3_INCLUDE_DIR}
  ${Eigen_INCLUDE_DIRS}
+ ${OpenCV_INCLUDE_DIRS}
  include
 )
 
@@ -32,5 +32,6 @@ add_dependencies(aruco_board ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORT
 # Specify libraries to link a library or executable target against
 target_link_libraries(aruco_board
   ${catkin_LIBRARIES}
+  ${OpenCV_LIBS}
 )
 
