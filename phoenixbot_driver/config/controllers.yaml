@@ -10,16 +10,12 @@ move_base_controller:
     pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
     twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
 
-front_arm_controller:
-    type: "position_controllers/JointTrajectoryController"
-    joints:
-        - gripper_lift_joint
-        - mobile_gripper_joint
-        - static_gripper_joint
+simon_arm_controller:
+    type: "velocity_controllers/JointPositionController"
+    joint: simon_arm_joint
+    pid: {p: 1,  d: 0, i: 0, i_clamp: 1}
 
-simon_gantry_controller:
-    type: "position_controllers/JointTrajectoryController"
-    joints:
-        - simon_x_axis_joint
-        - simon_y_axis_joint
+rope_controller:
+    type: "velocity_controllers/JointVelocityController"
+    joint: rope_joint
 

@@ -11,7 +11,7 @@
     <!-- Launch the controllers -->
     <rosparam file="$(find phoenixbot_driver)/config/controllers.yaml" command="load"/>
     <node output="screen" name="controller_spawner" pkg="controller_manager" type="spawner"
-          args="move_base_controller state_controller --shutdown-timeout 1"/>
+          args="move_base_controller state_controller simon_arm_controller rope_controller --shutdown-timeout 1"/>
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 </launch>
