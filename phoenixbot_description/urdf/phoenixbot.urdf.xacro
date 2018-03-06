@@ -9,6 +9,10 @@
     <!-- Include the chassis -->
     <xacro:include filename="$(find phoenixbot_description)/urdf/phoenixbot_chassis.xacro" />
 
+    <xacro:include filename="$(find phoenixbot_description)/urdf/phoenixbot_simon.xacro" />
+
+    <xacro:include filename="$(find phoenixbot_description)/urdf/phoenixbot_pulley.xacro" />
+
 	<link name="front_camera"/>
 	<joint name="front_camera_joint" type="fixed">
 		<parent link="base_link"/>
