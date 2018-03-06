@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.79.0 commit date:2017-09-11, commit time:10:43, hash:5bd8ac9abfa</authoring_tool>
     </contributor>
-    <created>2018-02-25T16:34:50</created>
-    <modified>2018-02-25T16:34:50</modified>
+    <created>2018-02-25T19:39:38</created>
+    <modified>2018-02-25T19:39:38</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -23,17 +23,118 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0 0 0 1</color>
+              <color sid="diffuse">0.4138584 0.4138584 0.4138584 1</color>
             </diffuse>
             <specular>
-              <color sid="specular">0.5 0.5 0.5 1</color>
+              <color sid="specular">0.1 0.1 0.1 1</color>
             </specular>
             <shininess>
               <float sid="shininess">0</float>
             </shininess>
-            <transparent opaque="A_ONE">
-              <color>1 1 1 1</color>
-            </transparent>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+    <effect id="YellowTeam-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.6249282 0.64 0.001174593 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.1 0.1 0.1 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+    <effect id="BlueTeam-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.05821794 0.02980618 0.64 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.1 0.1 0.1 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+    <effect id="RedTeam-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.64 0.007195216 0.002935561 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.1 0.1 0.1 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+    <effect id="GreenTeam-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.006937282 0.64 0.03208689 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.1 0.1 0.1 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
             <index_of_refraction>
               <float sid="index_of_refraction">1</float>
             </index_of_refraction>
@@ -46,14 +147,26 @@
     <material id="mymaterial-material" name="mymaterial">
       <instance_effect url="#mymaterial-effect"/>
     </material>
+    <material id="YellowTeam-material" name="YellowTeam">
+      <instance_effect url="#YellowTeam-effect"/>
+    </material>
+    <material id="BlueTeam-material" name="BlueTeam">
+      <instance_effect url="#BlueTeam-effect"/>
+    </material>
+    <material id="RedTeam-material" name="RedTeam">
+      <instance_effect url="#RedTeam-effect"/>
+    </material>
+    <material id="GreenTeam-material" name="GreenTeam">
+      <instance_effect url="#GreenTeam-effect"/>
+    </material>
   </library_materials>
   <library_geometries>
     <geometry id="Clone114-mesh" name="Clone114">
       <mesh>
         <source id="Clone114-mesh-positions">
-          <float_array id="Clone114-mesh-positions-array" count="96">-21.85898 9.53674e-7 -30.48003 -21.85898 6.095996 -30.48003 -30.47998 6.095996 -21.85893 -30.47998 9.53674e-7 -21.85893 -41.66337 9.53674e-7 -50.28433 -28.14519 6.095996 -36.76613 -36.76617 6.095996 -28.14513 -50.28438 9.53674e-7 -41.66333 30.48002 9.53674e-7 -21.85893 30.48002 6.095996 -21.85893 21.85892 6.095996 -30.48003 21.85892 9.53674e-7 -30.48003 41.66332 9.53674e-7 -50.28433 36.76612 6.095996 -28.14513 28.14512 6.095996 -36.76613 50.28435 9.53674e-7 -41.66333 -30.47998 9.53674e-7 21.85897 -30.47998 6.095996 21.85897 -21.85898 6.095996 30.48002 -21.85898 9.53674e-7 30.48002 -41.66337 9.53674e-7 50.28438 -36.76617 6.095996 28.14515 -28.14519 6.095996 36.7662 -50.28438 9.53674e-7 41.66334 21.85892 9.53674e-7 30.48002 21.85892 6.095996 30.48002 30.48002 6.095996 21.85897 30.48002 9.53674e-7 21.85897 41.66332 9.53674e-7 50.28438 28.14512 6.095996 36.7662 36.76612 6.095996 28.14515 50.28435 9.53674e-7 41.66334</float_array>
+          <float_array id="Clone114-mesh-positions-array" count="168">-21.85898 9.53674e-7 -30.48003 -21.85898 6.095996 -30.48003 -30.47998 6.095996 -21.85893 -30.47998 9.53674e-7 -21.85893 -41.66337 9.53674e-7 -50.28433 -28.14519 6.095996 -36.76613 -36.76617 6.095996 -28.14513 -50.28438 9.53674e-7 -41.66333 30.48002 9.53674e-7 -21.85893 30.48002 6.095996 -21.85893 21.85892 6.095996 -30.48003 21.85892 9.53674e-7 -30.48003 41.66332 9.53674e-7 -50.28433 36.76612 6.095996 -28.14513 28.14512 6.095996 -36.76613 50.28435 9.53674e-7 -41.66333 -30.47998 9.53674e-7 21.85897 -30.47998 6.095996 21.85897 -21.85898 6.095996 30.48002 -21.85898 9.53674e-7 30.48002 -41.66337 9.53674e-7 50.28438 -36.76617 6.095996 28.14515 -28.14519 6.095996 36.7662 -50.28438 9.53674e-7 41.66334 21.85892 9.53674e-7 30.48002 21.85892 6.095996 30.48002 30.48002 6.095996 21.85897 30.48002 9.53674e-7 21.85897 41.66332 9.53674e-7 50.28438 28.14512 6.095996 36.7662 36.76612 6.095996 28.14515 50.28435 9.53674e-7 41.66334 -18.28798 6.095996 -18.28802 -30.47998 6.095996 -18.28802 -18.28798 6.095995 -30.48003 -30.47998 1.43051e-6 -18.28802 -18.28798 9.53674e-7 -30.48003 -18.28798 6.095998 30.48002 30.48002 6.095996 -18.28802 -18.28798 6.095996 18.28801 18.28802 6.095994 -18.28802 18.28802 6.095996 30.48002 30.48002 6.095996 18.28801 18.28802 6.095993 -30.48003 18.28802 1.43051e-6 -30.48003 30.48002 4.76837e-7 18.28801 18.28802 6.095996 18.28801 18.28802 0 18.28801 -30.47998 6.095996 18.28801 -18.28798 4.76837e-7 30.48002 18.28802 4.76837e-7 30.48002 -30.47998 0 18.28801 30.48002 1.90735e-6 -18.28802 18.28802 -1.43051e-6 -18.28802 -18.28798 0 18.28801 -18.28798 -9.53674e-7 -18.28802</float_array>
           <technique_common>
-            <accessor source="#Clone114-mesh-positions-array" count="32" stride="3">
+            <accessor source="#Clone114-mesh-positions-array" count="56" stride="3">
               <param name="X" type="float"/>
               <param name="Y" type="float"/>
               <param name="Z" type="float"/>
@@ -61,9 +174,9 @@
           </technique_common>
         </source>
         <source id="Clone114-mesh-normals">
-          <float_array id="Clone114-mesh-normals-array" count="102">0 1 0 -1 0 0 0 0 -1 0 0 1 1 0 0 -0.7071059 0 0.7071077 0.2148172 0.9527367 0.2148171 0.707111 0 -0.7071027 -0.214818 0.9527368 0.2148162 0.7071055 0 0.7071081 -0.7071063 0 -0.7071074 0.7071079 7.8647e-6 0.7071057 -0.7071011 0 -0.7071125 0.2148163 0.9527369 -0.2148171 0.7071052 9.29465e-6 -0.7071084 -0.707107 0 0.7071067 0 1 0 -0.2148172 0.9527368 -0.2148171 0 -1 0 0 1 0 -0.7071059 7.14972e-7 0.7071077 0.2148175 0.9527369 0.2148162 0.7071074 7.14973e-6 -0.7071063 -0.2148176 0.9527367 0.2148167 0.7071061 1.42994e-6 0.7071076 -0.7071058 0 -0.7071078 0 1 0 0.7071121 0 0.7071015 -0.7071051 7.8647e-6 -0.7071086 0.2148169 0.9527369 -0.2148169 0.7071007 0 -0.7071129 -0.7071068 0 0.7071068 0 1 0 -0.2148172 0.9527368 -0.2148168</float_array>
+          <float_array id="Clone114-mesh-normals-array" count="246">-0.7071059 0 0.7071077 0.2148172 0.9527367 0.2148171 0.707111 0 -0.7071027 0 1 0 -0.214818 0.9527368 0.2148162 0.7071055 0 0.7071081 -0.7071063 0 -0.7071074 0.7071079 7.8647e-6 0.7071057 -0.7071011 0 -0.7071125 0.2148163 0.9527369 -0.2148171 0.7071052 9.29465e-6 -0.7071084 -0.707107 0 0.7071067 0 1 0 -0.2148172 0.9527368 -0.2148171 0 -1 0 0 1 0 0 0 -1 -1 0 0 1.33535e-6 0 -1 0 0 -1 -1.21002e-7 1 0 1 0 0 1.33534e-7 1 0 0 0 1 0 0 1 1 0 0 1 0 -5.34134e-7 0 1 0 0 1 0 -1.56443e-7 1 0 0 1 0 0 1 0 0 -1 0 -1.95553e-7 -1 1.33534e-7 -1.33534e-7 -1 -2.34664e-7 0 -1 0 0 -1 0 0 -1 -2.34664e-7 0 -1 0 0 -1 0 0 -1 0 -0.7071059 7.14972e-7 0.7071077 0.2148175 0.9527369 0.2148162 0.7071074 7.14973e-6 -0.7071063 -0.2148176 0.9527367 0.2148167 0.7071061 1.42994e-6 0.7071076 -0.7071058 0 -0.7071078 0 1 0 0.7071121 0 0.7071015 -0.7071051 7.8647e-6 -0.7071086 0.2148169 0.9527369 -0.2148169 0.7071007 0 -0.7071129 -0.7071068 0 0.7071068 0 1 0 -0.2148172 0.9527368 -0.2148168 1.3353e-7 1 0 0 0 -1 -1.3687e-7 0 -1 -1.56443e-7 1 0 -6.67671e-7 1 0 -1.73484e-6 0 1 1.62875e-7 0 1 1 0 -5.34135e-7 0 1 0 -6.67652e-7 1 0 0 1 0 0 1 0 0 1 -2.05305e-7 0 1 0 -1.33531e-7 -1 0 0 -1 2.67064e-7 -1.21003e-7 -1 -1.21001e-7 0 -1 -1.56443e-7 1.51253e-7 -1 -1.51253e-7 2.73775e-7 -1 2.67067e-7 0 -1 1.33532e-7 1.33534e-7 -1 0 -1.95553e-7 -1 0 0 -1 -1.56443e-7 2.73775e-7 -1 0 0 -1 0 0 -1 0</float_array>
           <technique_common>
-            <accessor source="#Clone114-mesh-normals-array" count="34" stride="3">
+            <accessor source="#Clone114-mesh-normals-array" count="82" stride="3">
               <param name="X" type="float"/>
               <param name="Y" type="float"/>
               <param name="Z" type="float"/>
@@ -73,10 +186,30 @@
         <vertices id="Clone114-mesh-vertices">
           <input semantic="POSITION" source="#Clone114-mesh-positions"/>
         </vertices>
-        <triangles material="mymaterial-material" count="60">
+        <triangles material="mymaterial-material" count="48">
           <input semantic="VERTEX" source="#Clone114-mesh-vertices" offset="0"/>
           <input semantic="NORMAL" source="#Clone114-mesh-normals" offset="1"/>
-          <p>10 0 2 0 25 0 17 1 3 1 16 1 10 2 0 2 1 2 25 3 19 3 24 3 27 4 9 4 26 4 24 5 29 5 25 5 31 6 29 6 28 6 30 7 27 7 26 7 25 0 30 0 26 0 23 8 22 8 21 8 22 9 19 9 18 9 21 10 16 10 23 10 18 0 21 0 22 0 13 11 8 11 15 11 14 12 11 12 10 12 9 0 14 0 10 0 12 13 13 13 15 13 5 14 0 14 4 14 6 15 3 15 2 15 2 16 5 16 6 16 7 17 5 17 4 17 23 18 19 18 20 18 0 18 7 18 4 18 12 18 8 18 11 18 27 18 28 18 24 18 11 18 24 18 3 18 18 0 25 0 17 0 26 0 9 0 25 0 10 19 1 19 2 19 2 0 17 0 25 0 25 0 9 0 10 0 17 1 2 1 3 1 10 2 11 2 0 2 25 3 18 3 19 3 27 4 8 4 9 4 24 20 28 20 29 20 31 21 30 21 29 21 30 22 31 22 27 22 25 0 29 0 30 0 23 23 20 23 22 23 22 24 20 24 19 24 21 25 17 25 16 25 18 26 17 26 21 26 13 27 9 27 8 27 14 28 12 28 11 28 9 0 13 0 14 0 12 29 14 29 13 29 5 30 1 30 0 30 6 31 7 31 3 31 2 32 1 32 5 32 7 33 6 33 5 33 23 18 16 18 19 18 0 18 3 18 7 18 12 18 15 18 8 18 27 18 31 18 28 18 19 18 16 18 24 18 3 18 0 18 11 18 11 18 8 18 24 18 27 18 24 18 8 18 16 18 3 18 24 18</p>
+          <p>23 14 19 14 20 14 0 14 7 14 4 14 12 14 8 14 11 14 27 14 28 14 24 14 34 19 44 19 36 19 50 23 37 23 49 23 52 25 42 25 45 25 51 17 33 17 35 17 32 27 48 27 39 27 34 28 40 28 43 28 46 29 38 29 40 29 46 30 37 30 41 30 46 31 32 31 39 31 16 32 54 32 19 32 55 33 35 33 3 33 53 34 44 34 11 34 24 35 47 35 27 35 35 36 54 36 51 36 53 37 36 37 44 37 47 38 52 38 45 38 49 39 47 39 50 39 55 40 47 40 54 40 23 14 16 14 19 14 0 14 3 14 7 14 12 14 15 14 8 14 27 14 31 14 28 14 34 57 43 57 44 57 50 61 41 61 37 61 52 25 38 25 42 25 51 17 48 17 33 17 32 3 33 3 48 3 34 65 32 65 40 65 46 66 42 66 38 66 46 67 39 67 37 67 46 68 40 68 32 68 49 69 19 69 54 69 16 70 51 70 54 70 3 71 0 71 55 71 36 72 55 72 0 72 11 73 8 73 53 73 52 74 53 74 8 74 45 75 27 75 47 75 24 76 50 76 47 76 35 77 55 77 54 77 53 78 55 78 36 78 47 79 53 79 52 79 49 80 54 80 47 80 55 81 53 81 47 81</p>
+        </triangles>
+        <triangles material="YellowTeam-material" count="15">
+          <input semantic="VERTEX" source="#Clone114-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Clone114-mesh-normals" offset="1"/>
+          <p>24 0 29 0 25 0 31 1 29 1 28 1 30 2 27 2 26 2 25 3 30 3 26 3 42 21 27 21 45 21 46 22 41 22 25 22 25 24 50 24 24 24 24 41 28 41 29 41 31 42 30 42 29 42 30 43 31 43 27 43 25 3 29 3 30 3 42 21 26 21 27 21 25 3 26 3 46 3 42 3 46 3 26 3 25 23 41 23 50 23</p>
+        </triangles>
+        <triangles material="BlueTeam-material" count="15">
+          <input semantic="VERTEX" source="#Clone114-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Clone114-mesh-normals" offset="1"/>
+          <p>23 4 22 4 21 4 22 5 19 5 18 5 21 6 16 6 23 6 18 3 21 3 22 3 49 23 18 23 19 23 16 17 48 17 51 17 39 3 48 3 17 3 23 44 20 44 22 44 22 45 20 45 19 45 21 46 17 46 16 46 18 47 17 47 21 47 49 60 37 60 18 60 16 17 17 17 48 17 17 63 18 63 39 63 37 64 39 64 18 64</p>
+        </triangles>
+        <triangles material="RedTeam-material" count="15">
+          <input semantic="VERTEX" source="#Clone114-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Clone114-mesh-normals" offset="1"/>
+          <p>5 10 0 10 4 10 6 11 3 11 2 11 2 12 5 12 6 12 7 13 5 13 4 13 2 15 32 15 1 15 0 16 34 16 36 16 35 17 2 17 3 17 5 51 1 51 0 51 6 52 7 52 3 52 2 53 1 53 5 53 7 54 6 54 5 54 34 55 1 55 32 55 2 3 33 3 32 3 0 56 1 56 34 56 35 17 33 17 2 17</p>
+        </triangles>
+        <triangles material="GreenTeam-material" count="15">
+          <input semantic="VERTEX" source="#Clone114-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Clone114-mesh-normals" offset="1"/>
+          <p>13 7 8 7 15 7 14 8 11 8 10 8 9 3 14 3 10 3 12 9 13 9 15 9 43 18 11 18 44 18 10 20 40 20 9 20 52 26 9 26 38 26 13 48 9 48 8 48 14 49 12 49 11 49 9 3 13 3 14 3 12 50 14 50 13 50 43 16 10 16 11 16 38 58 9 58 40 58 10 59 43 59 40 59 52 62 8 62 9 62</p>
         </triangles>
       </mesh>
     </geometry>
@@ -90,6 +223,10 @@
           <bind_material>
             <technique_common>
               <instance_material symbol="mymaterial-material" target="#mymaterial-material"/>
+              <instance_material symbol="YellowTeam-material" target="#YellowTeam-material"/>
+              <instance_material symbol="BlueTeam-material" target="#BlueTeam-material"/>
+              <instance_material symbol="RedTeam-material" target="#RedTeam-material"/>
+              <instance_material symbol="GreenTeam-material" target="#GreenTeam-material"/>
             </technique_common>
           </bind_material>
         </instance_geometry>

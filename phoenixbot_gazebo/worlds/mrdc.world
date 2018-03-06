@@ -2,11 +2,53 @@
 <sdf version="1.4">
   <world name="mrdc">
     <include>
-      <uri>model://sun</uri>
-    </include>
-    <include>
       <uri>model://ground_plane</uri>
     </include>
+
+	<light type="point" name="overhead_1">
+		<pose>5 5 5 0 0 0</pose>
+		<diffuse>.9 .9 .9 1</diffuse>
+		<specular>.1 .1 .1 1</specular>
+		<attenuation>
+			<range>20</range>
+			<linear>0.13</linear>
+			<constant>0.1</constant>
+		</attenuation>
+		<cast_shadows>true</cast_shadows>
+	</light>
+	<light type="point" name="overhead_2">
+		<pose>5 -5 5 0 0 0</pose>
+		<diffuse>.9 .9 .9 1</diffuse>
+		<specular>.1 .1 .1 1</specular>
+		<attenuation>
+			<range>20</range>
+			<linear>0.13</linear>
+			<constant>0.1</constant>
+		</attenuation>
+		<cast_shadows>true</cast_shadows>
+	</light>
+	<light type="point" name="overhead_3">
+		<pose>-5 5 5 0 0 0</pose>
+		<diffuse>.9 .9 .9 1</diffuse>
+		<specular>.1 .1 .1 1</specular>
+		<attenuation>
+			<range>20</range>
+			<linear>0.13</linear>
+			<constant>0.1</constant>
+		</attenuation>
+		<cast_shadows>true</cast_shadows>
+	</light>
+	<light type="point" name="overhead_4">
+		<pose>-5 -5 5 0 0 0</pose>
+		<diffuse>.9 .9 .9 1</diffuse>
+		<specular>.1 .1 .1 1</specular>
+		<attenuation>
+			<range>20</range>
+			<linear>0.13</linear>
+			<constant>0.1</constant>
+		</attenuation>
+		<cast_shadows>true</cast_shadows>
+	</light>
 
     <model name="field">
       <static>true</static>
@@ -54,6 +96,22 @@
           <geometry>
             <mesh>
               <uri>file://elements.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+      </link>
+      <link name="aruco">
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file://aruco_1024.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>file://aruco_1024.dae</uri>
             </mesh>
           </geometry>
         </collision>
