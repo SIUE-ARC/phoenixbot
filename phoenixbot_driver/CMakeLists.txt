@@ -4,6 +4,7 @@ project(phoenixbot_driver)
 add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
+    phoenixbot_msgs
     hardware_interface
     controller_manager
     serial

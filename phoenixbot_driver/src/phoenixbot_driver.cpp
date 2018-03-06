@@ -4,6 +4,7 @@
 
 int main(int argc, char **argv) {
     ros::init(argc, argv, "phoenixbot_driver");
+    ros::NodeHandle nh;
 
     // TODO Move to param server
     PhoenixbotInterface interface("/dev/ttyACM0", 115200, 250);
@@ -17,10 +18,14 @@ int main(int argc, char **argv) {
     ros::Time then = ros::Time::now();
     ros::Rate rate(50.0);
 
+    ros::Publisher sensorTopic = nh.advertise<phoenixbot_msgs::Light>("light_sensors", 1);
+    ros::Subscriber solenoidTopic = nh.subscribe("solenoid_commands", 1, &PhoenixbotInterface::solenoid, &interface);
+
     while (ros::ok()) {
         const ros::Time now = ros::Time::now();
 
         interface.read();
+        sensorTopic.publish(interface.light());
         cm.update(now, now - then);
         interface.write();
 
