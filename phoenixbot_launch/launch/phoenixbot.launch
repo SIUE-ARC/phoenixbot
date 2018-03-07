@@ -31,7 +31,7 @@
         <node if="$(arg gui)" required="true" name="gzclient" pkg="gazebo_ros" type="gzclient"/>
 
         <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false"
-          args="-urdf -z 0.6096 -x 2.4384 -y 2.4384 -Y 0.785398 -model phoenixbot -param robot_description"/>
+          args="-urdf -z 0.6096 -x -2.4384 -y 2.4384 -Y 2.35619 -model phoenixbot -param robot_description"/>
     </group>
 
     <include file="$(find phoenixbot_driver)/launch/phoenixbot_driver.launch">

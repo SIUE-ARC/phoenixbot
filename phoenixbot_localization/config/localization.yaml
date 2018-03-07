@@ -5,12 +5,6 @@ map_frame: map
 odom_frame: odom
 base_link_frame: base_link
 
-initial_state: [2.4384,  2.4384,  0.0,
-               0.0,  0.0,  0.785398,
-               0.0,  0.0,  0.0,
-               0.0,  0.0,  0.0,
-               0.0,  0.0,  0.0]
-
 # Wheel odometry
 # We discard position estimates from wheel odometry
 # because the same data is already reported in velocity

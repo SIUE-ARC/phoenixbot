@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-    <node type="phoenixbot_behavior_coordinator.py" name="phoenixbot_behavior_coordinator" pkg="phoenixbot_behavior_coordination"/>
+    <node output="screen" type="phoenixbot_behavior_coordinator.py" name="phoenixbot_behavior_coordinator" pkg="phoenixbot_behavior_coordination">
+        <rosparam command="load" file="$(find phoenixbot_behavior_coordination)/config/waypoints.yaml"/>
+    </node>
 </launch>
