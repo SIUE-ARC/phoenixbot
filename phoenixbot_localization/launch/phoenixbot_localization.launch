@@ -31,6 +31,8 @@
         <rosparam command="load" file="$(find phoenixbot_localization)/config/markers.yaml"/>
     </node>
 
+    <remap from="set_pose" to="initialpose"/>
+
     <!-- Launch localization filters -->
     <!-- Odom filter -->
     <node name="odom_localization_node" type="ekf_localization_node" pkg="robot_localization">
