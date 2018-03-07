@@ -48,6 +48,10 @@
         <arg name="map" value="$(arg nav_map)"/>
     </include>
 
+    <!-- Launch behavior coordination -->
+    <include file="$(find phoenixbot_behavior_coordination)/launch/phoenixbot_behavior_coordination.launch">
+    </include>
+
     <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" required="true"
         args="--display-config $(find phoenixbot_launch)/config/phoenixbot.rviz"/>
 </launch>

@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+    <node type="phoenixbot_behavior_coordinator.py" name="phoenixbot_behavior_coordinator" pkg="phoenixbot_behavior_coordination"/>
+</launch>
