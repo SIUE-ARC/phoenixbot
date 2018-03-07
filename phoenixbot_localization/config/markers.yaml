@@ -1,40 +1,20 @@
-marker_size: 0.070
+marker_size: 0.10
 markers:
     - marker:
         id: 113
         position:
             x: 0.0
             y: 0.0
-            z: 0.0
+            z: 0.12
         orientation:
             r: 0.0
             p: 0.0
             y: 0.0
     - marker:
-        id: 928
-        position:
-            x: 0.090
-            y: 0.0
-            z: 0.0
-        orientation:
-            r: 0.0
-            p: 0.0
-            y: 0.0
-    - marker:
-        id: 121
+        id: 512
         position:
             x: 0.0
-            y: -0.090
-            z: 0.0
-        orientation:
-            r: 0.0
-            p: 0.0
             y: 0.0
-    - marker:
-        id: 476
-        position:
-            x: 0.090
-            y: -0.090
             z: 0.0
         orientation:
             r: 0.0

@@ -17,8 +17,14 @@
 
 #define IMAGE_TOPIC "/usb_cam/image_raw"
 
-//const cv::Mat cameraMatrix = cv::Mat::eye(3,3, CV_64F);
-//const cv::Mat distCoeffs   = cv::Mat::eye(4,4, CV_64F);
+// Dir     ROS CV
+// forward X  -Z
+// left    Y   X
+// up      Z   Y
+
+const Eigen::Matrix3d CV_TO_EIGEN((Eigen::Matrix3d() << 0, 0, 1, -1, 0, 0, 0, -1, 0).finished());
+const Eigen::Matrix3d ROS_TO_CV((Eigen::Matrix3d() << 0, -1, 0, 0, 0, -1, 1, 0, 0).finished());
+
 const cv::Mat cameraMatrix = (cv::Mat_<float>(3,3) << 6.5746697944293521e+002, 0., 3.1950000000000000e+002, 0., 6.5746697944293521e+002, 2.3950000000000000e+002, 0., 0., 1.);
 const std::vector<float> distCoeffs = {-4.1802327176423804e-001, 5.0715244063187526e-001, 0., 0., -5.7843597214487474e-001};
 
@@ -68,20 +74,6 @@ void loadBoardMarkers() {
             position.y = static_cast<double>(marker["position"]["y"]);
             position.z = static_cast<double>(marker["position"]["z"]);
 
-            Eigen::Vector3d center(position.x, position.y, position.z);
-            for(Eigen::Vector3d offset : 
-                {
-                    Eigen::Vector3d(-marker_size/2.0, marker_size/2.0, 0),
-                    Eigen::Vector3d(marker_size/2.0, marker_size/2.0, 0),
-                    Eigen::Vector3d(marker_size/2.0, -marker_size/2.0, 0),
-                    Eigen::Vector3d(-marker_size/2.0, -marker_size/2.0, 0),
-                })
-            {
-                cv::Point3f corner(center.x(), center.y(), center.z());
-                cv::Point3f cvOffset(offset.x(), offset.y(), offset.z());
-                newMarker.corners.emplace_back(corner + cvOffset);
-            }
-
             double r = static_cast<double>(marker["orientation"]["r"]);
             double p = static_cast<double>(marker["orientation"]["p"]);
             double y = static_cast<double>(marker["orientation"]["y"]);
@@ -90,6 +82,23 @@ void loadBoardMarkers() {
 
             newMarker.pose.orientation = rpyToQuat(r, p, y);
             newMarker.pose.position = position;
+
+            Eigen::Affine3d markerFrame;
+			tf::poseMsgToEigen(newMarker.pose, markerFrame);
+            markerFrame = markerFrame;
+
+            for(Eigen::Vector3d offset : 
+                {
+                    Eigen::Vector3d(0, marker_size/2.0, marker_size/2.0),
+                    Eigen::Vector3d(0, -marker_size/2.0, marker_size/2.0),
+                    Eigen::Vector3d(0, -marker_size/2.0, -marker_size/2.0),
+                    Eigen::Vector3d(0, marker_size/2.0, -marker_size/2.0),
+                })
+            {
+                Eigen::Vector3d corner = markerFrame * offset;
+                corner = ROS_TO_CV * corner;
+                newMarker.corners.emplace_back(corner.x(), corner.y(), corner.z());
+            }
         }
     }
     std::vector<int> ids;
@@ -132,8 +141,8 @@ void colorCallback(const sensor_msgs::ImageConstPtr &msg) {
 			cv::cv2eigen(rotationMatrix, eigenRotationMatrix);
 
             Eigen::Affine3d boardPose;
-            boardPose = eigenRotationMatrix;
-            boardPose *= Eigen::Translation3d(tvec[0], tvec[1], tvec[2]);
+            boardPose = Eigen::Translation3d(tvec[0], tvec[1], tvec[2]) * eigenRotationMatrix;
+            boardPose = CV_TO_EIGEN * boardPose;
 
             Eigen::Affine3d robotPose = boardPose.inverse();
 
