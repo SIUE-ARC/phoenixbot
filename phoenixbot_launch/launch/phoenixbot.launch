@@ -39,7 +39,7 @@
     </include>
 
     <!-- Launch localization -->
-    <include file="$(find phoenbixbot_localization)/launch/phoenixbot_localization.launch">
+    <include file="$(find phoenixbot_localization)/launch/phoenixbot_localization.launch">
         <arg name="map" value="$(arg map)"/>
     </include>
 

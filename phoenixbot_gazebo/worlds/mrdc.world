@@ -100,21 +100,65 @@
           </geometry>
         </collision>
       </link>
-      <link name="aruco">
+      <link name="aruco_1024">
+		<pose>-6.343 6.052 0.6985 0 0 0</pose>
         <visual name="visual">
           <geometry>
             <mesh>
-              <uri>file://aruco_1024.dae</uri>
+                <uri>file://markers/aruco_1024.dae</uri>
             </mesh>
           </geometry>
         </visual>
-        <collision name="collision">
+      </link>
+      <link name="aruco_928">
+		<pose>-1.5805 5.2646 0.14605 0 -1.57079 3.14159</pose>
+        <visual name="visual">
           <geometry>
             <mesh>
-              <uri>file://aruco_1024.dae</uri>
+                <uri>file://markers/aruco_928.dae</uri>
             </mesh>
           </geometry>
-        </collision>
+        </visual>
+      </link>
+      <link name="aruco_234">
+		<pose>-1.8091 5.1503 0.073026 0 0 3.14159</pose>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+                <uri>file://markers/aruco_234.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+      <link name="aruco_157">
+		<pose>-1.8091 5.3789 0.073026 0 0 3.14159</pose>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+                <uri>file://markers/aruco_157.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+      <link name="aruco_133">
+		<pose>-6.3938 5.8551 0.11430 0 0 0</pose>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+                <uri>file://markers/aruco_133.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+      <link name="aruco_113">
+		<pose>-6.3938 5.6138 0.11430 0 0 0</pose>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+                <uri>file://markers/aruco_113.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
       </link>
     </model>
   </world>

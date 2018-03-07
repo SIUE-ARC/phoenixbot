@@ -1,23 +1,70 @@
-marker_size: 0.10
+marker_size: 0.1
+boards:
+    - [113, 928]
+    - [121, 476]
+
 markers:
+    # Pulley Markers
     - marker:
         id: 113
         position:
-            x: 0.0
-            y: 0.0
-            z: 0.12
+            x: -6.3938
+            y: 5.6138
+            z: 0.11430
         orientation:
             r: 0.0
             p: 0.0
             y: 0.0
     - marker:
-        id: 512
+        id: 133
         position:
-            x: 0.0
-            y: 0.0
-            z: 0.0
+            x: -6.3938
+            y: 5.8551
+            z: 0.11430
         orientation:
             r: 0.0
             p: 0.0
             y: 0.0
+    - marker:
+        id: 1024
+        position:
+            x: -6.343
+            y: 6.052
+            z: 0.6985
+        orientation:
+            r: 0.0
+            p: 0.0
+            y: 0.0
+
+    # Simon Markers
+    - marker:
+        id: 157
+        position:
+            x: -1.8091
+            y: 5.3789
+            z: 0.073026
+        orientation:
+            r: 0.0
+            p: 0.0
+            y: 3.14159
+    - marker:
+        id: 234
+        position:
+            x: -1.8091
+            y: 5.1503
+            z: 0.073026
+        orientation:
+            r: 0.0
+            p: 0.0
+            y: 3.14159
+    - marker:
+        id: 928
+        position:
+            x: -1.5805
+            y: 5.2646
+            z: 0.14605
+        orientation:
+            r: 0.0
+            p: -1.57079
+            y: 3.14159
 

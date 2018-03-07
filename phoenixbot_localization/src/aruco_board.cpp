@@ -15,18 +15,23 @@
 
 #include <eigen_conversions/eigen_msg.h>
 
-#define IMAGE_TOPIC "/usb_cam/image_raw"
+//#define IMAGE_TOPIC "/usb_cam/image_raw"
+#define IMAGE_TOPIC "/phoenixbot/front_camera/image_raw"
 
 // Dir     ROS CV
 // forward X  -Z
 // left    Y   X
 // up      Z   Y
 
-const Eigen::Matrix3d CV_TO_EIGEN((Eigen::Matrix3d() << 0, 0, 1, -1, 0, 0, 0, -1, 0).finished());
-const Eigen::Matrix3d ROS_TO_CV((Eigen::Matrix3d() << 0, -1, 0, 0, 0, -1, 1, 0, 0).finished());
+const Eigen::Matrix3d CV_TO_EIGEN = Eigen::Matrix3d::Identity();//((Eigen::Matrix3d() << 0, 0, 1, -1, 0, 0, 0, -1, 0).finished());
+const Eigen::Matrix3d ROS_TO_CV = Eigen::Matrix3d::Identity();//((Eigen::Matrix3d() << 0, -1, 0, 0, 0, -1, 1, 0, 0).finished());
 
-const cv::Mat cameraMatrix = (cv::Mat_<float>(3,3) << 6.5746697944293521e+002, 0., 3.1950000000000000e+002, 0., 6.5746697944293521e+002, 2.3950000000000000e+002, 0., 0., 1.);
-const std::vector<float> distCoeffs = {-4.1802327176423804e-001, 5.0715244063187526e-001, 0., 0., -5.7843597214487474e-001};
+const cv::Mat cameraMatrix = cv::Mat::eye(3,3,CV_32F);
+const std::vector<float> distCoeffs = {0,0,0,0,0};
+
+//const cv::Mat cameraMatrix = (cv::Mat_<float>(3,3) << 6.5746697944293521e+002, 0., 3.1950000000000000e+002, 0., 6.5746697944293521e+002, 2.3950000000000000e+002, 0., 0., 1.);
+//const std::vector<float> distCoeffs = {-4.1802327176423804e-001, 5.0715244063187526e-001, 0., 0., -5.7843597214487474e-001};
+
 
 cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_ARUCO_ORIGINAL);
 cv::Ptr<cv::aruco::Board> board;// = cv::aruco::GridBoard::create(5, 7, 0.04, 0.01, dictionary);
@@ -56,7 +61,8 @@ struct ArucoMarker {
     std::vector<cv::Point3f> corners;
 };
 
-std::vector<ArucoMarker> markers;
+//std::vector<ArucoMarker> markers;
+std::map<int, ArucoMarker> markers;
 void loadBoardMarkers() {
     double marker_size;
     ros::param::get("~marker_size", marker_size);
@@ -66,8 +72,11 @@ void loadBoardMarkers() {
         for(int i = 0; i < marker_list.size(); i++) {
             XmlRpc::XmlRpcValue &marker = marker_list[i]["marker"];
 
-            markers.emplace_back();
-            ArucoMarker &newMarker = markers.back();
+            int id = static_cast<int>(marker["id"]);
+
+            markers.emplace(id, ArucoMarker());
+            ArucoMarker &newMarker = markers[id];
+            newMarker.id = id;
 
             geometry_msgs::Point position;
             position.x = static_cast<double>(marker["position"]["x"]);
@@ -77,8 +86,6 @@ void loadBoardMarkers() {
             double r = static_cast<double>(marker["orientation"]["r"]);
             double p = static_cast<double>(marker["orientation"]["p"]);
             double y = static_cast<double>(marker["orientation"]["y"]);
-
-            newMarker.id = static_cast<int>(marker["id"]);
 
             newMarker.pose.orientation = rpyToQuat(r, p, y);
             newMarker.pose.position = position;
@@ -105,7 +112,8 @@ void loadBoardMarkers() {
     std::vector<std::vector<cv::Point3f>> corners;
 
     ROS_INFO("Creating board...");
-    for(const auto &marker : markers) {
+    for(const auto &p : markers) {
+        const ArucoMarker &marker = p.second;
         ids.emplace_back(marker.id);
         corners.emplace_back(marker.corners);
         ROS_INFO_STREAM(marker.id << ":" << marker.corners);
@@ -127,6 +135,7 @@ void colorCallback(const sensor_msgs::ImageConstPtr &msg) {
     cv::aruco::detectMarkers(color, dictionary, corners, ids);
     // if at least one marker detected
     if (ids.size() > 0) {
+
         cv::aruco::drawDetectedMarkers(imageCopy, corners, ids);
         cv::Vec3d rvec, tvec;
         int valid = estimatePoseBoard(corners, ids, board, cameraMatrix, distCoeffs, rvec, tvec);
