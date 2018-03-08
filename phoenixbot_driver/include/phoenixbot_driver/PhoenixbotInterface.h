@@ -34,10 +34,11 @@ private:
     double vel[4];
     double eff[4];
 
-    double cmdVel[4];
+    double cmdVel[4] = {0};
 
     double lightSensors[4];
-    bool cmdSolenoid[4];
+    bool cmdSolenoid[4] = {false};
+    int solenoidMap[4] = {2, 3, 4, 5};
 };
 
 #endif

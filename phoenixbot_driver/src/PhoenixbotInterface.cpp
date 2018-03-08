@@ -60,7 +60,7 @@ void PhoenixbotInterface::enable() {
 
 // Queue up a solenoid command to be sent on next write
 void PhoenixbotInterface::solenoid(phoenixbot_msgs::Solenoid msg) {
-    for(int i = 0; i < 0; i++) {
+    for(int i = 0; i < 4; i++) {
         cmdSolenoid[i] = msg.solenoids[i];
     }
 }
@@ -127,7 +127,9 @@ void PhoenixbotInterface::write() {
 
     // Write solenoid commands
     for(int i = 0; i < 4; i++) {
-        serialString << "S " << i << " " << (cmdSolenoid[i] ? 1 : 0) << "\r";
+        serialString.str("");
+
+        serialString << "S " << solenoidMap[i] << " " << (cmdSolenoid[i] ? 1 : 0) << "\r";
         arduino.write(serialString.str());
     }
 }
