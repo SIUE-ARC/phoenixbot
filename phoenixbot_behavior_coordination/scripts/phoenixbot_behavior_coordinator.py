@@ -35,7 +35,7 @@ def imu_callback(data):
 active_goal_status = 0
 def nav_callback(msg):
     global active_goal_status
-    active_goal_status = msg.status
+    active_goal_status = msg.status.status
 
 def wait_for_start():
     pass
@@ -81,9 +81,20 @@ def drive(drive_speed, turn_speed):
 
 def drive_to(waypoint):
     nav_target.publish(waypoint)
-    while active_goal_status != 2:
+    while active_goal_status != 3:
         pass
-    
+
+def approach_simon():
+    pass
+
+def do_simon():
+    pass
+
+def approach_pulley():
+    pass
+
+def do_pulley():
+    pass
         
 # Initialization
 rospy.init_node('phoenixbot_behavior_coordinator')
@@ -93,7 +104,7 @@ nav_result = rospy.Subscriber("/move_base/result", MoveBaseActionResult, nav_cal
 
 pose_pub = rospy.Publisher('initialpose', PoseWithCovarianceStamped, queue_size=3)
 vel_pub = rospy.Publisher('move_base_controller/cmd_vel', Twist, queue_size=3)
-nav_target = rospy.Publisher('/move_base/current_goal', PoseStamped, queue_size=3)
+nav_target = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size=3)
 
 rospy.wait_for_service('/move_base/clear_costmaps')
 clear_costmap = rospy.ServiceProxy('/move_base/clear_costmaps', Empty)
@@ -105,25 +116,34 @@ wait_for_start()
 # Drive down the ramp
 print("Driving to ramp...");
 while not ramp:
-    drive(0.5, 0.0)
+    drive(0.75, 0.0)
 print("Driving down ramp...");
 while ramp:
-    drive(0.5, 0.0)
+    drive(0.75, 0.0)
 print("Reached bottom of ramp");
 drive(0.0, 0.0)
 
 # Update the pose
+print("Updating pose...")
+rospy.sleep(1)
 pose_pub.publish(get_pose("bottom_of_ramp"))
+rospy.sleep(1)
 clear_costmap()
-rospy.sleep(3)
+rospy.sleep(1)
 
 # Drive clear of the ramp
-drive(0.5, 0.0)
-rospy.sleep(5)
+print("Clearing ramp")
+drive(1.0, 0.0)
+rospy.sleep(3)
 drive(0.0, 0.0)
 
-# Drive to first waypoint
-drive_to(get_waypoint("disembark"))
+drive_to(get_waypoint("simon_approach"))
+approach_simon()
+do_simon()
+
+drive_to(get_waypoint("pulley_approach"))
+approach_pulley()
+do_pulley()
 
 print("FINISHED")
 
