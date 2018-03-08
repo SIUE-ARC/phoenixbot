@@ -10,5 +10,4 @@
             <inertia ixx="${INERTIA}" iyy="${INERTIA}" izz="${INERTIA}" ixy="0" ixz="0" iyz="0"/>
         </inertial>
     </xacro:macro>
-
 </robot>

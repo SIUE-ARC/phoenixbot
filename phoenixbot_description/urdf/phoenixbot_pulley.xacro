@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="phoenixbot_pulley">
+    <xacro:macro name="rope_wheel" params="name">
+        <link name="${name}">
+            <visual>
+                <origin rpy="${pi/2} 0 ${pi/2}" xyz="${0.5 * IN} 0 0"/>
+                <geometry>
+                    <cylinder length="${1 * IN}" radius="${1 * IN}"/>
+                </geometry>
+            </visual>
+
+            <collision>
+                <origin rpy="${pi/2} 0 ${pi/2}" xyz="${0.5 * IN} 0 0"/>
+                <geometry>
+                    <cylinder length="${1 * IN}" radius="${1 * IN}"/>
+                </geometry>
+            </collision>
+
+            <xacro:cylinder_inertia mass="${0.31 * LBS}" radius="${1 * IN}" thickness="${1 * IN}"/>
+        </link>
+	</xacro:macro>
+
+    <joint name="pulley_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="pulley_center"/>
+        <origin xyz="${17 * IN} 0 ${7 * IN}"/>
+    </joint>
+
+    <link name="pulley_center">
+        <visual>
+            <origin xyz="${-2 * IN} 0 ${-2 * IN}"/>
+            <geometry>
+                <box size="${4 * IN} ${4 * IN} ${7 * IN}"/>
+            </geometry>
+        </visual>
+
+        <collision>
+            <origin xyz="${-2 * IN} 0 ${-2 * IN}"/>
+            <geometry>
+                <box size="${4 * IN} ${4 * IN} ${7 * IN}"/>
+            </geometry>
+        </collision>
+
+        <xacro:cylinder_inertia mass="${0.31 * LBS}" radius="${1 * IN}" thickness="${1 * IN}"/>
+    </link>
+
+    <xacro:rope_wheel name="left_rope_wheel"/>
+    <xacro:rope_wheel name="right_rope_wheel"/>
+
+    <joint name="rope_joint" type="continuous">
+        <axis xyz="1 0 0"/>
+        <origin xyz="0 ${1.25 * IN} 0"/>
+        <parent link="pulley_center"/>
+        <child link="left_rope_wheel"/>
+    </joint>
+    <joint name="rope_joint_slave" type="continuous">
+        <axis xyz="1 0 0"/>
+        <origin xyz="0 ${-1.25 * IN} 0"/>
+        <parent link="pulley_center"/>
+        <child link="right_rope_wheel"/>
+        <mimic joint="rope_joint" multiplier="-1"/>
+    </joint>
+
+    <transmission name="rope_transmission">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rope_joint">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rope_motor">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+</robot>
+

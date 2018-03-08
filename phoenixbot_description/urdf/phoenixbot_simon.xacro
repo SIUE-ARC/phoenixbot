@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="phoenixbot_simon">
+    <link name="simon_arm">
+        <visual>
+            <origin rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="package://phoenixbot_description/meshes/simonArm.stl"/>
+            </geometry>
+        </visual>
+
+        <collision>
+            <origin xyz="${-14 * IN} 0 0"/>
+            <geometry>
+                <box size="${29.5 * IN} ${24 * IN} ${3 * IN}"/>
+            </geometry>
+        </collision>
+
+        <inertial>
+            <mass value="${4 * LBS}"/>
+            <inertia ixx="${1/12*15*LBS*((3.33*IN)**2+(28.31*IN)**2)}"
+                iyy="${1/12*15*LBS*((27.50*IN)**2+(28.31*IN)**2)}"
+                izz="${1/12*15*LBS*((27.50*IN)**2+(3.33*IN)**2)}"
+            ixy="0" ixz="0" iyz="0"/>
+        </inertial>
+    </link>
+
+    <link name="solenoid1"/>
+    <link name="solenoid2"/>
+    <link name="solenoid3"/>
+    <link name="solenoid4"/>
+
+    <joint name="solenoid1_joint" type="fixed">
+        <parent link="simon_arm"/>
+        <child link="solenoid1"/>
+        <origin xyz="${-28 * IN} ${-5 * IN} 0"/>
+    </joint>
+    <joint name="solenoid2_joint" type="fixed">
+        <parent link="simon_arm"/>
+        <child link="solenoid2"/>
+        <origin xyz="${-28 * IN} ${5 * IN} 0"/>
+    </joint>
+    <joint name="solenoid3_joint" type="fixed">
+        <parent link="simon_arm"/>
+        <child link="solenoid3"/>
+        <origin xyz="${-18 * IN} ${5 * IN} 0"/>
+    </joint>
+    <joint name="solenoid4_joint" type="fixed">
+        <parent link="simon_arm"/>
+        <child link="solenoid4"/>
+        <origin xyz="${-18 * IN} ${-5 * IN} 0"/>
+    </joint>
+
+    <joint name="simon_arm_joint" type="revolute">
+        <axis xyz="0 1 0"/>
+        <origin xyz="${-10.73 * IN} 0 ${3 * IN}"/>
+        <parent link="chassis"/>
+        <child link="simon_arm"/>
+        <limit lower="0" upper="1.6" effort="20.0" velocity="1.6"/>
+    </joint>
+
+    <transmission name="simon_arm_transmission">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="simon_arm_joint">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="simon_motor">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+</robot>
+
