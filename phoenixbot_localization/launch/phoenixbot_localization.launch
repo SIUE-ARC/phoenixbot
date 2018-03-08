@@ -12,13 +12,13 @@
     <!-- Launch map server and AMCL if a static map was supplied -->
     <group unless="$(eval map == '')">
         <node pkg="map_server" type="map_server" name="map_server" args="$(find phoenixbot_2dnav)/maps/$(arg map)"/>
-        <node pkg="amcl" type="amcl" name="amcl_localization">
-                <param name="scan" value="scan"/>
-                <param name="tf_broadcast" value="false"/>
-                <param name="initial_pose_x" value="2.4384"/>
-                <param name="initial_pose_y" value="2.4384"/>
-                <param name="initial_pose_a" value="0.785398"/>
-        </node>
+        <!--<node pkg="amcl" type="amcl" name="amcl_localization">-->
+                <!--<param name="scan" value="scan"/>-->
+                <!--<param name="tf_broadcast" value="false"/>-->
+                <!--<param name="initial_pose_x" value="2.4384"/>-->
+                <!--<param name="initial_pose_y" value="2.4384"/>-->
+                <!--<param name="initial_pose_a" value="0.785398"/>-->
+        <!--</node>-->
     </group>
 
     <!-- Launch marker localization -->
