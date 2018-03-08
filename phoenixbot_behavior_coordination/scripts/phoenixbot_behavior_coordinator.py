@@ -5,6 +5,8 @@ import numpy
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from geometry_msgs.msg import PoseStamped
+from phoenixbot_msgs.msg import Light
+from phoenixbot_msgs.msg import Solenoid
 from move_base_msgs.msg import MoveBaseActionResult
 from sensor_msgs.msg import Imu
 from std_srvs.srv import Empty
@@ -36,6 +38,24 @@ active_goal_status = 0
 def nav_callback(msg):
     global active_goal_status
     active_goal_status = msg.status.status
+
+simon_light = 0
+def light_callback(msg):
+    global simon_light
+
+    max_intensity = 0
+    for i, value in enumerate(msg.sensors):
+        if value > max_intensity:
+            max_intensity = value
+            simon_light = i
+
+    max_difference = 0
+    for i, value in enumerate(msg.sensors):
+        if max_intensity - value > max_difference:
+            max_difference = max_intensity - value
+
+    if max_difference < 50:
+        simon_light = -1
 
 def wait_for_start():
     pass
@@ -88,7 +108,11 @@ def approach_simon():
     pass
 
 def do_simon():
-    pass
+    solenoid_cmd = Solenoid()
+    while simon_light != -1:
+        solenoid_cmd.solenoids = [False] * 4
+        solenoid_cmd.solenoids[simon_light] = True
+        solenoid_pub.publish(solenoid_cmd)
 
 def approach_pulley():
     pass
@@ -101,10 +125,12 @@ rospy.init_node('phoenixbot_behavior_coordinator')
 
 imu_sub = rospy.Subscriber("imu_data", Imu, imu_callback)
 nav_result = rospy.Subscriber("/move_base/result", MoveBaseActionResult, nav_callback)
+simon_lights = rospy.Subscriber("light_sensors", Light, light_callback)
 
 pose_pub = rospy.Publisher('initialpose', PoseWithCovarianceStamped, queue_size=3)
 vel_pub = rospy.Publisher('move_base_controller/cmd_vel', Twist, queue_size=3)
 nav_target = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size=3)
+solenoid_pub = rospy.Subscriber("solenoid_commands", Solenoid, queue_size=1)
 
 rospy.wait_for_service('/move_base/clear_costmaps')
 clear_costmap = rospy.ServiceProxy('/move_base/clear_costmaps', Empty)
