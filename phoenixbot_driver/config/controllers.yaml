@@ -12,9 +12,8 @@ move_base_controller:
     enable_odom_tf: false
 
 simon_arm_controller:
-    type: "velocity_controllers/JointPositionController"
+    type: "velocity_controllers/JointVelocityController"
     joint: simon_arm_joint
-    pid: {p: 1,  d: 0, i: 0, i_clamp: 1}
 
 rope_controller:
     type: "velocity_controllers/JointVelocityController"

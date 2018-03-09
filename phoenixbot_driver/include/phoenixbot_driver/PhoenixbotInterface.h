@@ -38,7 +38,7 @@ private:
 
     double lightSensors[4];
     bool cmdSolenoid[4] = {false};
-    int solenoidMap[4] = {2, 3, 4, 5};
+    int solenoidMap[4] = {5, 4, 3, 2};
 };
 
 #endif

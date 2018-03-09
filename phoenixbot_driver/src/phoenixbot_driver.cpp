@@ -7,7 +7,7 @@ int main(int argc, char **argv) {
     ros::NodeHandle nh;
 
     // TODO Move to param server
-    PhoenixbotInterface interface("/dev/ttyACM0", 115200, 250);
+    PhoenixbotInterface interface("/dev/ttyACM1", 1000000, 250);
     controller_manager::ControllerManager cm(&interface);
 
     // Spin off a thread to handle ROS interactions so main thread remains realtime
@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 
     // Realtime control starts here
     ros::Time then = ros::Time::now();
-    ros::Rate rate(50.0);
+    ros::Rate rate(10.0);
 
     ros::Publisher sensorTopic = nh.advertise<phoenixbot_msgs::Light>("light_sensors", 1);
     ros::Subscriber solenoidTopic = nh.subscribe("solenoid_commands", 1, &PhoenixbotInterface::solenoid, &interface);
