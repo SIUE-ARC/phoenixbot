@@ -14,6 +14,13 @@ from std_msgs.msg import Float64
 
 import tf.transformations
 
+# TODO
+def approach_simon():
+    blocking_drive(-0.6, 0, 1)
+
+def approach_pulley():
+    pass
+
 z_hat = numpy.array([0,0,1]);
 
 ramp = False
@@ -114,9 +121,6 @@ def drive_to(waypoint):
         pass
     active_goal_status = 0
 
-def approach_simon():
-    blocking_drive(-0.6, 0, 1)
-
 def raise_simon():
     msg = Float64()
     msg.data = 0
@@ -159,17 +163,14 @@ def release_rope():
     msg.data = -0.75
     rope_cmd.publish(msg)
 
-def approach_pulley():
-    pass
-
 def do_pulley():
     pull_rope()
-    blocking_drive(0.5, 0, 1)
+    blocking_drive(0.5, 0, 2)
     rospy.sleep(3)
     stop_rope()
     rospy.sleep(1)
     release_rope()
-    blocking_drive(-0.5, 0, 1)
+    blocking_drive(-0.5, 0, 2)
     rospy.sleep(4)
     stop_rope()
 
@@ -235,9 +236,10 @@ simon_arm_cmd = rospy.Publisher('/simon_arm_controller/command', Float64, queue_
 
 # rospy.wait_for_service('/move_base/clear_costmaps')
 clear_costmap = rospy.ServiceProxy('/move_base/clear_costmaps', Empty)
+rospy.sleep(5)
 
 # Start
-competition()
+#competition()
 
 # Tests
 # do_simon()

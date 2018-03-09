@@ -79,6 +79,9 @@ phoenixbot_msgs::Light PhoenixbotInterface::light() {
 
 // Read the state of everything from the robot
 void PhoenixbotInterface::read() {
+    arduino.flushOutput();
+    arduino.flushInput();
+
     // Read drive encoders
     arduino.write("E -1\r");
     ROS_INFO_STREAM("E -1");
@@ -144,7 +147,7 @@ void PhoenixbotInterface::write() {
     serialString.str("");
     
     // Write simon motor speed
-    serialString << "N " << ((cmdVel[3] > 0) ? 1 : 0) << "\r";
+    serialString << "N " << ((cmdVel[3] > 0) ? 100 : -300) << "\r";
     ROS_INFO_STREAM(serialString.str());
     arduino.write(serialString.str());
     serialString.str("");

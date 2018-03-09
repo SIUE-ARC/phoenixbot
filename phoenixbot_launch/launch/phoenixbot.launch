@@ -54,5 +54,6 @@
 
     <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" required="true"
         args="--display-config $(find phoenixbot_launch)/config/phoenixbot.rviz"/>
+
 </launch>
 
