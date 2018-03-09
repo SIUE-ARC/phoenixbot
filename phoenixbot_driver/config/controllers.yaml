@@ -19,3 +19,8 @@ rope_controller:
     type: "velocity_controllers/JointVelocityController"
     joint: rope_joint
 
+simon_arm_position_controller:
+    type: "velocity_controllers/JointPositionController"
+    joint: simon_arm_joint
+    pid: {p: 1,  d: 0, i: 0, i_clamp: 1}
+

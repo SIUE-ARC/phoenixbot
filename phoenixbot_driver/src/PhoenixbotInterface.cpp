@@ -138,7 +138,7 @@ void PhoenixbotInterface::write() {
     ROS_INFO_STREAM(serialString.str());
     serialString.str("");
 
-    serialStrinr << "M 4 " << (int)(-cmdVel[2] * 500) << "\r";
+    serialString << "M 4 " << (int)(-cmdVel[2] * 500) << "\r";
     arduino.write(serialString.str());
     ROS_INFO_STREAM(serialString.str());
     serialString.str("");
