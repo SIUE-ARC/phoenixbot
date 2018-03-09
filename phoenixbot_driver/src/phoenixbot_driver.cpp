@@ -7,7 +7,7 @@ int main(int argc, char **argv) {
     ros::NodeHandle nh;
 
     // TODO Move to param server
-    PhoenixbotInterface interface("/dev/ttyACM1", 1000000, 250);
+    PhoenixbotInterface interface("/dev/ttyACM0", 1000000, 250);
     controller_manager::ControllerManager cm(&interface);
 
     // Spin off a thread to handle ROS interactions so main thread remains realtime

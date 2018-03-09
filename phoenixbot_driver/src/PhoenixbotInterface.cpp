@@ -147,7 +147,7 @@ void PhoenixbotInterface::write() {
     serialString.str("");
     
     // Write simon motor speed
-    serialString << "N " << ((cmdVel[3] > 0) ? 100 : -300) << "\r";
+    serialString << "N " << ((cmdVel[3] > 0) ? 300 : -300) << "\r";
     ROS_INFO_STREAM(serialString.str());
     arduino.write(serialString.str());
     serialString.str("");
