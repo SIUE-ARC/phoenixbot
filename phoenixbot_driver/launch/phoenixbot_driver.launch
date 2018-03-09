@@ -6,7 +6,7 @@
     <param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf" />
 
     <!-- Spawn hardware interface if running in real mode -->
-    <node unless="$(arg sim)" name="phoenixbot_driver" pkg="phoenixbot_driver" type="phoenixbot_driver" output="screen"/>
+    <node unless="$(arg sim)" name="phoenixbot_driver" pkg="phoenixbot_driver" type="phoenixbot_driver" />
 
     <!-- Launch the controllers -->
     <rosparam file="$(find phoenixbot_driver)/config/controllers.yaml" command="load"/>

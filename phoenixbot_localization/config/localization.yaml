@@ -16,7 +16,7 @@ odom0_config: [false, false, false, # x, y, z
                false, false, false] # d^2x, d^2y, d^2z
 
 # Body IMU
-imu0: /imu_data
+imu0: /imu
 imu0_config: [false, false, false,
               false, false, true,
               false, false, false,

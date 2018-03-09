@@ -2,10 +2,10 @@
 
 <launch>
     <!-- Name of map if using static map -->
-    <arg name="map" default=""/>
+    <arg name="map" default="mrdc_laser.yaml"/>
 
     <!-- Name of nav map if a different map should be used-->
-    <arg name="nav_map" default=""/>
+    <arg name="nav_map" default="mrdc_nav.yaml"/>
 
     <!-- Run the robot in gazebo instead of trying to connect to real hardware -->
     <arg name="sim" default="false"/>
@@ -15,6 +15,8 @@
 
     <!-- Display rviz with proper config during launch -->
     <arg name="rviz" default="$(arg sim)"/>
+
+    <arg name="auto" default="true"/>
 
     <!-- Load robot description -->
     <param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf" />
@@ -38,6 +40,8 @@
         <arg name="sim" value="$(arg sim)"/>
     </include>
 
+    <include file="$(find razor_imu_9dof)/launch/razor-pub.launch"/>
+
     <!-- Launch localization -->
     <include file="$(find phoenixbot_localization)/launch/phoenixbot_localization.launch">
         <arg name="map" value="$(arg map)"/>
@@ -45,11 +49,10 @@
 
     <!-- Launch navigation -->
     <include file="$(find phoenixbot_2dnav)/launch/phoenixbot_nav.launch">
-        <arg name="map" value="$(arg nav_map)"/>
     </include>
 
     <!-- Launch behavior coordination -->
-    <include file="$(find phoenixbot_behavior_coordination)/launch/phoenixbot_behavior_coordination.launch">
+    <include if="$(arg auto)" file="$(find phoenixbot_behavior_coordination)/launch/phoenixbot_behavior_coordination.launch">
     </include>
 
     <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" required="true"

@@ -2,7 +2,7 @@
 
 <!-- TODO: Put all this in one namespace? -->
 <launch>
-    <arg name="map" default=""/>
+    <arg name="map" default="mrdc_nav.yaml"/>
 
     <!-- If a map should be used for navigation bring it up -->
     <node  unless="$(eval map=='')" ns="nav_map" pkg="map_server" type="map_server" name="nav_map_server" args="$(find phoenixbot_2dnav)/maps/$(arg map)"/>

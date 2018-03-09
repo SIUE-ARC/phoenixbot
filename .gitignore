@@ -1,3 +1,10 @@
 # Ignore built urdfs
 *.urdf
 
+# Ignore swapfiles
+*.swo
+*.swp
+*.swl
+*.swn
+*.swm
+

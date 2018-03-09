@@ -3,11 +3,13 @@
     <arg name="map" default=""/>
 
     <!-- Launch SLAM if no static map supplied -->
+<!--
     <group if="$(eval map == '')">
         <node pkg="gmapping" type="slam_gmapping" name="slam">
             <param name="scan" value="scan"/>
         </node>
     </group>
+-->
 
     <!-- Launch map server and AMCL if a static map was supplied -->
     <group unless="$(eval map == '')">
@@ -23,6 +25,7 @@
 
     <!-- Launch marker localization -->
     <!-- TODO Move to hardware launch file -->
+<!--
     <node name="usb_cam" type="usb_cam_node" pkg="usb_cam">
         <param name="video_device" value="/dev/video1"/>
         <param name="camera_name" value="front_camera"/>
@@ -30,6 +33,7 @@
     <node name="aruco_board" type="aruco_board" pkg="phoenixbot_localization">
         <rosparam command="load" file="$(find phoenixbot_localization)/config/markers.yaml"/>
     </node>
+-->
 
     <remap from="set_pose" to="initialpose"/>
 

@@ -20,6 +20,13 @@
 		<origin xyz="${8 * IN} 0 ${5 * IN}" rpy="0 0.2 0"/>
 	</joint>
 
+	<link name="imu_base_link"/>
+	<joint name="imu_joint" type="fixed">
+		<parent link="base_link"/>
+		<child link="imu_base_link"/>
+        <origin xyz="0 ${1 * IN} 0"/>
+	</joint>
+
 	<link name="laser_link"/>
 	<joint name="laser_joint" type="fixed">
 		<parent link="base_link"/>

@@ -24,7 +24,7 @@ def approach_pulley():
 z_hat = numpy.array([0,0,1]);
 
 ramp = False
-max_deviation = 1 - 0.9840;
+max_deviation = 1 - 0.8;
 
 def imu_callback(data):
     global max_deviation
@@ -36,12 +36,15 @@ def imu_callback(data):
     robot_up = robot_up / numpy.linalg.norm(robot_up);
     deviation = 1-z_hat.dot(robot_up);
 
-    max_deviation = max(deviation, max_deviation);
+    if deviation <= 1:
+	    #max_deviation = max(deviation, max_deviation);
 
-    if deviation > (max_deviation * 0.05):
-        ramp = True;
-    else:
-        ramp = False;
+	    if deviation > (max_deviation):
+		ramp = True;
+	    else:
+		ramp = False;
+
+	    print(ramp, deviation, max_deviation + max_deviation * 0.05)
 
 active_goal_status = 0
 def nav_callback(msg):
@@ -135,7 +138,8 @@ def lower_simon():
 
 def do_simon():
     lower_simon()
-    while simon_light != -1:
+    start_time = rospy.Time.now();
+    while simon_light != -1 and rospy.Time.now() - start_time < rospy.Duration(10):
         s = simon_light
         solenoid_msg = Solenoid()
         solenoid_msg.solenoids = [False] * 4
@@ -146,6 +150,7 @@ def do_simon():
             solenoid_msg.solenoids[s] = False
             solenoid_pub.publish(solenoid_msg)
             rospy.sleep(1)
+    print("Finished simon")
     raise_simon()
 
 def pull_rope():
@@ -175,15 +180,16 @@ def do_pulley():
     stop_rope()
 
 def drive_down_ramp():
+    blocking_drive(0.5, 0, 7)
     # Drive down the ramp
-    print("Driving to ramp...");
-    while not ramp:
-        drive(0.75, 0.0)
-    print("Driving down ramp...");
-    while ramp:
-        drive(0.75, 0.0)
-    print("Reached bottom of ramp");
-    drive(0.0, 0.0)
+    #jprint("Driving to ramp...");
+    #while not ramp:
+    #    drive(0.6, 0.0)
+    #print("Driving down ramp...");
+    #while ramp:
+    #    drive(0.6, 0.0)
+    #print("Reached bottom of ramp");
+    #drive(0.0, 0.0)
 
 
 def competition():
@@ -195,12 +201,14 @@ def competition():
     # Update the pose
     print("Updating pose...")
     pose_pub.publish(get_pose("bottom_of_ramp"))
-    clear_costmap()
+    #clear_costmap()
     rospy.sleep(1)
 
     # Drive clear of the ramp
     print("Clearing ramp")
-    blocking_drive(1.0, 0.0, 0.75)
+    blocking_drive(0.75, 0.0, 0.75)
+    blocking_drive(0.0, 1.57, 1.0)
+    blocking_drive(0.75, 0.0, 0.75)
 
     print("Driving to simon")
     drive_to(get_waypoint("simon_approach"))
@@ -223,7 +231,7 @@ def competition():
 # Initialization
 rospy.init_node('phoenixbot_behavior_coordinator')
 
-imu_sub = rospy.Subscriber("imu_data", Imu, imu_callback)
+imu_sub = rospy.Subscriber("imu", Imu, imu_callback)
 nav_result = rospy.Subscriber("/move_base/result", MoveBaseActionResult, nav_callback)
 simon_lights = rospy.Subscriber("light_sensors", Light, light_callback)
 
@@ -234,15 +242,17 @@ solenoid_pub = rospy.Publisher("solenoid_commands", Solenoid, queue_size=1)
 rope_cmd = rospy.Publisher('/rope_controller/command', Float64, queue_size=3)
 simon_arm_cmd = rospy.Publisher('/simon_arm_controller/command', Float64, queue_size=3)
 
-# rospy.wait_for_service('/move_base/clear_costmaps')
+rospy.wait_for_service('/move_base/clear_costmaps')
 clear_costmap = rospy.ServiceProxy('/move_base/clear_costmaps', Empty)
-rospy.sleep(5)
+rospy.sleep(15)
 
 # Start
-#competition()
+competition()
 
 # Tests
-# do_simon()
+# drive_down_ramp()
+#do_simon()
 # do_pulley()
+#rospy.spin()
 
 
