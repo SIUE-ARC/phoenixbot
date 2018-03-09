@@ -42,19 +42,18 @@ def nav_callback(msg):
 simon_light = 0
 def light_callback(msg):
     global simon_light
+    simon_light = -2
 
     max_intensity = 0
+    average_intensity = 0
     for i, value in enumerate(msg.sensors):
+        average_intensity += value;
         if value > max_intensity:
             max_intensity = value
-            simon_light = i
+            if max_intensity > 0.5:
+                simon_light = i
 
-    max_difference = 0
-    for i, value in enumerate(msg.sensors):
-        if max_intensity - value > max_difference:
-            max_difference = max_intensity - value
-
-    if max_difference < 50:
+    if average_intensity > 0.5:
         simon_light = -1
 
 def wait_for_start():
@@ -111,7 +110,8 @@ def do_simon():
     solenoid_cmd = Solenoid()
     while simon_light != -1:
         solenoid_cmd.solenoids = [False] * 4
-        solenoid_cmd.solenoids[simon_light] = True
+        if simon_light > 0:
+            solenoid_cmd.solenoids[simon_light] = True
         solenoid_pub.publish(solenoid_cmd)
 
 def approach_pulley():
@@ -130,7 +130,7 @@ simon_lights = rospy.Subscriber("light_sensors", Light, light_callback)
 pose_pub = rospy.Publisher('initialpose', PoseWithCovarianceStamped, queue_size=3)
 vel_pub = rospy.Publisher('move_base_controller/cmd_vel', Twist, queue_size=3)
 nav_target = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size=3)
-solenoid_pub = rospy.Subscriber("solenoid_commands", Solenoid, queue_size=1)
+solenoid_pub = rospy.Publisher("solenoid_commands", Solenoid, queue_size=1)
 
 rospy.wait_for_service('/move_base/clear_costmaps')
 clear_costmap = rospy.ServiceProxy('/move_base/clear_costmaps', Empty)
