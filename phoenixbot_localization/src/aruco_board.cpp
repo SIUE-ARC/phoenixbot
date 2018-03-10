@@ -13,10 +13,12 @@
 #include <opencv2/core/eigen.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
 
+#include <phoenixbot_msgs/Markers.h>
+
 #include <eigen_conversions/eigen_msg.h>
 
-//#define IMAGE_TOPIC "/usb_cam/image_raw"
-#define IMAGE_TOPIC "/phoenixbot/front_camera/image_raw"
+#define IMAGE_TOPIC "/usb_cam/image_raw"
+//#define IMAGE_TOPIC "/phoenixbot/front_camera/image_raw"
 
 // Dir     ROS CV
 // forward X  -Z
@@ -124,6 +126,7 @@ void loadBoardMarkers() {
 
 image_transport::Publisher pub;
 ros::Publisher posePub;
+ros::Publisher markerPub;
 void colorCallback(const sensor_msgs::ImageConstPtr &msg) {
     cv_bridge::CvImagePtr image = cv_bridge::toCvCopy(msg);
     cv::Mat &color = image->image;
@@ -137,6 +140,36 @@ void colorCallback(const sensor_msgs::ImageConstPtr &msg) {
     if (ids.size() > 0) {
 
         cv::aruco::drawDetectedMarkers(imageCopy, corners, ids);
+
+        {
+            double marker_size;
+            ros::param::get("~marker_size", marker_size);
+            std::vector<cv::Vec3d> rvecs, tvecs;
+            cv::aruco::estimatePoseSingleMarkers(corners, marker_size, cameraMatrix, distCoeffs, rvecs, tvecs);
+
+            phoenixbot_msgs::Markers markerMsg;
+            markerMsg.header.stamp = msg->header.stamp;
+            markerMsg.header.frame_id = "camera";
+            markerMsg.ids = ids;
+
+            for(int i = 0; i < ids.size(); i++) {
+                cv::Mat rotationMatrix;
+                cv::Rodrigues(rvecs[i], rotationMatrix);
+
+                Eigen::Matrix3d eigenRotationMatrix;
+                cv::cv2eigen(rotationMatrix, eigenRotationMatrix);
+
+                Eigen::Affine3d markerPose;
+                markerPose = Eigen::Translation3d(tvecs[i][0], tvecs[i][1], tvecs[i][2]) * eigenRotationMatrix;
+
+                geometry_msgs::Pose markerPoseMsg;
+                tf::poseEigenToMsg(markerPose, markerPoseMsg);
+                
+                markerMsg.poses.push_back(markerPoseMsg);
+            }
+            markerPub.publish(markerMsg);
+        }
+                
         cv::Vec3d rvec, tvec;
         int valid = estimatePoseBoard(corners, ids, board, cameraMatrix, distCoeffs, rvec, tvec);
         // if at least one board marker detected
@@ -163,7 +196,7 @@ void colorCallback(const sensor_msgs::ImageConstPtr &msg) {
             outputPose.header.frame_id = "map";
             outputPose.pose.pose = robotPoseMsg;
 
-            posePub.publish(outputPose);
+            //posePub.publish(outputPose);
         }
     }
 
@@ -182,6 +215,7 @@ int main(int argc, char **argv) {
     pub = it.advertise("debug", 1);
 
     posePub = node.advertise<geometry_msgs::PoseWithCovarianceStamped>("aruco_pose", 5);
+    markerPub = node.advertise<phoenixbot_msgs::Markers>("markers", 1);
 
     ros::spin();
 }

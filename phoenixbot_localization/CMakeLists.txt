@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
     geometry_msgs
     image_transport
     tf2_eigen
+    phoenixbot_msgs
 )
 find_package(Eigen REQUIRED) 
 find_package(OpenCV REQUIRED)

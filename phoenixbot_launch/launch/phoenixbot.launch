@@ -48,11 +48,13 @@
     </include>
 
     <!-- Launch navigation -->
+    <!--
     <include file="$(find phoenixbot_2dnav)/launch/phoenixbot_nav.launch">
     </include>
+    -->
 
     <!-- Launch behavior coordination -->
-    <include if="$(arg auto)" file="$(find phoenixbot_behavior_coordination)/launch/phoenixbot_behavior_coordination.launch">
+    <include file="$(find phoenixbot_behavior_coordination)/launch/phoenixbot_behavior_coordination.launch">
     </include>
 
     <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" required="true"

@@ -49,10 +49,10 @@
         </sensor>
     </gazebo>
 
-    <gazebo reference="front_camera">
-        <sensor type="camera" name="front_camera">
+    <gazebo reference="camera">
+        <sensor type="camera" name="camera">
             <update_rate>30.0</update_rate>
-            <camera name="front">
+            <camera name="camera">
                 <horizontal_fov>1.3962634</horizontal_fov>
                 <image>
                     <width>800</width>
@@ -75,7 +75,7 @@
                 <cameraName>phoenixbot/front_camera</cameraName>
                 <imageTopicName>image_raw</imageTopicName>
                 <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-                <frameName>camera_link</frameName>
+                <frameName>camera</frameName>
                 <hackBaseline>0.07</hackBaseline>
                 <distortionK1>0.0</distortionK1>
                 <distortionK2>0.0</distortionK2>

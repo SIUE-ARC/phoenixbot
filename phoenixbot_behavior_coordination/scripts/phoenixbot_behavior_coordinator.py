@@ -1,16 +1,20 @@
 #!/usr/bin/env python
 import rospy
 
+import tf2_ros
 import numpy
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from geometry_msgs.msg import PoseStamped
+import tf2_geometry_msgs
 from phoenixbot_msgs.msg import Light
 from phoenixbot_msgs.msg import Solenoid
+from phoenixbot_msgs.msg import Markers
 from move_base_msgs.msg import MoveBaseActionResult
 from sensor_msgs.msg import Imu
 from std_srvs.srv import Empty
 from std_msgs.msg import Float64
+import math
 
 import tf.transformations
 
@@ -191,6 +195,36 @@ def drive_down_ramp():
     #print("Reached bottom of ramp");
     #drive(0.0, 0.0)
 
+markers = {}
+def marker_callback(msg):
+    print(marker_callback)
+    
+    for id, pose in zip(msg.ids, msg.poses):
+        p = PoseStamped()
+        p.header = msg.header
+        p.pose = pose
+        markers[id] = p
+
+def track_marker(id, closing_distance):
+    # target_pose = tfBuffer.transform(markers[id], "base_link")
+    target_pose = markers[id]
+    distance = math.sqrt(target_pose.pose.position.x ** 2 + target_pose.pose.position.y ** 2)
+    angle = math.atan2(target_pose.pose.position.y, target_pose.pose.position.x)
+
+    while target_pose not None and abs(angle) > math.radians(5) and distance > closing_distancek:
+        # target_pose = tfBuffer.transform(markers[id], "base_link")
+        target_pose = markers[id]
+        distance = math.sqrt(target_pose.pose.position.x ** 2 + target_pose.pose.position.y ** 2)
+        angle = math.atan2(target_pose.pose.position.y, target_pose.pose.position.x)
+
+        if angle > math.radians(5):
+            drive(0.0, angle)
+        else:
+            drive(distance - closing_distance, 0.0)
+
+    distance = math.sqrt(target_pose.pose.position.x ** 2 + target_pose.pose.position.y ** 2)
+    drive(1.0, 0.0, distance)
+    print(distance, angle)
 
 def competition():
     pose_pub.publish(get_pose("initial_pose"))
@@ -198,35 +232,31 @@ def competition():
 
     drive_down_ramp()
 
-    # Update the pose
-    print("Updating pose...")
-    pose_pub.publish(get_pose("bottom_of_ramp"))
-    #clear_costmap()
-    rospy.sleep(1)
+    track_marker(133, 0.62865)
+    track_marker(113, 0.6858)
 
-    # Drive clear of the ramp
-    print("Clearing ramp")
-    blocking_drive(0.75, 0.0, 0.75)
-    blocking_drive(0.0, 1.57, 1.0)
-    blocking_drive(0.75, 0.0, 0.75)
+    # # Drive clear of the ramp
+    # print("Clearing ramp")
+    # blocking_drive(0.0, 1.57, 1.0)
+    # blocking_drive(0.75, 0.0, 0.75)
 
-    print("Driving to simon")
-    drive_to(get_waypoint("simon_approach"))
+    # print("Driving to simon")
+    # drive_to(get_waypoint("simon_approach"))
 
-    print("Approaching simon")
-    approach_simon()
+    # print("Approaching simon")
+    # approach_simon()
 
-    print("Doing simon")
-    do_simon()
+    # print("Doing simon")
+    # do_simon()
 
-    print("Driving to pulley")
-    drive_to(get_waypoint("pulley_approach"))
+    # print("Driving to pulley")
+    # drive_to(get_waypoint("pulley_approach"))
 
-    print("Approaching pulley")
-    approach_pulley()
+    # print("Approaching pulley")
+    # approach_pulley()
 
-    print("Doing pulley")
-    do_pulley()
+    # print("Doing pulley")
+    # do_pulley()
         
 # Initialization
 rospy.init_node('phoenixbot_behavior_coordinator')
@@ -234,6 +264,7 @@ rospy.init_node('phoenixbot_behavior_coordinator')
 imu_sub = rospy.Subscriber("imu", Imu, imu_callback)
 nav_result = rospy.Subscriber("/move_base/result", MoveBaseActionResult, nav_callback)
 simon_lights = rospy.Subscriber("light_sensors", Light, light_callback)
+marker_sub = rospy.Subscriber('/markers', Markers, marker_callback)
 
 pose_pub = rospy.Publisher('initialpose', PoseWithCovarianceStamped, queue_size=3)
 vel_pub = rospy.Publisher('move_base_controller/cmd_vel', Twist, queue_size=3)
@@ -242,9 +273,12 @@ solenoid_pub = rospy.Publisher("solenoid_commands", Solenoid, queue_size=1)
 rope_cmd = rospy.Publisher('/rope_controller/command', Float64, queue_size=3)
 simon_arm_cmd = rospy.Publisher('/simon_arm_controller/command', Float64, queue_size=3)
 
-rospy.wait_for_service('/move_base/clear_costmaps')
+tfBuffer = tf2_ros.Buffer()
+listener = tf2_ros.TransformListener(tfBuffer)
+
+# rospy.wait_for_service('/move_base/clear_costmaps')
 clear_costmap = rospy.ServiceProxy('/move_base/clear_costmaps', Empty)
-rospy.sleep(15)
+rospy.sleep(5)
 
 # Start
 competition()
