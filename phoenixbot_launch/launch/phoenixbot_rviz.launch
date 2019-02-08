@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+	<param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf"/>
+	<node type="rviz" name="rviz" pkg="rviz"/>
+
+	<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"/>
+	<node name = "joint_state_publisher" type = "joint_state_publisher" pkg = "joint_state_publisher">
+  		<param name = "use_gui" value = "true"/>
+  	</node>
+</launch>

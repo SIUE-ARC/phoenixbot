@@ -1,0 +1,28 @@
+<?xml version = "1.0"?>
+
+<launch>
+	<arg name="markerSize"      default="0.05"/>    <!-- in m -->
+	<arg name="side"             default="left"/>
+	<arg name="ref_frame"       default=""/>  <!-- leave empty and the pose will be published wrt param parent_name -->
+	<arg name="camera"	    default="usb_cam"/>
+	<arg name="video_number"    default="0"/>
+	<arg name="view_gui" 	    default="false"/>
+
+	<include file="$(find usb_cam)/launch/usb_cam-test.launch">
+		<arg name="video_number" value="$(arg video_number)"/> 
+		<arg name="view_gui" value="$(arg view_gui)"/>
+	</include>
+
+
+	<node name="aruco_marker_publisher" pkg="aruco_ros" type="marker_publisher">
+		<remap from="/camera_info" to="/$(arg camera)/camera_info" />
+		<remap from="/image" to="/$(arg camera)/image_raw" />
+		<param name="image_is_rectified" value="True"/>
+		<param name="marker_size"        value="$(arg markerSize)"/>
+		<param name="reference_frame"    value="$(arg ref_frame)"/>   <!-- frame in which the marker pose will be refered -->
+		<param name="camera_frame"       value="$(arg camera)_frame"/>
+	</node>
+
+	<node name="aruco_tracking" pkg="marker_transform" type="tf_marker_tranform.py"/>
+
+</launch>
