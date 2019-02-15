@@ -10,10 +10,13 @@
 
     <!-- Launch the controllers -->
     <rosparam file="$(find phoenixbot_driver)/config/controllers.yaml" command="load"/>
-    <node unless="$(arg sim)" output="screen" name="controller_spawner" pkg="controller_manager" type="spawner"
-          args="move_base_controller state_controller simon_arm_controller rope_controller --shutdown-timeout 1"/>
-    <node if="$(arg sim)" output="screen" name="controller_spawner" pkg="controller_manager" type="spawner"
-          args="move_base_controller state_controller simon_arm_position_controller rope_controller --shutdown-timeout 1"/>
+    <node unless="$(arg sim)" output="screen" respawn="false"
+          name="controller_spawner" pkg="controller_manager" type="spawner"
+          args="move_base_controller state_controller simon_arm_controller rope_controller"/>
+
+    <node if="$(arg sim)" output="screen" respawn="false"
+          name="controller_spawner" pkg="controller_manager" type="spawner"
+          args="move_base_controller state_controller simon_arm_position_controller rope_controller"/>
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 

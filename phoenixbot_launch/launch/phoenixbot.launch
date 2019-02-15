@@ -46,10 +46,8 @@
     </include>
 
     <!-- Launch navigation -->
-    <!--
     <include file="$(find phoenixbot_2dnav)/launch/phoenixbot_nav.launch">
     </include>
-    -->
 
     <!-- Launch behavior coordination -->
     <include file="$(find phoenixbot_behavior_coordination)/launch/phoenixbot_behavior_coordination.launch">

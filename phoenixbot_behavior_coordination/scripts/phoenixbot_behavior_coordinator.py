@@ -211,6 +211,7 @@ def competition():
     # Drive clear of the ramp
     print("Clearing ramp")
     drive_down_ramp()
+    pose_pub.publish(get_pose("bottom_of_ramp"))
 
     print("Driving to simon")
     drive_to(get_waypoint("simon_approach"))

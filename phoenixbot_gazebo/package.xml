@@ -10,5 +10,9 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <export></export>
+  <run_depend>gazebo_ros</run_depend>
+  <export>
+    <gazebo_ros gazebo_model_path="${prefix}/meshes"/>
+    <gazebo_ros gazebo_media_path="${prefix}/meshes"/>
+  </export>
 </package>
