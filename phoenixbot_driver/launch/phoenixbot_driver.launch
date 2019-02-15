@@ -16,5 +16,14 @@
           args="move_base_controller state_controller simon_arm_position_controller rope_controller --shutdown-timeout 1"/>
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+    <!-- Launch the rest of the hardware interfaces -->
+    <group unless="$(arg sim)">
+      <include file="$(find razor_imu_9dof)/launch/razor-pub.launch"/>
+      <node name="usb_cam" type="usb_cam_node" pkg="usb_cam">
+          <param name="video_device" value="/dev/video1"/>
+          <param name="camera_name" value="camera"/>
+      </node>
+    </group>
 </launch>
 

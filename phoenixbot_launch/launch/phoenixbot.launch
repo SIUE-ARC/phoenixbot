@@ -40,8 +40,6 @@
         <arg name="sim" value="$(arg sim)"/>
     </include>
 
-    <include file="$(find razor_imu_9dof)/launch/razor-pub.launch"/>
-
     <!-- Launch localization -->
     <include file="$(find phoenixbot_localization)/launch/phoenixbot_localization.launch">
         <arg name="map" value="$(arg map)"/>

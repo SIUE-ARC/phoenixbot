@@ -73,6 +73,15 @@ def light_callback(msg):
     if average_intensity > 0.8:
         simon_light = -1
 
+markers = {}
+def marker_callback(msg):
+
+    for id, pose in zip(msg.ids, msg.poses):
+        p = PoseStamped()
+        p.header = msg.header
+        p.pose = pose
+        markers[id] = p
+
 def wait_for_start():
     pass
 
@@ -195,68 +204,31 @@ def drive_down_ramp():
     #print("Reached bottom of ramp");
     #drive(0.0, 0.0)
 
-markers = {}
-def marker_callback(msg):
-    print(marker_callback)
-    
-    for id, pose in zip(msg.ids, msg.poses):
-        p = PoseStamped()
-        p.header = msg.header
-        p.pose = pose
-        markers[id] = p
-
-def track_marker(id, closing_distance):
-    # target_pose = tfBuffer.transform(markers[id], "base_link")
-    target_pose = markers[id]
-    distance = math.sqrt(target_pose.pose.position.x ** 2 + target_pose.pose.position.y ** 2)
-    angle = math.atan2(target_pose.pose.position.y, target_pose.pose.position.x)
-
-    while target_pose not None and abs(angle) > math.radians(5) and distance > closing_distancek:
-        # target_pose = tfBuffer.transform(markers[id], "base_link")
-        target_pose = markers[id]
-        distance = math.sqrt(target_pose.pose.position.x ** 2 + target_pose.pose.position.y ** 2)
-        angle = math.atan2(target_pose.pose.position.y, target_pose.pose.position.x)
-
-        if angle > math.radians(5):
-            drive(0.0, angle)
-        else:
-            drive(distance - closing_distance, 0.0)
-
-    distance = math.sqrt(target_pose.pose.position.x ** 2 + target_pose.pose.position.y ** 2)
-    drive(1.0, 0.0, distance)
-    print(distance, angle)
-
 def competition():
     pose_pub.publish(get_pose("initial_pose"))
     wait_for_start()
 
+    # Drive clear of the ramp
+    print("Clearing ramp")
     drive_down_ramp()
 
-    track_marker(133, 0.62865)
-    track_marker(113, 0.6858)
+    print("Driving to simon")
+    drive_to(get_waypoint("simon_approach"))
 
-    # # Drive clear of the ramp
-    # print("Clearing ramp")
-    # blocking_drive(0.0, 1.57, 1.0)
-    # blocking_drive(0.75, 0.0, 0.75)
+    print("Approaching simon")
+    approach_simon()
 
-    # print("Driving to simon")
-    # drive_to(get_waypoint("simon_approach"))
+    print("Doing simon")
+    do_simon()
 
-    # print("Approaching simon")
-    # approach_simon()
+    print("Driving to pulley")
+    drive_to(get_waypoint("pulley_approach"))
 
-    # print("Doing simon")
-    # do_simon()
+    print("Approaching pulley")
+    approach_pulley()
 
-    # print("Driving to pulley")
-    # drive_to(get_waypoint("pulley_approach"))
-
-    # print("Approaching pulley")
-    # approach_pulley()
-
-    # print("Doing pulley")
-    # do_pulley()
+    print("Doing pulley")
+    do_pulley()
         
 # Initialization
 rospy.init_node('phoenixbot_behavior_coordinator')
