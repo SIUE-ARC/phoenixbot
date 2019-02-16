@@ -5,71 +5,153 @@
       <uri>model://ground_plane</uri>
     </include>
 
-	<light type="point" name="overhead_1">
-		<pose>5 5 5 0 0 0</pose>
-		<diffuse>.9 .9 .9 1</diffuse>
-		<specular>.1 .1 .1 1</specular>
-		<attenuation>
-			<range>20</range>
-			<linear>0.13</linear>
-			<constant>0.1</constant>
-		</attenuation>
-		<cast_shadows>true</cast_shadows>
-	</light>
-	<light type="point" name="overhead_2">
-		<pose>5 -5 5 0 0 0</pose>
-		<diffuse>.9 .9 .9 1</diffuse>
-		<specular>.1 .1 .1 1</specular>
-		<attenuation>
-			<range>20</range>
-			<linear>0.13</linear>
-			<constant>0.1</constant>
-		</attenuation>
-		<cast_shadows>true</cast_shadows>
-	</light>
-	<light type="point" name="overhead_3">
-		<pose>-5 5 5 0 0 0</pose>
-		<diffuse>.9 .9 .9 1</diffuse>
-		<specular>.1 .1 .1 1</specular>
-		<attenuation>
-			<range>20</range>
-			<linear>0.13</linear>
-			<constant>0.1</constant>
-		</attenuation>
-		<cast_shadows>true</cast_shadows>
-	</light>
-	<light type="point" name="overhead_4">
-		<pose>-5 -5 5 0 0 0</pose>
-		<diffuse>.9 .9 .9 1</diffuse>
-		<specular>.1 .1 .1 1</specular>
-		<attenuation>
-			<range>20</range>
-			<linear>0.13</linear>
-			<constant>0.1</constant>
-		</attenuation>
-		<cast_shadows>true</cast_shadows>
-	</light>
+  <!-- Gazebo doesn't model light diffusion, so we need some extra light sources
+       to make sure everything is evenly lit -->
+  <light type="point" name="overhead_1">
+    <pose>5 5 5 0 0 0</pose>
+    <diffuse>.9 .9 .9 1</diffuse>
+    <specular>.1 .1 .1 1</specular>
+    <attenuation>
+      <range>20</range>
+      <linear>0.2</linear>
+      <constant>0.8</constant>
+    </attenuation>
+    <cast_shadows>true</cast_shadows>
+  </light>
+  <light type="point" name="overhead_2">
+    <pose>5 -5 5 0 0 0</pose>
+    <diffuse>.9 .9 .9 1</diffuse>
+    <specular>.1 .1 .1 1</specular>
+    <attenuation>
+      <range>20</range>
+      <linear>0.2</linear>
+      <constant>0.8</constant>
+    </attenuation>
+    <cast_shadows>true</cast_shadows>
+  </light>
+  <light type="point" name="overhead_3">
+    <pose>-5 5 5 0 0 0</pose>
+    <diffuse>.9 .9 .9 1</diffuse>
+    <specular>.1 .1 .1 1</specular>
+    <attenuation>
+      <range>20</range>
+      <linear>0.2</linear>
+      <constant>0.8</constant>
+    </attenuation>
+    <cast_shadows>true</cast_shadows>
+  </light>
+  <light type="point" name="overhead_4">
+    <pose>-5 -5 5 0 0 0</pose>
+    <diffuse>.9 .9 .9 1</diffuse>
+    <specular>.1 .1 .1 1</specular>
+    <attenuation>
+      <range>20</range>
+      <linear>0.2</linear>
+      <constant>0.8</constant>
+    </attenuation>
+    <cast_shadows>true</cast_shadows>
+  </light>
 
-	<model name="field">
-	   <pose>0 0 0  0 0 0</pose>
+	<model name="platform">
 	   <static>true</static>
 	   <link name="platform">
 	      <visual name="visual">
 		<geometry>
 		   <mesh>
-		      <uri>file://phoenixbot_gazebo/meshes/platform_center.stl</uri>
+		      <uri>file://2019/platform.stl</uri>
 		   </mesh>
 		</geometry>
 	      </visual>
 	      <collision name="collision">
 		<geometry>
 		   <mesh>
-		      <uri>file://phoenixbot_gazebo/meshes/platform_center.stl</uri>
+		      <uri>file://2019/platform.stl</uri>
 		   </mesh>
 		</geometry>
 	      </collision>
 	   </link>
 	</model>
+
+	<model name="Ramp">
+	   <static>true</static>
+	   <link name="Ramp">
+	      <visual name="visual">
+		<geometry>
+		   <mesh>
+		      <uri>file://2019/Ramp.stl</uri>
+		   </mesh>
+		</geometry>
+	      </visual>
+	      <collision name="collision">
+		<geometry>
+		   <mesh>
+		      <uri>file://2019/Ramp.stl</uri>
+		   </mesh>
+		</geometry>
+	      </collision>
+	   </link>
+	</model>
+
+	<model name="bridge">
+	   <static>true</static>
+	   <link name="bridge">
+	      <visual name="visual">
+		<geometry>
+		   <mesh>
+		      <uri>file://2019/bridge.stl</uri>
+		   </mesh>
+		</geometry>
+	      </visual>
+	      <collision name="collision">
+		<geometry>
+		   <mesh>
+		      <uri>file://2019/bridge.stl</uri>
+		   </mesh>
+		</geometry>
+	      </collision>
+	   </link>
+	</model>
+
+	<model name="hoopStand">
+	   <static>true</static>
+	   <link name="hoopStand">
+	      <visual name="visual">
+		<geometry>
+		   <mesh>
+		      <uri>file://2019/hoopStand.stl</uri>
+		   </mesh>
+		</geometry>
+	      </visual>
+	      <collision name="collision">
+		<geometry>
+		   <mesh>
+		      <uri>file://2019/hoopStand.stl</uri>
+		   </mesh>
+		</geometry>
+	      </collision>
+	   </link>
+	</model>
+
+	<model name="simonBox">
+	   <static>true</static>
+	   <link name="simonBox">
+	      <visual name="visual">
+		<geometry>
+		   <mesh>
+		      <uri>file://2019/simonBox.stl</uri>
+		   </mesh>
+		</geometry>
+	      </visual>
+	      <collision name="collision">
+		<geometry>
+		   <mesh>
+		      <uri>file://2019/simonBox.stl</uri>
+		   </mesh>
+		</geometry>
+	      </collision>
+	   </link>
+	</model>
+
   </world>
 </sdf>
 
