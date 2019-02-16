@@ -11,8 +11,8 @@ initial_pose:
 
 bottom_of_ramp:
     position:
-        x: -4.791
-        y:  4.840
+        x: -5.250
+        y:  5.250
         z:  0.000
     orientation:
         x:  0.000
