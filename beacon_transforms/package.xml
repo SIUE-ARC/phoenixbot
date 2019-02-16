@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>beacon_transforms</name>
+  <version>0.0.0</version>
+  <description>The beacon_transforms package</description>
+
+  <maintainer email="arc@todo.todo">arc</maintainer>
+
+  <license>TODO</license>
+
+  <build_depend>marvelmind_nav</build_depend> 
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export> </export>
+</package>

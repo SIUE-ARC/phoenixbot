@@ -1,17 +1,23 @@
 # Explicitly override the world frame declared in localization_common
 world_frame: map
 
-pose0: amcl_pose
-pose0_config: [true,  true,  false, # x, y, z
-               false, false, true,  # r, p, y
+pose0: current_pose
+pose0_config: [true,  true,  true, # x, y, z
+               false, false, false,  # r, p, y
                false, false, false, # dx, dy, dz
                false, false, false, # dr, dp, dy
                false, false, false] # d^2x, d^2y, d^2z
 
-#pose1: aruco_pose
+#pose1: amcl_pose
 #pose1_config: [true,  true,  false, # x, y, z
+#               false, false, true,  # r, p, y
+#               false, false, false, # dx, dy, dz
+#               false, false, false, # dr, dp, dy
+#               false, false, false] # d^2x, d^2y, d^2z
+
+#pose2: aruco_pose
+#pose2_config: [true,  true,  false, # x, y, z
                #false, false, true,  # r, p, y
                #false, false, false, # dx, dy, dz
                #false, false, false, # dr, dp, dy
                #false, false, false] # d^2x, d^2y, d^2z
-

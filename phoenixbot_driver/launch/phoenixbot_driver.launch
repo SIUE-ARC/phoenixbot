@@ -41,6 +41,7 @@
           <param name="camera_name" value="front_camera"/>
       </node>
 
+      <node name="beacon" pkg="marvelmind_nav" type="hedge_rcv_bin" args="/dev/ttyACM1"/>
     </group>
 </launch>
 
