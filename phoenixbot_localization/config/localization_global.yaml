@@ -1,3 +1,4 @@
+# Explicitly override the world frame declared in localization_common
 world_frame: map
 
 pose0: amcl_pose

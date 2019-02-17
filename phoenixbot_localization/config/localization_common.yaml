@@ -1,4 +1,4 @@
-two_d_mode: true
+two_d_mode: false
 
 # robot_localization produces transform from world frame to base_link frame
 map_frame: map
@@ -11,7 +11,7 @@ base_link_frame: base_link
 odom0: /chassis_controller/odom
 odom0_config: [false, false, false, # x, y, z
                false, false, false, # r, p, y
-               true,  true, false,   # dx, dy, dz
+               true,  true, false,  # dx, dy, dz
                false, false, true,  # dr, dp, dy
                false, false, false] # d^2x, d^2y, d^2z
 
