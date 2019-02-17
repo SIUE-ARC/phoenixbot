@@ -5,9 +5,6 @@
     <!-- Load robot description -->
     <param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf" />
 
-    <!-- Spawn hardware interface if running in real mode -->
-    <node unless="$(arg sim)" name="phoenixbot_driver" pkg="phoenixbot_driver" type="phoenixbot_driver" />
-
     <!-- Launch the controllers -->
     <rosparam file="$(find phoenixbot_driver)/config/controllers.yaml" command="load"/>
     <node unless="$(arg sim)" output="screen" respawn="false"
@@ -20,9 +17,14 @@
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
-    <!-- Launch the rest of the hardware interfaces -->
+    <!-- Spawn hardware interfaces if running in real mode -->
     <group unless="$(arg sim)">
       <include file="$(find razor_imu_9dof)/launch/razor-pub.launch"/>
+
+      <node name="phoenixbot_driver" pkg="phoenixbot_driver" type="phoenixbot_driver" output="screen">
+        <param name="port" value="/dev/ttyACM0"/>
+      </node>
+
       <node name="usb_cam" type="usb_cam_node" pkg="usb_cam">
           <param name="video_device" value="/dev/video0"/>
           <param name="camera_name" value="front_camera"/>
