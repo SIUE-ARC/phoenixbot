@@ -72,7 +72,7 @@
             <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
                 <alwaysOn>true</alwaysOn>
                 <updateRate>0.0</updateRate>
-                <cameraName>phoenixbot/front_camera</cameraName>
+                <cameraName>front_camera</cameraName>
                 <imageTopicName>image_raw</imageTopicName>
                 <cameraInfoTopicName>camera_info</cameraInfoTopicName>
                 <frameName>camera</frameName>

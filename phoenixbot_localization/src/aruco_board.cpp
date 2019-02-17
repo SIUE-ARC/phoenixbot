@@ -17,8 +17,7 @@
 
 #include <eigen_conversions/eigen_msg.h>
 
-#define IMAGE_TOPIC "/usb_cam/image_raw"
-//#define IMAGE_TOPIC "/phoenixbot/front_camera/image_raw"
+#define IMAGE_TOPIC "/front_camera/image_raw"
 
 // Dir     ROS CV
 // forward X  -Z
