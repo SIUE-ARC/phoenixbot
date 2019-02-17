@@ -50,7 +50,7 @@ def joy_callback(msg):
 joy_sub = rospy.Subscriber("joy", Joy, joy_callback)
 simon_lights = rospy.Subscriber("light_sensors", Light, light_callback)
 
-vel_pub = rospy.Publisher('move_base_controller/cmd_vel', Twist, queue_size=3)
+vel_pub = rospy.Publisher('chassis_controller/cmd_vel', Twist, queue_size=3)
 solenoid_pub = rospy.Publisher("solenoid_commands", Solenoid, queue_size=1)
 
 rope_cmd = rospy.Publisher('/rope_controller/command', Float64, queue_size=3)

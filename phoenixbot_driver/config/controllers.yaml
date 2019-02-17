@@ -2,7 +2,7 @@ state_controller:
     type: joint_state_controller/JointStateController
     publish_rate: 50
 
-move_base_controller:
+chassis_controller:
     type: "diff_drive_controller/DiffDriveController"
     publish_rate: 50
     left_wheel: 'left_wheel_joint'

@@ -8,7 +8,7 @@ base_link_frame: base_link
 # Wheel odometry
 # We discard position estimates from wheel odometry
 # because the same data is already reported in velocity
-odom0: /move_base_controller/odom
+odom0: /chassis_controller/odom
 odom0_config: [false, false, false, # x, y, z
                false, false, false, # r, p, y
                true,  true, false,   # dx, dy, dz
