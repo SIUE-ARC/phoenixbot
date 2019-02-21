@@ -2,8 +2,10 @@
 <launch>
     <arg name="map" default=""/>
 
+    <arg name="slam" default="$(eval map == '')"/>
+
     <!-- Launch SLAM if no static map supplied -->
-    <group if="$(eval map == '')">
+    <group if="$(arg slam)">
         <node pkg="gmapping" type="slam_gmapping" name="slam">
             <param name="scan" value="scan"/>
         </node>
@@ -11,7 +13,7 @@
 
 
     <!-- Launch map server and AMCL if a static map was supplied -->
-    <group unless="$(eval map == '')">
+    <group unless="$(arg slam)">
         <node pkg="map_server" type="map_server" name="map_server" args="$(find phoenixbot_2dnav)/maps/$(arg map)"/>
         <node pkg="amcl" type="amcl" name="amcl_localization">
             <param name="scan" value="scan"/>
@@ -35,11 +37,10 @@
         <rosparam command="load" file="$(find phoenixbot_localization)/config/localization_common.yaml"/>
     </node>
 
-    <!-- Map filter -->
-    <node name="global_localization_node" type="ekf_localization_node" pkg="robot_localization">
+    <!-- Global localization (Don't launch if SLAM is running) -->
+    <node unless="$(arg slam)" name="global_localization_node" type="ekf_localization_node" pkg="robot_localization">
         <rosparam command="load" file="$(find phoenixbot_localization)/config/localization_common.yaml"/>
         <rosparam command="load" file="$(find phoenixbot_localization)/config/localization_global.yaml"/>
     </node>
 
 </launch>
-
