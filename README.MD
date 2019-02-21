@@ -2,13 +2,24 @@
 
 ## Running in gazebo
 
-### Full MRDC simulation
+### MRDC Autonomous Simulation
+Runs phoenixbot in the 2018 MRDC world with the autonomous behavior coordinator.
 ```
-roslaunch phoenixbot_launch phoenixbot.launch sim:=true map:=mrdc_laser.yaml nav_map:=mrdc_nav.yaml
+roslaunch phoenixbot_launch phoenixbot_auto.launch sim:=true
 ```
 
-### SLAM simulation
+### Teleop Simulation
+Runs phoenixbot in an empty world, with teleop_twist_joy and the
+phoenixbot_teleop node.
 ```
-roslaunch phoenixbot_launch phoenixbot.launch sim:=true 
+roslaunch phoenixbot_launch phoenixbot_teleop.launch sim:=true
+```
+
+### SLAM Simulation
+Runs phoenixbot in the Willow Garage world using SLAM as a map source instead
+of a static map. Starts navigation stack but provides no other control
+methods.
+```
+roslaunch phoenixbot_launch phoenixbot_slam.launch sim:=true
 ```
 

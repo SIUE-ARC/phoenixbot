@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!-- Display gzclient during launch -->
+    <arg name="gui" default="false"/>
+    <arg name="world" default="worlds/willowgarage.world"/>
+
+    <!-- Load robot description -->
+    <param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf" />
+
+    <!-- Set use_sim_time early so no issues -->
+    <param name="use_sim_time" value="true"/>
+
+    <!-- This is a workaround for a bug in gazebo7 described here:
+         https://github.com/ros-simulation/gazebo_ros_pkgs/issues/612-->
+    <rosparam>
+      gazebo_ros_control:
+        pid_gains:
+          simon_arm_joint:
+            p: 2.0
+            i: 0.0
+            d: 1.8
+            i_clamp: 1.0
+            antiwindup: false
+      publish_state: true
+    </rosparam>
+
+    <!-- Start gazebo -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <!-- <arg if="$(eval world != '')" name="world_name" value="$(find phoenixbot_gazebo)/worlds/$(arg world)"/> -->
+        <arg name="world_name" value="$(arg world)"/>
+        <arg name="gui" value="false"/>
+    </include>
+
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false"
+      args="-urdf -z 0.6096 -x -2.4384 -y 2.4384 -Y 2.35619 -model phoenixbot -param robot_description"/>
+</launch>

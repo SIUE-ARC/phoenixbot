@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-    <arg name="gui" default="true"/>
-    <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="$(find phoenixbot_gazebo)/worlds/mrdc.world"/>
-        <arg name="gui" value="$(arg gui)"/>
-    </include>
-</launch>
-
