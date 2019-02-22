@@ -11,5 +11,10 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>phoenixbot_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+
   <export></export>
 </package>

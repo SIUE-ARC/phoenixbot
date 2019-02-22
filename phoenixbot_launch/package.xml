@@ -9,6 +9,16 @@
 
   <license>GPLv3</license>
 
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>joy</exec_depend>
+  <exec_depend>phoenixbot_2dnav</exec_depend>
+  <exec_depend>phoenixbot_behavior_coordination</exec_depend>
+  <exec_depend>phoenixbot_driver</exec_depend>
+  <exec_depend>phoenixbot_gazebo</exec_depend>
+  <exec_depend>phoenixbot_launch</exec_depend>
+  <exec_depend>phoenixbot_localization</exec_depend>
+  <exec_depend>rviz</exec_depend>
+
   <buildtool_depend>catkin</buildtool_depend>
 
   <export></export>
