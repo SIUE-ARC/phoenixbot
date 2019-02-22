@@ -240,7 +240,7 @@ simon_lights = rospy.Subscriber("light_sensors", Light, light_callback)
 marker_sub = rospy.Subscriber('/markers', Markers, marker_callback)
 
 pose_pub = rospy.Publisher('initialpose', PoseWithCovarianceStamped, queue_size=3)
-vel_pub = rospy.Publisher('/chassis_controller/cmd_vel', Twist, queue_size=3)
+vel_pub = rospy.Publisher('/direct/cmd_vel', Twist, queue_size=3)
 nav_target = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size=3)
 solenoid_pub = rospy.Publisher("solenoid_commands", Solenoid, queue_size=1)
 rope_cmd = rospy.Publisher('/rope_controller/command', Float64, queue_size=3)

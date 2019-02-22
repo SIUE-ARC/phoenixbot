@@ -13,6 +13,18 @@
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
+    <!-- Launch the controller mutiplexer -->
+    <node pkg="twist_mux" type="twist_mux" name="twist_mux">
+      <remap from="cmd_vel_out" to="chassis_controller/cmd_vel"/>
+      <rosparam file="$(find phoenixbot_driver)/config/twist_mux.yaml"  command="load"/>
+    </node>
+
+    <!-- Displays twist messages as an arrow on rviz -->
+    <node pkg="twist_mux" type="twist_marker" name="twist_marker">
+      <remap from="twist"  to="chassis_controller/cmd_vel"/>
+      <remap from="marker" to="twist_marker"/>
+    </node>
+
     <!-- Spawn hardware interfaces if running in real mode -->
     <group unless="$(arg sim)">
 
