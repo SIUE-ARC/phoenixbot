@@ -145,7 +145,7 @@ def raise_simon():
 
 def lower_simon():
     msg = Float64()
-    msg.data = 1.6
+    msg.data = -1.6
     simon_arm_cmd.publish(msg)
     rospy.sleep(1)
 
