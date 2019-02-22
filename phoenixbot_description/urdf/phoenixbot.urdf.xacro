@@ -9,11 +9,22 @@
     <!-- Include the chassis -->
     <xacro:include filename="$(find phoenixbot_description)/urdf/phoenixbot_chassis.xacro" />
 
-	<link name="front_camera"/>
-	<joint name="front_camera_joint" type="fixed">
+    <xacro:include filename="$(find phoenixbot_description)/urdf/phoenixbot_simon.xacro" />
+
+    <xacro:include filename="$(find phoenixbot_description)/urdf/phoenixbot_pulley.xacro" />
+
+	<link name="camera"/>
+	<joint name="camera_joint" type="fixed">
 		<parent link="base_link"/>
-		<child link="front_camera"/>
-		<origin xyz="${8 * IN} 0 ${5 * IN}" rpy="0 0.2 0"/>
+		<child link="camera"/>
+        <origin xyz="${4.875 * IN} ${-14.375 * IN} ${14.125 * IN}" rpy="0 -0.1 0"/>
+	</joint>
+
+	<link name="imu_base_link"/>
+	<joint name="imu_joint" type="fixed">
+		<parent link="base_link"/>
+		<child link="imu_base_link"/>
+        <origin xyz="0 ${1 * IN} 0"/>
 	</joint>
 
 	<link name="laser_link"/>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>phoenixbot_localization</name>
+  <version>0.0.0</version>
+  <description>The phoenixbot_localization package</description>
+
+  <maintainer email="zach.inbox@gmail.com">Zach Anderson</maintainer>
+  <author email="zach.inbox@gmail.com">Zach Anderson</author>
+
+  <license>GPLv3</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- TODO I think this is overkill, trim it back -->
+  <build_depend>cmake_modules</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>opencv3</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>tf2_eigen</build_depend>
+  <build_depend>eigen_conversions</build_depend>
+
+  <exec_depend>navigation</exec_depend>
+  <exec_depend>phoenixbot_2dnav</exec_depend>
+  <exec_depend>robot_localization</exec_depend>
+  <exec_depend>slam_gmapping</exec_depend>
+
+  <export></export>
+</package>

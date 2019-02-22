@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!-- Run the robot in gazebo instead of trying to connect to real hardware -->
+    <arg name="sim" default="false"/>
+
+    <!-- In a teleop configuration it is not unusual for a second computer to
+         be connected to the joystick. This argument should be set to true
+         when launching on the computer with the joystick connected -->
+    <arg name="driver" default="true"/>
+
+    <!-- Start main phoenixbot nodes -->
+    <include file="$(find phoenixbot_launch)/launch/phoenixbot_base.launch">
+      <arg name="world" value="worlds/empty.world"/>
+      <arg name="map" value=""/>
+      <arg name="sim" value="$(arg sim)"/>
+    </include>
+
+    <!-- Start nodes for control -->
+    <group if="$(arg driver)">
+      <node type="joy_node" pkg="joy" name="joy">
+          <param name="autorepeat_rate" value="10"/>
+      </node>
+      <node name="phoenixbot_teleop" type="phoenixbot_teleop.py" pkg="phoenixbot_behavior_coordination"/>
+
+      <!-- Display rviz with proper config during launch -->
+      <arg name="rviz" default="$(arg sim)"/>
+      <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" required="true"
+          args="--display-config $(find phoenixbot_launch)/config/phoenixbot.rviz"/>
+
+      <arg name="gui" default="false"/>
+      <node if="$(eval sim and gui)" required="true" name="gzclient" pkg="gazebo_ros" type="gzclient"/>
+    </group>
+
+</launch>

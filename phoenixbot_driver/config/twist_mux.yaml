@@ -1,0 +1,23 @@
+topics:
+- name    : navigation
+  topic   : /move_base/cmd_vel
+  timeout : 0.5
+  priority: 10
+- name    : direct
+  topic   : /direct/cmd_vel
+  timeout : 0.5
+  priority: 20
+- name    : joystick
+  topic   : /teleop/cmd_vel
+  timeout : 0.5
+  priority: 100
+
+locks:
+- name    : pause
+  topic   : pause_navigation
+  timeout : 0.0
+  priority: 20
+- name    : Stop all auto
+  topic   : drive_lockout
+  timeout : 0.0
+  priority: 100

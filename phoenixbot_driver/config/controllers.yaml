@@ -2,24 +2,20 @@ state_controller:
     type: joint_state_controller/JointStateController
     publish_rate: 50
 
-move_base_controller:
+chassis_controller:
     type: "diff_drive_controller/DiffDriveController"
     publish_rate: 50
     left_wheel: 'left_wheel_joint'
     right_wheel: 'right_wheel_joint'
-    pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
-    twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
+    pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
+    twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
+    enable_odom_tf: false
 
-front_arm_controller:
-    type: "position_controllers/JointTrajectoryController"
-    joints:
-        - gripper_lift_joint
-        - mobile_gripper_joint
-        - static_gripper_joint
+simon_arm_controller:
+    type: "position_controllers/JointPositionController"
+    joint: simon_arm_joint
 
-simon_gantry_controller:
-    type: "position_controllers/JointTrajectoryController"
-    joints:
-        - simon_x_axis_joint
-        - simon_y_axis_joint
+rope_controller:
+    type: "velocity_controllers/JointVelocityController"
+    joint: rope_joint
 

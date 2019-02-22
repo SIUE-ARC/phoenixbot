@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<!-- Launches phoenixbot with all the nodes required to perform SLAM.
+     Does not launch any control nodes -->
+<launch>
+    <!-- Run the robot in gazebo instead of trying to connect to real hardware -->
+    <arg name="sim" default="false"/>
+
+    <!-- Start main phoenixbot nodes -->
+    <include file="$(find phoenixbot_launch)/launch/phoenixbot_base.launch">
+      <arg name="map" value=""/>
+      <arg name="sim" value="$(arg sim)"/>
+    </include>
+
+    <!-- Display rviz with proper config during launch -->
+    <arg name="rviz" default="$(arg sim)"/>
+    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" required="true"
+        args="--display-config $(find phoenixbot_launch)/config/phoenixbot.rviz"/>
+
+    <arg name="gui" default="false"/>
+    <node if="$(eval sim and gui)" required="true" name="gzclient" pkg="gazebo_ros" type="gzclient"/>
+</launch>

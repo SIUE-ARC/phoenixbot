@@ -5,14 +5,42 @@
     <!-- Load robot description -->
     <param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf" />
 
-    <!-- Spawn hardware interface if running in real mode -->
-    <node unless="$(arg sim)" name="phoenixbot_driver" pkg="phoenixbot_driver" type="phoenixbot_driver" output="screen"/>
-
     <!-- Launch the controllers -->
     <rosparam file="$(find phoenixbot_driver)/config/controllers.yaml" command="load"/>
-    <node output="screen" name="controller_spawner" pkg="controller_manager" type="spawner"
-          args="move_base_controller state_controller --shutdown-timeout 1"/>
+    <node respawn="false"
+          name="controller_spawner" pkg="controller_manager" type="spawner"
+          args="state_controller chassis_controller simon_arm_controller rope_controller"/>
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+    <!-- Launch the controller mutiplexer -->
+    <node pkg="twist_mux" type="twist_mux" name="twist_mux">
+      <remap from="cmd_vel_out" to="chassis_controller/cmd_vel"/>
+      <rosparam file="$(find phoenixbot_driver)/config/twist_mux.yaml"  command="load"/>
+    </node>
+
+    <!-- Displays twist messages as an arrow on rviz -->
+    <node pkg="twist_mux" type="twist_marker" name="twist_marker">
+      <remap from="twist"  to="chassis_controller/cmd_vel"/>
+      <remap from="marker" to="twist_marker"/>
+    </node>
+
+    <!-- Spawn hardware interfaces if running in real mode -->
+    <group unless="$(arg sim)">
+
+      <node name="phoenixbot_driver" pkg="phoenixbot_driver" type="phoenixbot_driver" output="screen">
+        <param name="port" value="/dev/ttyACM0"/>
+      </node>
+
+      <node pkg="razor_imu_9dof" type="imu_node.py" name="imu_node">
+        <param name="port" value="/dev/ttyUSB0"/>
+      </node>
+
+      <node name="usb_cam" type="usb_cam_node" pkg="usb_cam">
+          <param name="video_device" value="/dev/video0"/>
+          <param name="camera_name" value="front_camera"/>
+      </node>
+
+    </group>
 </launch>
 

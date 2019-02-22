@@ -1,0 +1,62 @@
+initial_pose:
+    position:
+        x: -2.4384
+        y:  2.4384
+        z:  0.6604
+    orientation:
+        x:  0.000
+        y:  0.000
+        z:  0.928
+        w:  0.372
+
+bottom_of_ramp:
+    position:
+        x: -5.250
+        y:  5.250
+        z:  0.000
+    orientation:
+        x:  0.000
+        y:  0.000
+        z:  0.928
+        w:  0.372
+
+pulley_approach:
+    position:
+        x: -5.343
+        y:  6.052
+        z:  0.000
+    orientation:
+        r: 0.0
+        p: 0.0
+        y: 0.0
+
+pulley:
+    position:
+        x: -6.343
+        y:  6.052
+        z:  0.000
+    orientation:
+        r: 0.0
+        p: 0.0
+        y: 0.0
+
+simon_approach:
+    position:
+        x: -2.8091
+        y:  5.2646
+        z:  0.000
+    orientation:
+        r: 0.0
+        p: 0.0
+        y: 0.0
+
+simon:
+    position:
+        x: -2.25
+        y:  5.2646
+        z:  0.000
+    orientation:
+        r: 0.0
+        p: 0.0
+        y: 0.0
+

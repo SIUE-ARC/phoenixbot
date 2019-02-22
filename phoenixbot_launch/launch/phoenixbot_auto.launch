@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!-- Run the robot in gazebo instead of trying to connect to real hardware -->
+    <arg name="sim" default="false"/>
+
+    <!-- Start main phoenixbot nodes-->
+    <include file="$(find phoenixbot_launch)/launch/phoenixbot_base.launch">
+      <arg name="world"   value="worlds/mrdc.world"/>
+      <arg name="map"     value="mrdc_laser.yaml"/>
+      <arg name="nav_map" value="mrdc_nav.yaml"/>
+      <arg name="sim"     value="$(arg sim)"/>
+    </include>
+
+    <!-- Launch behavior coordination -->
+    <include file="$(find phoenixbot_behavior_coordination)/launch/phoenixbot_behavior_coordination.launch">
+    </include>
+
+    <!-- Display rviz with proper config during launch -->
+    <arg name="rviz" default="$(arg sim)"/>
+    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" required="true"
+        args="--display-config $(find phoenixbot_launch)/config/phoenixbot.rviz"/>
+
+    <arg name="gui" default="false"/>
+    <node if="$(eval sim and gui)" required="true" name="gzclient" pkg="gazebo_ros" type="gzclient"/>
+</launch>

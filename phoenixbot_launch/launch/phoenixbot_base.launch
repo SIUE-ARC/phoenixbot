@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="world" default="worlds/empty.world"/>
+
+    <!-- Name of map if using static map -->
+    <arg name="map" default=""/>
+
+    <!-- Name of nav map if a different map should be used-->
+    <arg name="nav_map" default=""/>
+
+    <!-- How far up the control stack to launch -->
+    <arg name="localization" default="true"/>
+    <arg name="navigation" default="true"/>
+
+    <!-- Should run in simulation mode -->
+    <arg name="sim" default="false"/>
+
+    <!-- Bring up hardware interface (Or just drivers if in sim mode) -->
+    <include file="$(find phoenixbot_driver)/launch/phoenixbot_driver.launch">
+        <arg name="sim" value="$(arg sim)"/>
+    </include>
+
+    <!-- Prepare simulation environment if in sim mode -->
+    <include if="$(arg sim)" file="$(find phoenixbot_gazebo)/launch/phoenixbot_gazebo.launch">
+      <arg name="world" value="$(arg world)"/>
+    </include>
+
+    <!-- Launch localization -->
+    <include if="$(arg localization)" file="$(find phoenixbot_localization)/launch/phoenixbot_localization.launch">
+        <arg name="map" value="$(arg map)"/>
+    </include>
+
+    <!-- Launch navigation -->
+    <include if="$(arg navigation)" file="$(find phoenixbot_2dnav)/launch/phoenixbot_nav.launch">
+        <arg name="map" value="$(arg nav_map)"/>
+    </include>
+
+</launch>

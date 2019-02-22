@@ -4,9 +4,25 @@
 
 int main(int argc, char **argv) {
     ros::init(argc, argv, "phoenixbot_driver");
+    ros::NodeHandle nh;
 
-    // TODO Move to param server
-    PhoenixbotInterface interface("/dev/ttyACM0", 115200, 250);
+    std::string port;
+    int baud;
+
+    if (!ros::param::get("~port", port)) {
+      port = "/dev/ttyACM0";
+      ROS_WARN_STREAM("No port specified, using default: " << port);
+    }
+
+    if (!ros::param::get("~baudrate", baud)) {
+      baud = 1000000;
+      ROS_WARN_STREAM("No baudrate specified, using default: " << baud);
+    }
+
+    ros::param::param<std::string>("port", port, "/dev/ttyACM0");
+    ros::param::param<int>("baudrate", baud, 1000000);
+
+    PhoenixbotInterface interface(port, baud, 250);
     controller_manager::ControllerManager cm(&interface);
 
     // Spin off a thread to handle ROS interactions so main thread remains realtime
@@ -15,12 +31,16 @@ int main(int argc, char **argv) {
 
     // Realtime control starts here
     ros::Time then = ros::Time::now();
-    ros::Rate rate(50.0);
+    ros::Rate rate(10.0);
+
+    ros::Publisher sensorTopic = nh.advertise<phoenixbot_msgs::Light>("light_sensors", 1);
+    ros::Subscriber solenoidTopic = nh.subscribe("solenoid_commands", 1, &PhoenixbotInterface::solenoid, &interface);
 
     while (ros::ok()) {
         const ros::Time now = ros::Time::now();
 
         interface.read();
+        sensorTopic.publish(interface.light());
         cm.update(now, now - then);
         interface.write();
 

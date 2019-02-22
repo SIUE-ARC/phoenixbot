@@ -2,80 +2,164 @@
 
 #include <sstream>
 
+// PI * 2.0 / 1440.0
+#define TICKS_TO_RAD 0.00436332777 
+
 PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout)
     : arduino(port, baud, serial::Timeout::simpleTimeout(timeout))
 {
     // Setup ros_control interfaces
     // State Handles
-    hardware_interface::JointStateHandle leftStateHandle          ("left_wheel_joint",     pos + 0, vel + 0, eff + 0);
-    hardware_interface::JointStateHandle rightStateHandle         ("right_wheel_joint",    pos + 1, vel + 1, eff + 1);
-    hardware_interface::JointStateHandle gripperLiftStateHandle   ("gripper_lift_joint",   pos + 2, vel + 2, eff + 2);
-    hardware_interface::JointStateHandle mobileGripperStateHandle ("mobile_gripper_joint", pos + 3, vel + 3, eff + 3);
-    hardware_interface::JointStateHandle staticGripperStateHandle ("static_gripper_joint", pos + 4, vel + 4, eff + 4);
-    hardware_interface::JointStateHandle simonXAxisStateHandle    ("simon_x_axis_joint",   pos + 5, vel + 5, eff + 5);
-    hardware_interface::JointStateHandle simonYAxisStateHandle    ("simon_y_axis_joint",   pos + 6, vel + 6, eff + 6);
+    hardware_interface::JointStateHandle leftStateHandle  ("left_wheel_joint",     pos + 0, vel + 0, eff + 0);
+    hardware_interface::JointStateHandle rightStateHandle ("right_wheel_joint",    pos + 1, vel + 1, eff + 1);
+    hardware_interface::JointStateHandle ropeStateHandle  ("rope_joint",     pos + 2, vel + 2, eff + 2);
+    hardware_interface::JointStateHandle simonStateHandle ("simon_arm_joint",     pos + 3, vel + 3, eff + 3);
 
     // Register state handles
     stateInterface.registerHandle(leftStateHandle);
     stateInterface.registerHandle(rightStateHandle);
-    stateInterface.registerHandle(gripperLiftStateHandle);
-    stateInterface.registerHandle(mobileGripperStateHandle);
-    stateInterface.registerHandle(staticGripperStateHandle);
-    stateInterface.registerHandle(simonXAxisStateHandle);
-    stateInterface.registerHandle(simonYAxisStateHandle);
+    stateInterface.registerHandle(ropeStateHandle);
+    stateInterface.registerHandle(simonStateHandle);
 
     // Drive handles
     hardware_interface::JointHandle leftVelocityHandle  (leftStateHandle,  cmdVel + 0);
     hardware_interface::JointHandle rightVelocityHandle (rightStateHandle, cmdVel + 1);
+    hardware_interface::JointHandle ropeVelocityHandle  (ropeStateHandle,  cmdVel + 2);
+    hardware_interface::JointHandle simonVelocityHandle (simonStateHandle, cmdVel + 3);
 
     // Register drive handles
     velocityCommandInterface.registerHandle(leftVelocityHandle);
     velocityCommandInterface.registerHandle(rightVelocityHandle);
+    velocityCommandInterface.registerHandle(ropeVelocityHandle);
+    velocityCommandInterface.registerHandle(simonVelocityHandle);
 
-    // Stepper handles
-    hardware_interface::JointHandle gripperLiftPositionHandle   (gripperLiftStateHandle,   cmdPos + 0);
-    hardware_interface::JointHandle mobileGripperPositionHandle (mobileGripperStateHandle, cmdPos + 1);
-    hardware_interface::JointHandle staticGripperPositionHandle (staticGripperStateHandle, cmdPos + 2);
-    hardware_interface::JointHandle simonXAxisPositionHandle    (simonXAxisStateHandle,    cmdPos + 3);
-    hardware_interface::JointHandle simonYAxisPositionHandle    (simonYAxisStateHandle,    cmdPos + 4);
-
-    // Register stepper handles
-    positionCommandInterface.registerHandle(gripperLiftPositionHandle);
-    positionCommandInterface.registerHandle(mobileGripperPositionHandle);
-    positionCommandInterface.registerHandle(staticGripperPositionHandle);
-    positionCommandInterface.registerHandle(simonXAxisPositionHandle);
-    positionCommandInterface.registerHandle(simonYAxisPositionHandle);
-
+    // Register interfaces
     registerInterface(&stateInterface);
     registerInterface(&velocityCommandInterface);
-    registerInterface(&positionCommandInterface);
 
-    // TODO Initalize communication with arduino
+    // Enable arduino
+    ros::Duration(5.0).sleep();
+    std::string initString = arduino.readline(256, "\r");
+    arduino.write("H 0\r");
 }
 
-// TODO End communication and tear down
+// End communication and tear down
 PhoenixbotInterface::~PhoenixbotInterface() {
+    disable();
+    arduino.flush();
+    arduino.close();
+}
+
+// Disable all powered outputs
+void PhoenixbotInterface::disable() {
+    arduino.write("H 1\r");
+}
+
+// Enable all powered outputs
+void PhoenixbotInterface::enable() {
+    arduino.write("H 0\r");
+}
+
+// Queue up a solenoid command to be sent on next write
+void PhoenixbotInterface::solenoid(phoenixbot_msgs::Solenoid msg) {
+    for(int i = 0; i < 4; i++) {
+        cmdSolenoid[i] = msg.solenoids[i];
+    }
+}
+
+// Generate a light sensor message from the most recent data
+phoenixbot_msgs::Light PhoenixbotInterface::light() {
+    phoenixbot_msgs::Light lightMessage;
+
+    for(int i = 0; i < 4; i++) {
+        lightMessage.sensors.push_back((float)lightSensors[i]);
+    }
+    return lightMessage;
 }
 
 // Read the state of everything from the robot
 void PhoenixbotInterface::read() {
-    // TODO Read current steps of all stepper motors and convert to radiens
-    // TODO Read current encoder position of drive motors
-    // TODO Calculate velocity of drive motors
+    arduino.flushOutput();
+    arduino.flushInput();
+
+    // Read drive encoders
+    arduino.write("E -1\r");
+    ROS_INFO_STREAM("E -1");
+
+    std::stringstream serialString;
+    serialString.str(arduino.readline(256, "\r"));
+    ROS_INFO_STREAM(serialString.str());
+
+    for(int i = 0; i < 2; i++) {
+        int invert = (i == 1) ? -1 : 1;
+
+        int encoderCounts;
+        serialString >> encoderCounts;
+        pos[i] = encoderCounts * TICKS_TO_RAD * invert;
+
+        float velocityCounts;
+        serialString >> velocityCounts;
+        vel[i] = velocityCounts * TICKS_TO_RAD * invert;
+    }
+
+    // TODO Read feedback from other motors
+
+    // Read light sensors
+    for(int i = 0; i < 4; i++) {
+        std::stringstream serialString;
+        serialString << "A " << i << "\r";
+        arduino.write(serialString.str());
+        
+        int counts;
+        serialString.str(arduino.readline(256, "\r"));
+        ROS_INFO_STREAM(serialString.str());
+        serialString >> counts;
+
+        lightSensors[i] = counts / 1023.0;
+    }
 }
 
 // Push commands to the robot
 void PhoenixbotInterface::write() {
     std::stringstream serialString;
 
-    serialString << "M L " << (int)(cmdVel[0] * 500) << "\r";
+    // Write left drive motor speed
+    serialString << "C 0 S " << (int)(cmdVel[0] / TICKS_TO_RAD * 1000) << "\r";
     arduino.write(serialString.str());
+    ROS_INFO_STREAM(serialString.str());
+    serialString.str("");
 
-    serialString << "M R " << (int)(cmdVel[1] * 500) << "\r";
+    // Write right drive motor speed
+    serialString << "C 1 S " << (int)(-cmdVel[1] / TICKS_TO_RAD * 1000) << "\r";
     arduino.write(serialString.str());
+    ROS_INFO_STREAM(serialString.str());
+    serialString.str("");
 
-    // TODO Convert from radiens to steps
-    // TODO Send step targets to stepper motors
-    // TODO Send velocity targets to drive motors
+    // Write rope motor speed
+    serialString << "M 3 " << (int)(cmdVel[2] * 500) << "\r";
+    arduino.write(serialString.str());
+    ROS_INFO_STREAM(serialString.str());
+    serialString.str("");
+
+    serialString << "M 4 " << (int)(-cmdVel[2] * 500) << "\r";
+    arduino.write(serialString.str());
+    ROS_INFO_STREAM(serialString.str());
+    serialString.str("");
+    
+    // Write simon motor speed
+    serialString << "N " << ((cmdVel[3] > 0) ? 300 : -300) << "\r";
+    ROS_INFO_STREAM(serialString.str());
+    arduino.write(serialString.str());
+    serialString.str("");
+
+
+    // Write solenoid commands
+    for(int i = 0; i < 4; i++) {
+        serialString.str("");
+
+        serialString << "S " << solenoidMap[i] << " " << (cmdSolenoid[i] ? 1 : 0) << "\r";
+        ROS_INFO_STREAM(serialString.str());
+        arduino.write(serialString.str());
+    }
 }
 
