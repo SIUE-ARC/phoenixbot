@@ -1,0 +1,18 @@
+cmd: . /opt/ros/kinetic/setup.sh; catkin_make -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cwd: "{PROJECT_PATH}/../.."
+errorMatch: (?<file>[\\/0-9a-zA-Z\\._]+):(?<line>\\d+):(?<col>\\d+):\\s+(?<message>.+)
+name: Catkin Make
+atomCommandName: 'ros:catkin_make'
+targets:
+  roslaunch:
+    cmd: '. devel/setup.sh; roslaunch {FILE_ACTIVE} sim:=true'
+    cwd: "{PROJECT_PATH}/../.."
+    errorMatch: (?<file>[\\/0-9a-zA-Z\\._]+):(?<line>\\d+):(?<col>\\d+):\\s+(?<message>.+)
+    name: Phoenixbot Launch
+    atomCommandName: ros:roslaunch
+  rosrun:
+    cmd: '. devel/setup.sh; rosrun {FILE_ACTIVE}'
+    cwd: "{PROJECT_PATH}/../.."
+    errorMatch: (?<file>[\\/0-9a-zA-Z\\._]+):(?<line>\\d+):(?<col>\\d+):\\s+(?<message>.+)
+    name: Phoenixbot Launch
+    atomCommandName: ros:rosrun
