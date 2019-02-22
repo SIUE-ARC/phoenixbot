@@ -5,6 +5,10 @@
       <uri>model://ground_plane</uri>
     </include>
 
+	<light type="directional" name="sun">
+		<cast_shadows>false</cast_shadows>
+	</light>
+
   <!-- Gazebo doesn't model light diffusion, so we need some extra light sources
        to make sure everything is evenly lit -->
   <light type="point" name="overhead_1">
@@ -58,14 +62,14 @@
 	      <visual name="visual">
 		<geometry>
 		   <mesh>
-		      <uri>file://2019/platform.stl</uri>
+         <uri>file://meshes/mrdc/2019/platform.stl</uri>
 		   </mesh>
 		</geometry>
 	      </visual>
 	      <collision name="collision">
 		<geometry>
 		   <mesh>
-		      <uri>file://2019/platform.stl</uri>
+         <uri>file://meshes/mrdc/2019/platform.stl</uri>
 		   </mesh>
 		</geometry>
 	      </collision>
@@ -78,14 +82,14 @@
 	      <visual name="visual">
 		<geometry>
 		   <mesh>
-		      <uri>file://2019/Ramp.stl</uri>
+         <uri>file://meshes/mrdc/2019/Ramp.stl</uri>
 		   </mesh>
 		</geometry>
 	      </visual>
 	      <collision name="collision">
 		<geometry>
 		   <mesh>
-		      <uri>file://2019/Ramp.stl</uri>
+         <uri>file://meshes/mrdc/2019/Ramp.stl</uri>
 		   </mesh>
 		</geometry>
 	      </collision>
@@ -98,14 +102,14 @@
 	      <visual name="visual">
 		<geometry>
 		   <mesh>
-		      <uri>file://2019/bridge.stl</uri>
+		      <uri>file://meshes/mrdc/2019/bridge.stl</uri>
 		   </mesh>
 		</geometry>
 	      </visual>
 	      <collision name="collision">
 		<geometry>
 		   <mesh>
-		      <uri>file://2019/bridge.stl</uri>
+		      <uri>file://meshes/mrdc/2019/bridge.stl</uri>
 		   </mesh>
 		</geometry>
 	      </collision>
@@ -118,14 +122,14 @@
 	      <visual name="visual">
 		<geometry>
 		   <mesh>
-		      <uri>file://2019/hoopStand.stl</uri>
+		      <uri>file://meshes/mrdc/2019/hoopStand.stl</uri>
 		   </mesh>
 		</geometry>
 	      </visual>
 	      <collision name="collision">
 		<geometry>
 		   <mesh>
-		      <uri>file://2019/hoopStand.stl</uri>
+		      <uri>file://meshes/mrdc/2019/hoopStand.stl</uri>
 		   </mesh>
 		</geometry>
 	      </collision>
@@ -138,14 +142,14 @@
 	      <visual name="visual">
 		<geometry>
 		   <mesh>
-		      <uri>file://2019/simonBox.stl</uri>
+		      <uri>file://meshes/mrdc/2019/simonBox.stl</uri>
 		   </mesh>
 		</geometry>
 	      </visual>
 	      <collision name="collision">
 		<geometry>
 		   <mesh>
-		      <uri>file://2019/simonBox.stl</uri>
+		      <uri>file://meshes/mrdc/2019/simonBox.stl</uri>
 		   </mesh>
 		</geometry>
 	      </collision>
