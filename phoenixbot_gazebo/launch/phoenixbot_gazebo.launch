@@ -3,7 +3,7 @@
 <launch>
     <!-- Display gzclient during launch -->
     <arg name="gui" default="false"/>
-    <arg name="world" default="worlds/willowgarage.world"/>
+    <arg name="world" default="worlds/empty.world"/>
 
     <!-- Load robot description -->
     <param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf" />

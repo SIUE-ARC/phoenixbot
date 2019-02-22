@@ -23,3 +23,10 @@ methods.
 roslaunch phoenixbot_launch phoenixbot_slam.launch sim:=true
 ```
 
+### View Simulation Model
+Launches low level simulation nodes to test simulation models.
+```
+roslaunch phoenixbot_launch phoenixbot_model.launch
+roslaunch phoenixbot_launch phoenixbot_model.launch world:=worlds/to_test.world
+```
+

@@ -9,7 +9,7 @@
     <!-- Start main phoenixbot nodes -->
     <include file="$(find phoenixbot_launch)/launch/phoenixbot_base.launch">
       <arg name="map" value=""/>
-      <arg name="sim" value="true"/>
+      <arg name="sim" value="$(sim)"/>
     </include>
 
     <!-- Display rviz with proper config during launch -->

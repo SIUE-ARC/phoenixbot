@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <launch>
-    <arg name="world" default="worlds/willowgarage.world"/>
+    <arg name="world" default="worlds/empty.world"/>
 
     <!-- Name of map if using static map -->
     <arg name="map" default=""/>
@@ -12,7 +12,6 @@
     <!-- How far up the control stack to launch -->
     <arg name="localization" default="true"/>
     <arg name="navigation" default="true"/>
-    <arg name="behavior" default="true"/>
 
     <!-- Should run in simulation mode -->
     <arg name="sim" default="false"/>
