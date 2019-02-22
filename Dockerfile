@@ -17,6 +17,7 @@ RUN apt-get update && \
     rosdep install --from-paths . --as-root=apt:no --ignore-src --rosdistro=kinetic -y
 
 # Build the workspace
-RUN source /ros_entrypoint.sh \
-    && catkin_make
+RUN /ros_entrypoint.sh catkin_make install -DCMAKE_INSTALL_PREFIX=/opt/ros/kinetic
 
+# Build the workspace
+CMD ["roslaunch", "phoenixbot_launch", "phoenixbot_auto.launch", "sim:=true", "rviz:=false"]

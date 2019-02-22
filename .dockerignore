@@ -1,0 +1,9 @@
+# Dont send docker files to docker daemon
+Dockerfile
+.dockerignore
+Dockerfile*
+.dockerignore*
+
+# Ignore hidden files
+*.
+
