@@ -2,6 +2,10 @@
 
 <launch>
     <arg name="world" default="worlds/empty.world"/>
+    <arg name="x" default="0.0"/>
+    <arg name="y" default="0.0"/>
+    <arg name="z" default="0.0"/>
+    <arg name="Y" default="0.0"/>
 
     <!-- Name of map if using static map -->
     <arg name="map" default=""/>
@@ -24,6 +28,10 @@
     <!-- Prepare simulation environment if in sim mode -->
     <include if="$(arg sim)" file="$(find phoenixbot_gazebo)/launch/phoenixbot_gazebo.launch">
       <arg name="world" value="$(arg world)"/>
+      <arg name="x" value="$(arg x)"/>
+      <arg name="y" value="$(arg y)"/>
+      <arg name="z" value="$(arg z)"/>
+      <arg name="Y" value="$(arg Y)"/>
     </include>
 
     <!-- Launch localization -->
