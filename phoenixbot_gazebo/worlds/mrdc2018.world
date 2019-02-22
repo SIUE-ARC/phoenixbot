@@ -62,14 +62,14 @@
         <visual name="visual">
           <geometry>
             <mesh>
-              <uri>file://meshes/platform.dae</uri>
+              <uri>file://meshes/mrdc/2018/platform.dae</uri>
             </mesh>
           </geometry>
         </visual>
         <collision name="collision">
           <geometry>
             <mesh>
-              <uri>file://meshes/platform.dae</uri>
+              <uri>file://meshes/mrdc/2018/platform.dae</uri>
             </mesh>
           </geometry>
         </collision>
@@ -78,14 +78,14 @@
         <visual name="visual">
           <geometry>
             <mesh>
-              <uri>file://meshes/wall.dae</uri>
+              <uri>file://meshes/mrdc/2018/wall.dae</uri>
             </mesh>
           </geometry>
         </visual>
         <collision name="collision">
           <geometry>
             <mesh>
-              <uri>file://meshes/wall.dae</uri>
+              <uri>file://meshes/mrdc/2018/wall.dae</uri>
             </mesh>
           </geometry>
         </collision>
@@ -94,14 +94,14 @@
         <visual name="visual">
           <geometry>
             <mesh>
-              <uri>file://meshes/elements.dae</uri>
+              <uri>file://meshes/mrdc/2018/elements.dae</uri>
             </mesh>
           </geometry>
         </visual>
         <collision name="collision">
           <geometry>
             <mesh>
-              <uri>file://meshes/elements.dae</uri>
+              <uri>file://meshes/mrdc/2018/elements.dae</uri>
             </mesh>
           </geometry>
         </collision>

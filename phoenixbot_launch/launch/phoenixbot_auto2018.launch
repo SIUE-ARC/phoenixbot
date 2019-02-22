@@ -6,7 +6,7 @@
 
     <!-- Start main phoenixbot nodes-->
     <include file="$(find phoenixbot_launch)/launch/phoenixbot_base.launch">
-      <arg name="world"   value="worlds/mrdc.world"/>
+      <arg name="world"   value="worlds/mrdc2018.world"/>
       <arg name="map"     value="mrdc_laser.yaml"/>
       <arg name="nav_map" value="mrdc_nav.yaml"/>
       <arg name="sim"     value="$(arg sim)"/>
