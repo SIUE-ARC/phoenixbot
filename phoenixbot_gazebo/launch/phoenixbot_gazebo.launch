@@ -5,6 +5,11 @@
     <arg name="gui" default="false"/>
     <arg name="world" default="worlds/empty.world"/>
 
+    <arg name="x" default="0.0"/>
+    <arg name="y" default="0.0"/>
+    <arg name="z" default="0.0"/>
+    <arg name="Y" default="0.0"/>
+
     <!-- Load robot description -->
     <param name="robot_description" textfile="$(find phoenixbot_description)/urdf/phoenixbot.urdf" />
 
@@ -33,5 +38,5 @@
     </include>
 
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false"
-      args="-urdf -z 0.6096 -x -2.4384 -y 2.4384 -Y 2.35619 -model phoenixbot -param robot_description"/>
+      args="-urdf -x $(arg x) -y $(arg y) -z $(arg z) -Y $(arg Y) -model phoenixbot -param robot_description"/>
 </launch>

@@ -5,7 +5,7 @@
 ### MRDC Autonomous Simulation
 Runs phoenixbot in the 2018 MRDC world with the autonomous behavior coordinator.
 ```
-roslaunch phoenixbot_launch phoenixbot_auto.launch sim:=true
+roslaunch phoenixbot_launch phoenixbot_auto2018.launch sim:=true
 ```
 
 ### Teleop Simulation

@@ -20,4 +20,4 @@ RUN apt-get update && \
 RUN /ros_entrypoint.sh catkin_make install -DCMAKE_INSTALL_PREFIX=/opt/ros/kinetic
 
 # Build the workspace
-CMD ["roslaunch", "phoenixbot_launch", "phoenixbot_auto.launch", "sim:=true", "rviz:=false"]
+CMD ["roslaunch", "phoenixbot_launch", "phoenixbot_auto2018.launch", "sim:=true", "rviz:=false"]
