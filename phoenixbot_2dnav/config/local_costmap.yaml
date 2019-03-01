@@ -9,3 +9,7 @@ local_costmap:
   height: 6.0
   resolution: 0.05
 
+plugins:
+  - {name: static_layer,            type: "costmap_2d::StaticLayer"}
+  - {name: inflation_layer,         type: "costmap_2d::InflationLayer"}
+
