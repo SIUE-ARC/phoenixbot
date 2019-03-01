@@ -8,8 +8,7 @@ observation_sources: front_lidar
 
 front_lidar:
   sensor_frame: laser_link
-  data_type: LaserScan
-  topic: scan
+  data_type: PointCloud2
+  topic: cloud_filtered
   marking: true
   clearing: true
-

@@ -25,6 +25,11 @@
       <remap from="marker" to="twist_marker"/>
     </node>
 
+    <node pkg="laser_filters" type="scan_to_cloud_filter_chain" name="laser_filter">
+      <rosparam command="load" file="$(find phoenixbot_driver)/config/laser_filter.yaml" />
+      <param name="target_frame" type="string" value="base_link" />
+    </node>
+
     <!-- Spawn hardware interfaces if running in real mode -->
     <group unless="$(arg sim)">
 
