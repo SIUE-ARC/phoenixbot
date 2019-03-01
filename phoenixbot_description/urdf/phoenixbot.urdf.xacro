@@ -17,14 +17,14 @@
 	<joint name="camera_joint" type="fixed">
 		<parent link="base_link"/>
 		<child link="camera"/>
-        <origin xyz="${4.875 * IN} ${-14.375 * IN} ${14.125 * IN}" rpy="0 -0.1 0"/>
+        <origin xyz="0 0 ${14.125 * IN}" rpy="0 -0.1 0"/>
 	</joint>
 
-	<link name="imu_base_link"/>
-	<joint name="imu_joint" type="fixed">
+	<link name="beacon"/>
+	<joint name="beacon_joint" type="fixed">
 		<parent link="base_link"/>
-		<child link="imu_base_link"/>
-        <origin xyz="0 ${1 * IN} 0"/>
+		<child link="beacon"/>
+    <origin xyz="0 {14 * IN} ${14 * IN}"/>
 	</joint>
 
 	<link name="laser_link"/>

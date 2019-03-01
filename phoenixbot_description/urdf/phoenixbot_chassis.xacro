@@ -3,21 +3,22 @@
     <xacro:macro name="wheel" params="name pos">
         <link name="${name}">
             <visual>
-                <origin rpy="0 0 ${pi/2}"/>
+                <!--<origin rpy="0 0 ${pi/2}"/>-->
+                <origin rpy="${pi/2} 0 0"/>
                 <geometry>
-		    <mesh filename = "package://phoenixbot_description/meshes/${pos}.stl" scale="0.01 0.01 0.01"/>
-                    <!--<cylinder length="${1 * IN}" radius="${2 * IN}"/>-->
+				<!--<mesh filename = "package://phoenixbot_description/meshes/${pos}.stl" scale="0.01 0.01 0.01"/>-->
+                    <cylinder length="${1 * IN}" radius="${3 * IN}"/>
                 </geometry>
             </visual>
 
             <collision>
                 <origin rpy="${pi/2} 0 0"/>
                 <geometry>
-                    <cylinder length="${1 * IN}" radius="${2 * IN}"/>
+                    <cylinder length="${1 * IN}" radius="${3 * IN}"/>
                 </geometry>
             </collision>
 
-            <xacro:cylinder_inertia mass="${0.31 * LBS}" radius="${2 * IN}" thickness="${1 * IN}"/>
+            <xacro:cylinder_inertia mass="${0.31 * LBS}" radius="${3 * IN}" thickness="${1 * IN}"/>
         </link>
 	</xacro:macro>
 
@@ -33,7 +34,7 @@
     <joint name = "base_footprint_joint" type="fixed">
         <parent link="base_link"/>
         <child link="base_footprint"/>
-        <origin xyz="0 0 0"/>
+        <origin xyz="0 0 ${-3 * IN}"/>
     </joint>
 
     <link name="chassis">
@@ -74,7 +75,7 @@
 
     <joint name="left_fwheel_joint" type="continuous">
         <axis xyz="0 1 0"/>
-        <origin xyz="${10.73 * IN} ${12.82 * IN} ${0.25 * IN}"/>
+        <origin xyz="${10.73 * IN} ${11.4 * IN} ${0.25 * IN}"/>
         <parent link="base_link"/>
         <child link="left_fwheel"/>
         <mimic joint="left_wheel_joint"/>
@@ -82,7 +83,7 @@
 
     <joint name="left_rwheel_joint" type="continuous">
         <axis xyz="0 1 0"/>
-        <origin xyz="${-10.73 * IN} ${12.82 * IN} ${0.25 * IN}"/>
+        <origin xyz="${-10.73 * IN} ${11.4 * IN} ${0.25 * IN}"/>
         <parent link="base_link"/>
         <child link="left_rwheel"/>
         <mimic joint="left_wheel_joint"/>
