@@ -17,7 +17,7 @@ PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout
     hardware_interface::JointStateHandle leftStateHandle  ("left_wheel_joint",   pos + 0, vel + 0, eff + 0);
     hardware_interface::JointStateHandle rightStateHandle ("right_wheel_joint",  pos + 1, vel + 1, eff + 1);
     hardware_interface::JointStateHandle simonStateHandle ("simon_arm_joint",    pos + 2, vel + 2, eff + 2);
-    hardware_interface::JointStateHandle leftPaddleState ("left_paddle_joint",  pos + 3, vel + 3, eff + 3);
+    hardware_interface::JointStateHandle leftPaddleState ("left_paddle_joint",   pos + 3, vel + 3, eff + 3);
     hardware_interface::JointStateHandle rightPaddleState ("right_paddle_joint", pos + 4, vel + 4, eff + 4);
 
     // Register state handles
@@ -27,29 +27,28 @@ PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout
     stateInterface.registerHandle(leftPaddleState);
     stateInterface.registerHandle(rightPaddleState);
 
+    // Register interfaces
+    registerInterface(&stateInterface);
+
     // Drive handles
     hardware_interface::JointHandle leftVelocityHandle  (leftStateHandle,  cmdVel + 0);
     hardware_interface::JointHandle rightVelocityHandle (rightStateHandle, cmdVel + 1);
 
+    velocityCommandInterface.registerHandle(leftVelocityHandle);
+    velocityCommandInterface.registerHandle(rightVelocityHandle);
+    registerInterface(&velocityCommandInterface);
+
+    // Position
     hardware_interface::JointHandle simonPositionHandle (simonStateHandle, cmdPos + 0);
     hardware_interface::JointHandle leftPaddlePosition  (leftPaddleState,  cmdPos + 1);
     hardware_interface::JointHandle rightPaddlePosition (rightPaddleState, cmdPos + 2);
 
-    // Register drive handles
-    velocityCommandInterface.registerHandle(leftVelocityHandle);
-    velocityCommandInterface.registerHandle(rightVelocityHandle);
-
-    velocityCommandInterface.registerHandle(simonPositionHandle);
-    velocityCommandInterface.registerHandle(leftPaddlePosition);
-    velocityCommandInterface.registerHandle(rightPaddlePosition);
-
-    // Register interfaces
-    registerInterface(&stateInterface);
-    registerInterface(&velocityCommandInterface);
+    positionCommandInterface.registerHandle(simonPositionHandle);
+    positionCommandInterface.registerHandle(leftPaddlePosition);
+    positionCommandInterface.registerHandle(rightPaddlePosition);
     registerInterface(&positionCommandInterface);
 
     // Enable arduino
-    ros::Duration(5.0).sleep();
     std::string initString = arduino.readline(256, "\r");
     arduino.write("H 0\r");
 }

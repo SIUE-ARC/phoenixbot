@@ -9,7 +9,7 @@
     <rosparam file="$(find phoenixbot_driver)/config/controllers.yaml" command="load"/>
     <node respawn="false"
           name="controller_spawner" pkg="controller_manager" type="spawner"
-          args="state_controller chassis_controller simon_arm_controller rope_controller"/>
+          args="state_controller chassis_controller simon_arm_controller left_paddle_controller right_paddle_controller"/>
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 

@@ -15,7 +15,10 @@ simon_arm_controller:
     type: "position_controllers/JointPositionController"
     joint: simon_arm_joint
 
-rope_controller:
-    type: "velocity_controllers/JointVelocityController"
-    joint: rope_joint
+left_paddle_controller:
+    type: "position_controllers/JointPositionController"
+    joint: left_paddle_joint
 
+right_paddle_controller:
+    type: "position_controllers/JointPositionController"
+    joint: right_paddle_joint
