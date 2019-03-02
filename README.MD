@@ -39,3 +39,8 @@ roslaunch phoenixbot_launch phoenixbot_model.launch
 roslaunch phoenixbot_launch phoenixbot_model.launch world:=worlds/to_test.world
 ```
 
+## Running on hardware
+It is critically important that the simon arm be resting on the top bar before
+powering on the arduino, otherwise the position of the arm will not be initialized
+correctly.
+

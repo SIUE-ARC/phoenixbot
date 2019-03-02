@@ -4,10 +4,17 @@
 
 #define PI 3.14159
 
-#define TICKS_TO_RAD       ((PI * 2.0) / (1440 * 4.0))
-#define TICKS_TO_RAD_SIMON ((PI * 2.0) / (7 * 4.0))
+#define DRIVE_PPR 1440
+#define DRIVE_REDUCTION 8.45
 
-#define MICROS_TO_RAD ((PI * 2.0) / (500))
+#define SIMON_PPR 7
+#define SIMON_REDUCTION 71.0
+#define SIMON_OFFSET (PI / 4.0)
+
+#define TICKS_TO_RAD       ((PI * 2.0) / (DRIVE_PPR * DRIVE_REDUCTION * 4.0))
+#define TICKS_TO_RAD_SIMON ((PI * 2.0) / (SIMON_PPR * SIMON_REDUCTION * 4.0))
+
+#define MICROS_TO_RAD (PI / 1000)
 
 PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout)
     : arduino(port, baud, serial::Timeout::simpleTimeout(timeout))
@@ -17,7 +24,7 @@ PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout
     hardware_interface::JointStateHandle leftStateHandle  ("left_wheel_joint",   pos + 0, vel + 0, eff + 0);
     hardware_interface::JointStateHandle rightStateHandle ("right_wheel_joint",  pos + 1, vel + 1, eff + 1);
     hardware_interface::JointStateHandle simonArmState    ("simon_arm_joint",    pos + 2, vel + 2, eff + 2);
-    hardware_interface::JointStateHandle leftPaddleState ("left_paddle_joint",   pos + 3, vel + 3, eff + 3);
+    hardware_interface::JointStateHandle leftPaddleState  ("left_paddle_joint",  pos + 3, vel + 3, eff + 3);
     hardware_interface::JointStateHandle rightPaddleState ("right_paddle_joint", pos + 4, vel + 4, eff + 4);
 
     // Register state handles
@@ -39,7 +46,7 @@ PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout
     registerInterface(&velocityCommandInterface);
 
     // Position
-    hardware_interface::JointHandle simonArmPosition    (simonArmState, cmdPos + 3);
+    hardware_interface::JointHandle simonArmPosition    (simonArmState,    cmdPos + 0);
     hardware_interface::JointHandle leftPaddlePosition  (leftPaddleState,  cmdPos + 1);
     hardware_interface::JointHandle rightPaddlePosition (rightPaddleState, cmdPos + 2);
 
@@ -47,6 +54,9 @@ PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout
     positionCommandInterface.registerHandle(leftPaddlePosition);
     positionCommandInterface.registerHandle(rightPaddlePosition);
     registerInterface(&positionCommandInterface);
+
+    // Init simon arm because it doesn't start at zero
+    cmdPos[0] = SIMON_OFFSET;
 
     // Enable arduino
     std::string initString = arduino.readline(256, "\r");
@@ -114,13 +124,12 @@ void PhoenixbotInterface::read() {
 
     int encoderCounts;
     serialString >> encoderCounts;
-    pos[2] = encoderCounts * TICKS_TO_RAD_SIMON;
+    pos[2] = encoderCounts * TICKS_TO_RAD_SIMON + SIMON_OFFSET;
 
     float velocityCounts;
     serialString >> velocityCounts;
     vel[2] = velocityCounts * TICKS_TO_RAD_SIMON;
 
-    // TODO Read feedback from other motors
     pos[3] = cmdPos[1];
     pos[4] = cmdPos[2];
 
@@ -129,6 +138,7 @@ void PhoenixbotInterface::read() {
         std::stringstream serialString;
         serialString << "A " << i << "\r";
         arduino.write(serialString.str());
+        ROS_INFO_STREAM(serialString.str());
         
         int counts;
         serialString.str(arduino.readline(256, "\r"));
@@ -156,7 +166,7 @@ void PhoenixbotInterface::write() {
     serialString.str("");
 
     // Right target arm position
-    serialString << "C 2 S " << (int)(cmdPos[0] / TICKS_TO_RAD_SIMON * 1000) << "\r";
+    serialString << "C 2 S " << (int)((cmdPos[0] - SIMON_OFFSET) / TICKS_TO_RAD_SIMON * 1000) << "\r";
     arduino.write(serialString.str());
     ROS_INFO_STREAM(serialString.str());
     serialString.str("");
