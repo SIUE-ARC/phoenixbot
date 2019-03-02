@@ -1,5 +1,14 @@
 # Phoenixbot
 
+## Installation
+
+### Install udev rules
+```
+sudo ln -s $(pwd)/99-phoenixbot.rules /etc/udev/rules.d/99-phoenixbot.rules
+sudo udevadm control --reload
+sudo udevadm trigger
+```
+
 ## Running in gazebo
 
 ### MRDC Autonomous Simulation
