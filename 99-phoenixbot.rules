@@ -1,0 +1,4 @@
+ATTRS{idVendor}=="15d1", SYMLINK+="ttyLidar"
+ATTRS{serial}=="00000000050C", SYMLINK+="ttyBeacon"
+ATTRS{serial}=="8563231303935170C162", SYMLINK+="ttyArduino"
+
