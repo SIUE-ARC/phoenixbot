@@ -30,14 +30,14 @@ private:
     hardware_interface::VelocityJointInterface velocityCommandInterface;
     hardware_interface::PositionJointInterface positionCommandInterface;
 
-    double pos[5];
-    double vel[5];
-    double eff[5];
+    double pos[5] = {0};
+    double vel[5] = {0};
+    double eff[5] = {0};
 
     double cmdVel[2] = {0};
-    double cmdPos[3] = {0};
+    double cmdPos[4] = {0};
 
-    double lightSensors[4];
+    double lightSensors[4] = {0};
     bool cmdSolenoid[4] = {false};
     int solenoidMap[4] = {5, 4, 3, 2};
 };

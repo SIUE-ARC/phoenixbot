@@ -16,14 +16,14 @@ PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout
     // State Handles
     hardware_interface::JointStateHandle leftStateHandle  ("left_wheel_joint",   pos + 0, vel + 0, eff + 0);
     hardware_interface::JointStateHandle rightStateHandle ("right_wheel_joint",  pos + 1, vel + 1, eff + 1);
-    hardware_interface::JointStateHandle simonStateHandle ("simon_arm_joint",    pos + 2, vel + 2, eff + 2);
+    hardware_interface::JointStateHandle simonArmState    ("simon_arm_joint",    pos + 2, vel + 2, eff + 2);
     hardware_interface::JointStateHandle leftPaddleState ("left_paddle_joint",   pos + 3, vel + 3, eff + 3);
     hardware_interface::JointStateHandle rightPaddleState ("right_paddle_joint", pos + 4, vel + 4, eff + 4);
 
     // Register state handles
     stateInterface.registerHandle(leftStateHandle);
     stateInterface.registerHandle(rightStateHandle);
-    stateInterface.registerHandle(simonStateHandle);
+    stateInterface.registerHandle(simonArmState);
     stateInterface.registerHandle(leftPaddleState);
     stateInterface.registerHandle(rightPaddleState);
 
@@ -39,11 +39,11 @@ PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout
     registerInterface(&velocityCommandInterface);
 
     // Position
-    hardware_interface::JointHandle simonPositionHandle (simonStateHandle, cmdPos + 0);
+    hardware_interface::JointHandle simonArmPosition    (simonArmState, cmdPos + 3);
     hardware_interface::JointHandle leftPaddlePosition  (leftPaddleState,  cmdPos + 1);
     hardware_interface::JointHandle rightPaddlePosition (rightPaddleState, cmdPos + 2);
 
-    positionCommandInterface.registerHandle(simonPositionHandle);
+    positionCommandInterface.registerHandle(simonArmPosition);
     positionCommandInterface.registerHandle(leftPaddlePosition);
     positionCommandInterface.registerHandle(rightPaddlePosition);
     registerInterface(&positionCommandInterface);
