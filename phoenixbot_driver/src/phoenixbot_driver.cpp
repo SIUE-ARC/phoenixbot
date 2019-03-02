@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
       ROS_WARN_STREAM("No baudrate specified, using default: " << baud);
     }
 
-    PhoenixbotInterface interface(port, baud, 250);
+    PhoenixbotInterface interface(port, baud, 1000);
     controller_manager::ControllerManager cm(&interface);
 
     // Spin off a thread to handle ROS interactions so main thread remains realtime

@@ -61,7 +61,9 @@ PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout
 
     // Enable arduino
     std::string initString = arduino.readline(256, "\r");
-    arduino.write("H 0\r");
+    ROS_INFO_STREAM(initString);
+
+    enable();
 }
 
 // End communication and tear down
@@ -102,6 +104,7 @@ phoenixbot_msgs::Light PhoenixbotInterface::light() {
 void PhoenixbotInterface::read() {
     arduino.flushOutput();
     arduino.flushInput();
+    arduino.flush();
 
     // Read drive encoders
     arduino.write("E -1\r");
@@ -114,22 +117,25 @@ void PhoenixbotInterface::read() {
     for(int i = 0; i < 2; i++) {
         int invert = (i == 1) ? -1 : 1;
 
+        float velocityCounts;
+        serialString >> velocityCounts;
+        vel[i] = velocityCounts * TICKS_TO_RAD * invert;
+
         int encoderCounts;
         serialString >> encoderCounts;
         pos[i] = encoderCounts * TICKS_TO_RAD * invert;
 
-        float velocityCounts;
-        serialString >> velocityCounts;
-        vel[i] = velocityCounts * TICKS_TO_RAD * invert;
+        serialString.str(arduino.readline(256, "\r"));
+        ROS_INFO_STREAM(serialString.str());
     }
-
-    int encoderCounts;
-    serialString >> encoderCounts;
-    pos[2] = encoderCounts * TICKS_TO_RAD_SIMON + SIMON_OFFSET;
 
     float velocityCounts;
     serialString >> velocityCounts;
     vel[2] = velocityCounts * TICKS_TO_RAD_SIMON;
+
+    int encoderCounts;
+    serialString >> encoderCounts;
+    pos[2] = encoderCounts * TICKS_TO_RAD_SIMON + SIMON_OFFSET;
 
     pos[3] = cmdPos[1];
     pos[4] = cmdPos[2];
@@ -152,6 +158,8 @@ void PhoenixbotInterface::read() {
 
 // Push commands to the robot
 void PhoenixbotInterface::write() {
+    arduino.flush();
+
     std::stringstream serialString;
 
     // Write left drive motor speed

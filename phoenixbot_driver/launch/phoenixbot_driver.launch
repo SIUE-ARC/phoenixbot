@@ -33,8 +33,9 @@
     <!-- Spawn hardware interfaces if running in real mode -->
     <group unless="$(arg sim)">
 
-      <node name="phoenixbot_driver" pkg="phoenixbot_driver" type="phoenixbot_driver" output="screen">
+      <node name="phoenixbot_driver" pkg="phoenixbot_driver" type="phoenixbot_driver">
         <param name="port" value="/dev/ttyArduino"/>
+        <param name="baudrate" value="1000000"/>
       </node>
 
       <node name="hokuyo_node" pkg="hokuyo_node" type="hokuyo_node">
