@@ -2,40 +2,51 @@
 
 #include <sstream>
 
-// PI * 2.0 / 1440.0
-#define TICKS_TO_RAD 0.00436332777 
+#define PI 3.14159
+
+#define TICKS_TO_RAD       ((PI * 2.0) / (1440 * 4.0))
+#define TICKS_TO_RAD_SIMON ((PI * 2.0) / (7 * 4.0))
+
+#define MICROS_TO_RAD ((PI * 2.0) / (500))
 
 PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout)
     : arduino(port, baud, serial::Timeout::simpleTimeout(timeout))
 {
     // Setup ros_control interfaces
     // State Handles
-    hardware_interface::JointStateHandle leftStateHandle  ("left_wheel_joint",     pos + 0, vel + 0, eff + 0);
-    hardware_interface::JointStateHandle rightStateHandle ("right_wheel_joint",    pos + 1, vel + 1, eff + 1);
-    hardware_interface::JointStateHandle ropeStateHandle  ("rope_joint",     pos + 2, vel + 2, eff + 2);
-    hardware_interface::JointStateHandle simonStateHandle ("simon_arm_joint",     pos + 3, vel + 3, eff + 3);
+    hardware_interface::JointStateHandle leftStateHandle  ("left_wheel_joint",   pos + 0, vel + 0, eff + 0);
+    hardware_interface::JointStateHandle rightStateHandle ("right_wheel_joint",  pos + 1, vel + 1, eff + 1);
+    hardware_interface::JointStateHandle simonStateHandle ("simon_arm_joint",    pos + 2, vel + 2, eff + 2);
+    hardware_interface::JointStateHandle leftPaddleState ("left_paddle_joint",  pos + 3, vel + 3, eff + 3);
+    hardware_interface::JointStateHandle rightPaddleState ("right_paddle_joint", pos + 4, vel + 4, eff + 4);
 
     // Register state handles
     stateInterface.registerHandle(leftStateHandle);
     stateInterface.registerHandle(rightStateHandle);
-    stateInterface.registerHandle(ropeStateHandle);
     stateInterface.registerHandle(simonStateHandle);
+    stateInterface.registerHandle(leftPaddleState);
+    stateInterface.registerHandle(rightPaddleState);
 
     // Drive handles
     hardware_interface::JointHandle leftVelocityHandle  (leftStateHandle,  cmdVel + 0);
     hardware_interface::JointHandle rightVelocityHandle (rightStateHandle, cmdVel + 1);
-    hardware_interface::JointHandle ropeVelocityHandle  (ropeStateHandle,  cmdVel + 2);
-    hardware_interface::JointHandle simonVelocityHandle (simonStateHandle, cmdVel + 3);
+
+    hardware_interface::JointHandle simonPositionHandle (simonStateHandle, cmdPos + 0);
+    hardware_interface::JointHandle leftPaddlePosition  (leftPaddleState,  cmdPos + 1);
+    hardware_interface::JointHandle rightPaddlePosition (rightPaddleState, cmdPos + 2);
 
     // Register drive handles
     velocityCommandInterface.registerHandle(leftVelocityHandle);
     velocityCommandInterface.registerHandle(rightVelocityHandle);
-    velocityCommandInterface.registerHandle(ropeVelocityHandle);
-    velocityCommandInterface.registerHandle(simonVelocityHandle);
+
+    velocityCommandInterface.registerHandle(simonPositionHandle);
+    velocityCommandInterface.registerHandle(leftPaddlePosition);
+    velocityCommandInterface.registerHandle(rightPaddlePosition);
 
     // Register interfaces
     registerInterface(&stateInterface);
     registerInterface(&velocityCommandInterface);
+    registerInterface(&positionCommandInterface);
 
     // Enable arduino
     ros::Duration(5.0).sleep();
@@ -102,7 +113,17 @@ void PhoenixbotInterface::read() {
         vel[i] = velocityCounts * TICKS_TO_RAD * invert;
     }
 
+    int encoderCounts;
+    serialString >> encoderCounts;
+    pos[2] = encoderCounts * TICKS_TO_RAD_SIMON;
+
+    float velocityCounts;
+    serialString >> velocityCounts;
+    vel[2] = velocityCounts * TICKS_TO_RAD_SIMON;
+
     // TODO Read feedback from other motors
+    pos[3] = cmdPos[1];
+    pos[4] = cmdPos[2];
 
     // Read light sensors
     for(int i = 0; i < 4; i++) {
@@ -135,23 +156,22 @@ void PhoenixbotInterface::write() {
     ROS_INFO_STREAM(serialString.str());
     serialString.str("");
 
-    // Write rope motor speed
-    serialString << "M 3 " << (int)(cmdVel[2] * 500) << "\r";
+    // Right target arm position
+    serialString << "C 2 S " << (int)(cmdPos[0] / TICKS_TO_RAD_SIMON * 1000) << "\r";
     arduino.write(serialString.str());
     ROS_INFO_STREAM(serialString.str());
     serialString.str("");
 
-    serialString << "M 4 " << (int)(-cmdVel[2] * 500) << "\r";
+    // Write paddle positions
+    serialString << "M 6 " << (int)(cmdPos[1] / MICROS_TO_RAD) << "\r";
     arduino.write(serialString.str());
     ROS_INFO_STREAM(serialString.str());
-    serialString.str("");
-    
-    // Write simon motor speed
-    serialString << "N " << ((cmdVel[3] > 0) ? 300 : -300) << "\r";
-    ROS_INFO_STREAM(serialString.str());
-    arduino.write(serialString.str());
     serialString.str("");
 
+    serialString << "M 7 " << (int)(cmdPos[2] / MICROS_TO_RAD) << "\r";
+    arduino.write(serialString.str());
+    ROS_INFO_STREAM(serialString.str());
+    serialString.str("");
 
     // Write solenoid commands
     for(int i = 0; i < 4; i++) {

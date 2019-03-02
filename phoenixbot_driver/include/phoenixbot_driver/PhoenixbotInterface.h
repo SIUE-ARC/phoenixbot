@@ -30,11 +30,12 @@ private:
     hardware_interface::VelocityJointInterface velocityCommandInterface;
     hardware_interface::PositionJointInterface positionCommandInterface;
 
-    double pos[4];
-    double vel[4];
-    double eff[4];
+    double pos[5];
+    double vel[5];
+    double eff[5];
 
-    double cmdVel[4] = {0};
+    double cmdVel[2] = {0};
+    double cmdPos[3] = {0};
 
     double lightSensors[4];
     bool cmdSolenoid[4] = {false};
