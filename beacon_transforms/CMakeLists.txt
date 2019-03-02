@@ -10,8 +10,8 @@ find_package(catkin REQUIRED COMPONENTS
 	     tf2_eigen
 	     tf_conversions
 	     eigen_conversions
-			 tf
-			 sensor_msgs
+		tf
+	  	sensor_msgs
 )
 
 
@@ -28,10 +28,6 @@ include_directories(
 add_executable(beacon_tf src/beacon_tf.cpp)
 add_dependencies(beacon_tf ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-
-add_executable(beacon_imu src/beacon_imu.cpp)
-add_dependencies(beacon_imu ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
 target_link_libraries(beacon_tf
   ${catkin_LIBRARIES}
 )
@@ -42,12 +38,3 @@ install(TARGETS beacon_tf beacon_tf
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-target_link_libraries(beacon_imu
-  ${catkin_LIBRARIES}
-)
-
-install(TARGETS beacon_imu beacon_imu
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
