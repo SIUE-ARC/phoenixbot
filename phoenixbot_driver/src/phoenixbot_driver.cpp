@@ -19,9 +19,6 @@ int main(int argc, char **argv) {
       ROS_WARN_STREAM("No baudrate specified, using default: " << baud);
     }
 
-    ros::param::param<std::string>("port", port, "/dev/ttyACM0");
-    ros::param::param<int>("baudrate", baud, 1000000);
-
     PhoenixbotInterface interface(port, baud, 250);
     controller_manager::ControllerManager cm(&interface);
 
