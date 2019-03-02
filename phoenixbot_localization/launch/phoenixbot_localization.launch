@@ -11,7 +11,6 @@
         </node>
     </group>
 
-
     <!-- Launch map server and AMCL if a static map was supplied -->
     <group unless="$(arg slam)">
         <node pkg="map_server" type="map_server" name="map_server" args="$(find phoenixbot_2dnav)/maps/$(arg map)"/>
@@ -27,6 +26,11 @@
     <!-- Launch marker localization -->
     <node name="aruco_board" type="aruco_board" pkg="phoenixbot_localization">
         <rosparam command="load" file="$(find phoenixbot_localization)/config/markers.yaml"/>
+    </node>
+
+    <!-- Launch beacon localization -->
+    <node name="beacon_tf" pkg="beacon_transforms" type="beacon_tf">
+      <rosparam command="load" file="$(find phoenixbot_localization)/config/beacons.yaml">
     </node>
 
     <!-- Launch localization filters -->
