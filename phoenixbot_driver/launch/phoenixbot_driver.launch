@@ -47,5 +47,8 @@
       </node>
 
     </group>
-</launch>
 
+    <group if="$(arg sim)">
+      <node pkg="phoenixbot_gazebo" type="fake_beacons.py" name="fake_beacons" output="screen"/>
+    </group>
+</launch>

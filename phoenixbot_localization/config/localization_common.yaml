@@ -25,6 +25,13 @@ imu0_config: [false, false, false,
               true, true, true,
               false, false, false,
               false, false, false,
-              true, true, true]
+              true,  false, true]
+
+pose0: beacon_pose
+pose0_config: [true,  true,  true, # x, y, z
+               false, false, false,  # r, p, y
+               false, false, false, # dx, dy, dz
+               false, false, false, # dr, dp, dy
+               false, false, false] # d^2x, d^2y, d^2z
 
 world_frame: odom
