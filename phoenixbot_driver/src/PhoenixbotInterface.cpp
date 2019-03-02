@@ -3,13 +3,14 @@
 #include <sstream>
 
 #define PI 3.14159
+#define DEG (PI / 180.0)
 
 #define DRIVE_PPR 1440
 #define DRIVE_REDUCTION 8.45
 
 #define SIMON_PPR 7
 #define SIMON_REDUCTION 71.0
-#define SIMON_OFFSET (PI / 4.0)
+#define SIMON_OFFSET (33 * DEG)
 
 #define TICKS_TO_RAD       ((PI * 2.0) / (DRIVE_PPR * DRIVE_REDUCTION * 4.0))
 #define TICKS_TO_RAD_SIMON ((PI * 2.0) / (SIMON_PPR * SIMON_REDUCTION * 4.0))

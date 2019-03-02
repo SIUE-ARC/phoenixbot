@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="phoenixbot">
     <xacro:property name="IN" value="0.0254" />
+    <xacro:property name="DEG" value="${pi/180}" />
     <xacro:property name="LBS" value="0.453592" />
 
     <xacro:macro name="cylinder_inertia" params="mass radius thickness">
