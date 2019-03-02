@@ -24,7 +24,7 @@
 	<joint name="beacon_joint" type="fixed">
 		<parent link="base_link"/>
 		<child link="beacon"/>
-    <origin xyz="0 ${14 * IN} ${14 * IN}"/>
+    <origin xyz="0 ${13 * IN} ${34.5 * IN}"/>
 	</joint>
 
 	<link name="laser_link"/>
@@ -34,4 +34,3 @@
         <origin xyz="${10.73 * IN} 0 ${3 * IN}"/>
 	</joint>
 </robot>
-

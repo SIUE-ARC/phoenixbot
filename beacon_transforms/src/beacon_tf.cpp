@@ -59,10 +59,8 @@ void beacon_position(const marvelmind_nav::hedge_pos_ang msg){
 
 	pos.header.stamp = ros::Time::now();
 	pos.header.frame_id = "map";
-
 	// Create affine3d from msg
-
-	local_pose = Eigen::Translation3d(msg.x_m, msg.y_m, msg.z_m);
+	local_pose = Eigen::Translation3d(msg.x_m, msg.y_m - 0.33, msg.z_m - 0.86);
 
 	// local_pose * transform = global_pose
 	current_pose = local_pose * pose_transform;
@@ -75,6 +73,7 @@ void beacon_position(const marvelmind_nav::hedge_pos_ang msg){
 	beacon_pub.publish(pos);
 	ROS_INFO("Pos has be published");
 }
+
 
 void setInitialPose(const geometry_msgs::PoseWithCovarianceStamped msg){
 	Eigen::Affine3d initialPose;
