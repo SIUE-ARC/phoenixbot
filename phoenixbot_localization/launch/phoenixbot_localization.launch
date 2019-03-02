@@ -39,6 +39,7 @@
 
     <!-- Global localization (Don't launch if SLAM is running) -->
     <node unless="$(arg slam)" name="global_localization_node" type="ekf_localization_node" pkg="robot_localization">
+        <remap from="odometry/filtered" to="localization/filtered"/>
         <rosparam command="load" file="$(find phoenixbot_localization)/config/localization_common.yaml"/>
         <rosparam command="load" file="$(find phoenixbot_localization)/config/localization_global.yaml"/>
     </node>

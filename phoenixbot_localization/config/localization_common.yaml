@@ -2,7 +2,7 @@
 # Have a good way to localize in three dimensions, so for now we're going to
 # pretend to be running in a planar enviornment. We might be able to release
 # this constraint in the global localization.
-two_d_mode: true
+two_d_mode: false
 
 # robot_localization produces transform from world frame to base_link frame
 map_frame: map
@@ -15,7 +15,7 @@ base_link_frame: base_link
 odom0: /chassis_controller/odom
 odom0_config: [false, false, false, # x, y, z
                false, false, false, # r, p, y
-               true,  true, false,  # dx, dy, dz
+               true,  true,  true,  # dx, dy, dz
                false, false, true,  # dr, dp, dy
                false, false, false] # d^2x, d^2y, d^2z
 
