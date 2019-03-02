@@ -1,0 +1,7 @@
+image: mrdc2019_nav.png
+resolution: 0.01
+origin: [-6.7056, -6.7056, 0.0]
+free_thresh: 0.196
+occupied_thresh: 0.65
+negate: 0
+

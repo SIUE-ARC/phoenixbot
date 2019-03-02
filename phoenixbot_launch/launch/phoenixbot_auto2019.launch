@@ -7,13 +7,13 @@
     <!-- Start main phoenixbot nodes-->
     <include file="$(find phoenixbot_launch)/launch/phoenixbot_base.launch">
       <arg name="world"   value="worlds/mrdc2019.world"/>
-      <arg name="map"     value="mrdc_laser.yaml"/>
-      <arg name="nav_map" value="mrdc_nav.yaml"/>
+      <arg name="map" value="mrdc2019_nav.yaml"/>
+      <arg name="nav_map" value="mrdc2019_nav.yaml"/>
       <arg name="sim"     value="$(arg sim)"/>
 
       <arg name="x" value="-2.4384"/>
       <arg name="y" value="2.4384"/>
-      <arg name="z" value="1.5"/>
+      <arg name="z" value="1.6096"/>
       <arg name="Y" value="2.35619"/>
     </include>
 
