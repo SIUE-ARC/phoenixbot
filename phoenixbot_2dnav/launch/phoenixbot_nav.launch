@@ -18,7 +18,9 @@
         <rosparam file="$(find phoenixbot_2dnav)/config/local_costmap.yaml" command="load" />
         <rosparam file="$(find phoenixbot_2dnav)/config/global_costmap.yaml" command="load" />
         <rosparam file="$(find phoenixbot_2dnav)/config/base_local_planner_params.yaml" command="load" />
+        <rosparam file="$(find phoenixbot_2dnav)/config/navfn_planner_param.yaml" command="load" />
+        <rosparam file="$(find phoenixbot_2dnav)/config/move_base_param.yaml" command="load" />
+
         <param name="controller_frequency" value="10.0"/>
     </node>
 </launch>
-
