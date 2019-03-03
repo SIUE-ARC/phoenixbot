@@ -30,7 +30,7 @@
 
     <!-- Launch beacon localization -->
     <node name="beacon_tf" pkg="beacon_transforms" type="beacon_tf">
-      <rosparam command="load" file="$(find phoenixbot_localization)/config/beacons.yaml">
+      <rosparam command="load" file="$(find phoenixbot_localization)/config/beacons.yaml"/>
     </node>
 
     <!-- Launch localization filters -->
