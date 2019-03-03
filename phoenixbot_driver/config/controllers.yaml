@@ -1,10 +1,10 @@
 state_controller:
     type: joint_state_controller/JointStateController
-    publish_rate: 50
+    publish_rate: 10
 
 chassis_controller:
     type: "diff_drive_controller/DiffDriveController"
-    publish_rate: 50
+    publish_rate: 10
     left_wheel: 'left_wheel_joint'
     right_wheel: 'right_wheel_joint'
     pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
