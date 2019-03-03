@@ -10,4 +10,7 @@
       <param name="scale_linear" value="0.2"/>
       <param name="scale_angular" value="0.3"/>
     </node>
+
+    <node name="rviz" pkg="rviz" type="rviz" required="true"
+        args="--display-config $(find phoenixbot_launch)/config/phoenixbot.rviz"/>
 </launch>
