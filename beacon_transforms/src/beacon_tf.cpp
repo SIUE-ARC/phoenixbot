@@ -62,7 +62,7 @@ void beacon_position(const marvelmind_nav::hedge_pos_ang msg){
 
 	// Create affine3d from msg
 
-	local_pose = Eigen::Translation3d(msg.x_m, msg.y_m, msg.z_m);
+	local_pose = Eigen::Translation3d(msg.x_m, -msg.y_m, msg.z_m - 0.86);
 
 	// local_pose * transform = global_pose
 	current_pose = local_pose * pose_transform;
@@ -86,7 +86,7 @@ void setInitialPose(const geometry_msgs::PoseWithCovarianceStamped msg){
 
 void beaconImuToImu(marvelmind_nav::hedge_imu_fusion msg){
 	imu.header.stamp = ros::Time::now();
-	imu.header.frame_id = "odom";
+	imu.header.frame_id = "beacon";
 
   imu.orientation.x = msg.qx;
   imu.orientation.y = msg.qy;
