@@ -63,6 +63,35 @@ PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout
     std::string initString = arduino.readline(256, "\r");
     ROS_INFO_STREAM(initString);
 
+    double kP[] = {0.021, 0.021};
+    double kI[] = {0, 0};
+    double kD[] = {0.0004, 0.0004};
+
+    std::stringstream serialString;
+    serialString << "C 0 P " << (int)(kP[0] * 1000) << "\r";
+    arduino.write(serialString.str());
+    serialString.str("");
+
+    serialString << "C 0 I " << (int)(kI[0] * 1000) << "\r";
+    arduino.write(serialString.str());
+    serialString.str("");
+
+    serialString << "C 0 D " << (int)(kD[0] * 1000) << "\r";
+    arduino.write(serialString.str());
+    serialString.str("");
+
+    serialString << "C 1 P " << (int)(kP[1] * 1000) << "\r";
+    arduino.write(serialString.str());
+    serialString.str("");
+
+    serialString << "C 1 I " << (int)(kI[1] * 1000) << "\r";
+    arduino.write(serialString.str());
+    serialString.str("");
+
+    serialString << "C 1 D " << (int)(kD[1] * 1000) << "\r";
+    arduino.write(serialString.str());
+    serialString.str("");
+
     enable();
 }
 
