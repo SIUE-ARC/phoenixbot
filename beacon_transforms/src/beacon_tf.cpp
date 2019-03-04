@@ -58,20 +58,22 @@ void beacon_position(const marvelmind_nav::hedge_pos_ang msg){
 	Eigen::Affine3d current_pose;
 
 	pos.header.stamp = ros::Time::now();
-	pos.header.frame_id = "map";
+	pos.header.frame_id = "beacon_map";
 	// Create affine3d from msg
-	local_pose = Eigen::Translation3d(msg.x_m, msg.y_m - 0.33, msg.z_m - 0.86);
+	
 
 	// local_pose * transform = global_pose
-	current_pose = local_pose * pose_transform;
+	//current_pose = local_pose * pose_transform;
 
 	// Turn transformed matrix back into message
-	tf::poseEigenToMsg(current_pose, pos.pose.pose);
+	pos.pose.pose.position.x = msg.x_m;
+	pos.pose.pose.position.y = msg.y_m;
+	pos.pose.pose.position.z = msg.z_m;
 	pos.pose.pose.orientation = tf::createQuaternionMsgFromYaw(msg.angle);
 
 	// Publish the message
 	beacon_pub.publish(pos);
-	ROS_INFO("Pos has be published");
+	ROS_INFO("Pos has been published");
 }
 
 
@@ -85,7 +87,7 @@ void setInitialPose(const geometry_msgs::PoseWithCovarianceStamped msg){
 
 void beaconImuToImu(marvelmind_nav::hedge_imu_fusion msg){
 	imu.header.stamp = ros::Time::now();
-	imu.header.frame_id = "odom";
+	imu.header.frame_id = "beacon";
 
   imu.orientation.x = msg.qx;
   imu.orientation.y = msg.qy;
