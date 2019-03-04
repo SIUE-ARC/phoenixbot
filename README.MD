@@ -44,3 +44,8 @@ It is critically important that the simon arm be resting on the top bar before
 powering on the arduino, otherwise the position of the arm will not be initialized
 correctly.
 
+## Connect to phonenixbot
+ssh arc@phoenixbot.local
+ROS_MASTER_URI="http://phoenixbot.local:11311" do this for every terminals
+to disconnect: sudo shutdown -h now
+
