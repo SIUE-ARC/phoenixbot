@@ -1,14 +1,23 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="phoenixbot_chassis">
-    <xacro:macro name="wheel" params="name pos">
-        <link name="${name}">
+    <xacro:macro name="wheel" params="pos side">
+      <link name="${side}_${pos}_wheel">
             <visual>
-                <!--<origin rpy="0 0 ${pi/2}"/>-->
-                <origin rpy="${pi/2} 0 0"/>
+              <xacro:if value="${side == 'right'}">
+                <origin rpy="0 0 ${pi}"/>
+              </xacro:if>
+
+              <xacro:if value="${pos == 'front' or pos=='back'}">
                 <geometry>
-				<!--<mesh filename = "package://phoenixbot_description/meshes/${pos}.stl" scale="0.01 0.01 0.01"/>-->
-                    <cylinder length="${1 * IN}" radius="${3 * IN}"/>
+                  <mesh filename = "package://phoenixbot_description/meshes/2019/outer_wheel.dae" scale="0.01 0.01 0.01"/>
                 </geometry>
+              </xacro:if>
+
+              <xacro:if value="${pos == 'center'}">
+                <geometry>
+                  <mesh filename = "package://phoenixbot_description/meshes/2019/center_wheel.dae" scale="0.01 0.01 0.01"/>
+                </geometry>
+              </xacro:if>
             </visual>
 
             <collision>
@@ -35,21 +44,32 @@
     <joint name = "base_link_joint" type="fixed">
         <parent link="base_link"/>
         <child link="chassis"/>
-        <origin xyz="0 0 ${1 * IN}"/>
+        <origin xyz="0 0 -0.0212"/>
     </joint>
 
     <joint name = "base_footprint_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="chassis"/>
         <child link="base_footprint"/>
         <origin xyz="0 0 ${-3 * IN}"/>
     </joint>
 
+    <link name="superstructure">
+        <visual>
+            <geometry>
+              <mesh filename = "package://phoenixbot_description/meshes/2019/superstructure.dae" scale="0.01 0.01 0.01"/>
+            </geometry>
+        </visual>
+    </link>
+    <joint name = "superstructure_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="superstructure"/>
+        <origin xyz="0 0 0.0755"/>
+    </joint>
+
     <link name="chassis">
         <visual>
-	    <origin rpy="${pi/2} 0 ${pi/2}"/>
             <geometry>
-		<mesh filename = "package://phoenixbot_description/meshes/phoenixbotbody.stl" scale="0.01 0.01 0.01"/>
-                <!--<box size="${28.31 * IN} ${27.50 * IN} ${3.33 * IN}"/>-->
+              <mesh filename = "package://phoenixbot_description/meshes/2019/chassis.dae" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
 
@@ -69,30 +89,30 @@
     </link>
 
     <!-- Left wheels -->
-    <xacro:wheel name="left_wheel" pos="middle_center"/>
-    <xacro:wheel name="left_fwheel" pos="outerWheel_center"/>
-    <xacro:wheel name="left_rwheel" pos="outerWheel_center"/>
+    <xacro:wheel side="left" pos="center"/>
+    <xacro:wheel side="left" pos="front"/>
+    <xacro:wheel side="left" pos="back"/>
 
     <joint name="left_wheel_joint" type="continuous">
         <axis xyz="0 1 0"/>
-        <origin xyz="0 ${11.4 * IN} -${0.5 * IN}"/> <!-- 0 ${12.82 *IN} 0 -->
-        <parent link="base_link"/>
-        <child link="left_wheel"/>
+        <origin xyz="0 0.3012 0.0"/>
+        <parent link="chassis"/>
+        <child link="left_center_wheel"/>
     </joint>
 
-    <joint name="left_fwheel_joint" type="continuous">
+    <joint name="left_front_wheel_joint" type="continuous">
         <axis xyz="0 1 0"/>
-        <origin xyz="${10.73 * IN} ${11.4 * IN} ${0.25 * IN}"/>
-        <parent link="base_link"/>
-        <child link="left_fwheel"/>
+        <origin xyz="0.2725 0.3057 0.0003556"/>
+        <parent link="chassis"/>
+        <child link="left_front_wheel"/>
         <mimic joint="left_wheel_joint"/>
     </joint>
 
-    <joint name="left_rwheel_joint" type="continuous">
+    <joint name="left_back_wheel_joint" type="continuous">
         <axis xyz="0 1 0"/>
-        <origin xyz="${-10.73 * IN} ${11.4 * IN} ${0.25 * IN}"/>
-        <parent link="base_link"/>
-        <child link="left_rwheel"/>
+        <origin xyz="-0.2725 0.3057 0.0003556"/>
+        <parent link="chassis"/>
+        <child link="left_back_wheel"/>
         <mimic joint="left_wheel_joint"/>
     </joint>
 
@@ -108,30 +128,30 @@
     </transmission>
 
     <!-- Right wheels -->
-    <xacro:wheel name="right_wheel" pos="middle_center"/>
-    <xacro:wheel name="right_fwheel" pos="outerWheel_center"/>
-    <xacro:wheel name="right_rwheel" pos="outerWheel_center"/>
+    <xacro:wheel side="right" pos="center"/>
+    <xacro:wheel side="right" pos="front"/>
+    <xacro:wheel side="right" pos="back"/>
 
     <joint name="right_wheel_joint" type="continuous">
         <axis xyz="0 1 0"/>
-        <origin xyz="0 ${-12.82 * IN} 0"/>
-        <parent link="base_link"/>
-        <child link="right_wheel"/>
+        <origin xyz="0 -0.3012 0.0"/>
+        <parent link="chassis"/>
+        <child link="right_center_wheel"/>
     </joint>
 
-    <joint name="right_fwheel_joint" type="continuous">
+    <joint name="right_front_wheel_joint" type="continuous">
         <axis xyz="0 1 0"/>
-        <origin xyz="${10.73 * IN} ${-12.82 * IN} ${0.25 * IN}"/>
-        <parent link="base_link"/>
-        <child link="right_fwheel"/>
+        <origin xyz="0.2725 -0.3057 0.0003556"/>
+        <parent link="chassis"/>
+        <child link="right_front_wheel"/>
         <mimic joint="right_wheel_joint"/>
     </joint>
 
-    <joint name="right_rwheel_joint" type="continuous">
+    <joint name="right_back_wheel_joint" type="continuous">
         <axis xyz="0 1 0"/>
-        <origin xyz="${-10.73 * IN} ${-12.82 * IN} ${0.25 * IN}"/>
-        <parent link="base_link"/>
-        <child link="right_rwheel"/>
+        <origin xyz="-0.2725 -0.3057 0.0003556"/>
+        <parent link="chassis"/>
+        <child link="right_back_wheel"/>
         <mimic joint="right_wheel_joint"/>
     </joint>
 

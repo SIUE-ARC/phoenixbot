@@ -11,8 +11,6 @@
 
     <xacro:include filename="$(find phoenixbot_description)/urdf/phoenixbot_simon.xacro" />
 
-    <xacro:include filename="$(find phoenixbot_description)/urdf/phoenixbot_pulley.xacro" />
-
 	<link name="camera"/>
 	<joint name="camera_joint" type="fixed">
 		<parent link="base_link"/>
@@ -31,7 +29,7 @@
 	<joint name="laser_joint" type="fixed">
 		<parent link="base_link"/>
 		<child link="laser_link"/>
-        <origin xyz="${10.73 * IN} 0 ${3 * IN}"/>
+        <origin xyz="0.3360 0.3184 0.0883"/>
 	</joint>
 </robot>
 

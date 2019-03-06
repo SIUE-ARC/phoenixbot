@@ -11,4 +11,12 @@
             <inertia ixx="${INERTIA}" iyy="${INERTIA}" izz="${INERTIA}" ixy="0" ixz="0" iyz="0"/>
         </inertial>
     </xacro:macro>
+
+    <xacro:macro name="trivial_inertia">
+        <xacro:property name="INERTIA" value="0.01"/>
+        <inertial>
+            <mass value="0.01"/>
+            <inertia ixx="${INERTIA}" iyy="${INERTIA}" izz="${INERTIA}" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
+    </xacro:macro>
 </robot>
