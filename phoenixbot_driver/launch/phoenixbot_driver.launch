@@ -45,8 +45,8 @@
 
       <node name="beacon" pkg="marvelmind_nav" type="hedge_rcv_bin" args="/dev/ttyBeacon"/>
 
-      <node pkg="wit_imu" type="wit_imu" name="wit_imu">
-        <param name="port" value="/dev/ttyWitIMU"/>
+      <node pkg="wit_imu" type="wit_imu" name="wit_imu" output="screen">
+        <param name="port" value="/dev/ttyWitImu"/>
       </node>
 
       <node name="usb_cam" type="usb_cam_node" pkg="usb_cam">
