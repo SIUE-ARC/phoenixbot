@@ -22,6 +22,13 @@
         </link>
 	</xacro:macro>
 
+  <link name="imu_link"/>
+  <joint name = "imu_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="imu_link"/>
+      <origin xyz="${-1.5 * IN} ${-2 * IN} 0"/>
+  </joint>
+
     <link name="base_link"/>
     <link name="base_footprint"/>
 
