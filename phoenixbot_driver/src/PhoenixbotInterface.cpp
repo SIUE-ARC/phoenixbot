@@ -12,6 +12,9 @@
 #define SIMON_REDUCTION 71.0 * (22.0/16.0)
 #define SIMON_OFFSET (33 * DEG)
 
+#define LEFT_PADDLE_OFFSET -60
+#define RIGHT_PADDLE_OFFSET 150
+
 // counts * TICKS_TO_RAD = radians
 #define TICKS_TO_RAD       ((PI * 2.0) / (DRIVE_PPR * DRIVE_REDUCTION * 4.0))
 #define TICKS_TO_RAD_SIMON ((PI * 2.0) / (SIMON_PPR * SIMON_REDUCTION * 4.0))
@@ -211,12 +214,12 @@ void PhoenixbotInterface::write() {
     serialString.str("");
 
     // Write paddle positions
-    serialString << "M 6 " << (int)(cmdPos[1] / MICROS_TO_RAD) << "\r";
+    serialString << "M 6 " << (int)(cmdPos[1] / MICROS_TO_RAD + LEFT_PADDLE_OFFSET) << "\r";
     arduino.write(serialString.str());
     ROS_INFO_STREAM(serialString.str());
     serialString.str("");
 
-    serialString << "M 7 " << (int)(cmdPos[2] / MICROS_TO_RAD) << "\r";
+    serialString << "M 7 " << (int)(cmdPos[2] / MICROS_TO_RAD + RIGHT_PADDLE_OFFSET) << "\r";
     arduino.write(serialString.str());
     ROS_INFO_STREAM(serialString.str());
     serialString.str("");
