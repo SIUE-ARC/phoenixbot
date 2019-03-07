@@ -4,6 +4,7 @@
 #include <hardware_interface/joint_command_interface.h>
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/robot_hw.h>
+#include <joint_limits_interface/joint_limits_interface.h>
 
 #include <phoenixbot_msgs/Light.h>
 #include <phoenixbot_msgs/Solenoid.h>
@@ -15,8 +16,8 @@ public:
     PhoenixbotInterface(std::string port, int baud, int timeout);
     ~PhoenixbotInterface();
 
-    void read();
-    void write();
+    void read(ros::Time time, ros::Duration period);
+    void write(ros::Time time, ros::Duration period);
 
     void enable();
     void disable();
@@ -29,6 +30,7 @@ private:
     hardware_interface::JointStateInterface stateInterface;
     hardware_interface::VelocityJointInterface velocityCommandInterface;
     hardware_interface::PositionJointInterface positionCommandInterface;
+    joint_limits_interface::PositionJointSoftLimitsInterface positionLimitsInterface;
 
     double pos[5] = {0};
     double vel[5] = {0};

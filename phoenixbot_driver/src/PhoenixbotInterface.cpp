@@ -60,6 +60,16 @@ PhoenixbotInterface::PhoenixbotInterface(std::string port, int baud, int timeout
     positionCommandInterface.registerHandle(rightPaddlePosition);
     registerInterface(&positionCommandInterface);
 
+    // Configure simon arm limits
+    joint_limits_interface::JointLimits simonArmLimits;
+    joint_limits_interface::SoftJointLimits simonArmSoftLimits;
+
+    simonArmLimits.has_velocity_limits = true;
+    simonArmLimits.max_velocity = 0.314;
+
+    joint_limits_interface::PositionJointSoftLimitsHandle simonArmLimitHandle(simonArmPosition, simonArmLimits, simonArmSoftLimits);
+    positionLimitsInterface.registerHandle(simonArmLimitHandle);
+
     // Init simon arm because it doesn't start at zero
     cmdPos[0] = SIMON_OFFSET;
 
@@ -134,7 +144,7 @@ phoenixbot_msgs::Light PhoenixbotInterface::light() {
 }
 
 // Read the state of everything from the robot
-void PhoenixbotInterface::read() {
+void PhoenixbotInterface::read(ros::Time time, ros::Duration period) {
     arduino.flushOutput();
     arduino.flushInput();
     arduino.flush();
@@ -190,7 +200,8 @@ void PhoenixbotInterface::read() {
 }
 
 // Push commands to the robot
-void PhoenixbotInterface::write() {
+void PhoenixbotInterface::write(ros::Time time, ros::Duration period) {
+    positionLimitsInterface.enforceLimits(period);
     arduino.flush();
 
     std::stringstream serialString;

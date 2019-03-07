@@ -35,11 +35,12 @@ int main(int argc, char **argv) {
 
     while (ros::ok()) {
         const ros::Time now = ros::Time::now();
+        const ros::Duration period = now - then;
 
-        interface.read();
+        interface.read(now, period);
         sensorTopic.publish(interface.light());
-        cm.update(now, now - then);
-        interface.write();
+        cm.update(now, period);
+        interface.write(now, period);
 
         then = now;
         rate.sleep();

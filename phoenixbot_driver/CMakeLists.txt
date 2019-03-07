@@ -6,6 +6,7 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
     phoenixbot_msgs
     hardware_interface
+    joint_limits_interface
     controller_manager
     serial
 )
