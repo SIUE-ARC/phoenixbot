@@ -2,7 +2,10 @@
 import rospy
 
 import tf2_ros
+
 import numpy
+import quaternion
+
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from geometry_msgs.msg import PoseStamped
@@ -22,33 +25,22 @@ import tf.transformations
 def approach_simon():
     blocking_drive(-0.6, 0, 1)
 
-def approach_pulley():
-    pass
-
-z_hat = numpy.array([0,0,1]);
-
 ramp = False
-max_deviation = 1 - 0.8;
-
 def imu_callback(data):
-    global max_deviation
     global ramp
 
-    rot_matrix = tf.transformations.quaternion_matrix(numpy.array([data.orientation.w, data.orientation.x, data.orientation.y, data.orientation.z]));
+    orientation = numpy.quaternion(
+        data.orientation.w,
+        data.orientation.x,
+        data.orientation.y,
+        data.orientation.z 
+    ) 
+    z_hat = numpy.array([0,0,1]);
 
-    robot_up = numpy.array([data.orientation.x, data.orientation.y, data.orientation.z])
-    robot_up = robot_up / numpy.linalg.norm(robot_up);
+    robot_up = quaternion.rotate_vectors(orientation, z_hat)
     deviation = 1-z_hat.dot(robot_up);
 
-    if deviation <= 1:
-	    #max_deviation = max(deviation, max_deviation);
-
-	    if deviation > (max_deviation):
-		ramp = True;
-	    else:
-		ramp = False;
-
-	    print(ramp, deviation, max_deviation + max_deviation * 0.05)
+    ramp = deviation > 0.025;
 
 active_goal_status = 0
 def nav_callback(msg):
@@ -130,119 +122,126 @@ def drive(drive_speed, turn_speed):
     cmd_msg.angular.z = turn_speed
     vel_pub.publish(cmd_msg)
 
+def drive_distance(distance, time=None):
+    if time is None: 
+        time = abs(distance) / 0.5
+    blocking_drive(distance / time, 0, time)
+
 def drive_to(waypoint):
     global active_goal_status
     nav_target.publish(waypoint)
+    r = rospy.Rate(10)
+
     while active_goal_status != 3:
-        pass
+        if active_goal_status == 4:
+            active_goal_status = 0
+            raise Exception("Goal aborted")
+        r.sleep()
+
     active_goal_status = 0
 
 def raise_simon():
     msg = Float64()
     msg.data = 0
     simon_arm_cmd.publish(msg)
-    rospy.sleep(1)
 
 def lower_simon():
     msg = Float64()
     msg.data = -1.6
     simon_arm_cmd.publish(msg)
-    rospy.sleep(1)
 
 def do_simon():
-    lower_simon()
     start_time = rospy.Time.now();
+    servo_states = {
+        0: (-1.0,  0.0),
+        1: ( 0.0,  1.0),
+        2: ( 0.0, -1.0),
+        3: ( 1.0,  0.0)
+    }
     while simon_light != -1 and rospy.Time.now() - start_time < rospy.Duration(10):
         s = simon_light
-        solenoid_msg = Solenoid()
-        solenoid_msg.solenoids = [False] * 4
         if s >= 0:
-            solenoid_msg.solenoids[s] = True
-            solenoid_pub.publish(solenoid_msg)
-            rospy.sleep(1)
-            solenoid_msg.solenoids[s] = False
-            solenoid_pub.publish(solenoid_msg)
-            rospy.sleep(1)
-    print("Finished simon")
-    raise_simon()
+            msg = Float64()
 
-def pull_rope():
-    msg = Float64()
-    msg.data = 0.75
-    rope_cmd.publish(msg)
+            msg.data = servo_states[s][0]
+            left_paddle_pub.publish(msg)
 
-def stop_rope():
-    msg = Float64()
-    msg.data = 0.0
-    rope_cmd.publish(msg)
+            msg.data = servo_states[s][1]
+            right_paddle_pub.publish(msg)
 
-def release_rope():
-    msg = Float64()
-    msg.data = -0.75
-    rope_cmd.publish(msg)
+            rospy.sleep(1.0)
 
-def do_pulley():
-    pull_rope()
-    blocking_drive(0.5, 0, 2)
-    rospy.sleep(3)
-    stop_rope()
-    rospy.sleep(1)
-    release_rope()
-    blocking_drive(-0.5, 0, 2)
-    rospy.sleep(4)
-    stop_rope()
+            msg.data = 0.0
+            right_paddle_pub.publish(msg)
+            left_paddle_pub.publish(msg)
 
-def drive_down_ramp():
-    blocking_drive(0.5, 0, 7)
-    # Drive down the ramp
-    #jprint("Driving to ramp...");
-    #while not ramp:
-    #    drive(0.6, 0.0)
-    #print("Driving down ramp...");
-    #while ramp:
-    #    drive(0.6, 0.0)
-    #print("Reached bottom of ramp");
-    #drive(0.0, 0.0)
+            rospy.sleep(1.0)
+
+    if simon_light != -1:
+        raise Exception("Simon timed out")
+
+def cross_ramp():
+    print("Driving to ramp...");
+    while not ramp:
+       drive(0.5, 0.0)
+
+    print("Driving through ramp...");
+    while ramp:
+       drive(0.5, 0.0)
+
+    print("Reached end of ramp");
+    drive(0.0, 0.0)
 
 def competition():
-    pose_pub.publish(get_pose("initial_pose"))
-    wait_for_start()
+    print("Crossing stage")
+    while True:
+        try:
+            drive_to(get_waypoint("opposite_ramp_top"))
+            break
+        except:
+            print("Attempting recovery")
+            drive_distance(-0.2);
 
-    # Drive clear of the ramp
     print("Clearing ramp")
-    drive_down_ramp()
+    cross_ramp()
+    drive_distance(0.5)
 
     print("Driving to simon")
     drive_to(get_waypoint("simon_approach"))
 
     print("Approaching simon")
-    approach_simon()
+    drive_distance(-0.6)
 
-    print("Doing simon")
-    do_simon()
+    print("Completing simon")
+    lower_simon()
+    try:
+        do_simon()
+    except:
+        pass
+    raise_simon()
+    drive_distance(0.6)
 
-    print("Driving to pulley")
-    drive_to(get_waypoint("pulley_approach"))
-
-    print("Approaching pulley")
-    approach_pulley()
-
-    print("Doing pulley")
-    do_pulley()
+    print("Driving to ramp")
+    drive_to(get_waypoint("opposite_ramp_bottom"))
+    cross_ramp()
+    drive_distance(0.5)
         
 # Initialization
 rospy.init_node('phoenixbot_behavior_coordinator')
 
-imu_sub = rospy.Subscriber("imu", Imu, imu_callback)
+imu_sub = rospy.Subscriber("imu_data", Imu, imu_callback)
+
 nav_result = rospy.Subscriber("/move_base/result", MoveBaseActionResult, nav_callback)
 simon_lights = rospy.Subscriber("light_sensors", Light, light_callback)
 marker_sub = rospy.Subscriber('/markers', Markers, marker_callback)
 
 pose_pub = rospy.Publisher('initialpose', PoseWithCovarianceStamped, queue_size=3)
+
 vel_pub = rospy.Publisher('/direct/cmd_vel', Twist, queue_size=3)
 nav_target = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size=3)
-solenoid_pub = rospy.Publisher("solenoid_commands", Solenoid, queue_size=1)
-rope_cmd = rospy.Publisher('/rope_controller/command', Float64, queue_size=3)
+
+left_paddle_pub = rospy.Publisher("/left_paddle_controller/command", Float64, queue_size=1)
+right_paddle_pub = rospy.Publisher("/right_paddle_controller/command", Float64, queue_size=1)
 simon_arm_cmd = rospy.Publisher('/simon_arm_controller/command', Float64, queue_size=3)
 
 tfBuffer = tf2_ros.Buffer()
@@ -253,12 +252,7 @@ clear_costmap = rospy.ServiceProxy('/move_base/clear_costmaps', Empty)
 rospy.sleep(5)
 
 # Start
+pose_pub.publish(get_pose("initial_pose"))
+wait_for_start()
 competition()
-
-# Tests
-# drive_down_ramp()
-#do_simon()
-# do_pulley()
-#rospy.spin()
-
 
