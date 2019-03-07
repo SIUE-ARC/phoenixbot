@@ -74,8 +74,9 @@
         </visual>
 
         <collision>
+            <origin xyz="0 0 0.03"/>
             <geometry>
-                <box size="${28.31 * IN} ${27.50 * IN} ${3.33 * IN}"/>
+                <box size="0.7108 0.7190 0.0866"/>
             </geometry>
         </collision>
 
