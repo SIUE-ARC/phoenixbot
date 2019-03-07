@@ -21,10 +21,6 @@ import math
 
 import tf.transformations
 
-# TODO
-def approach_simon():
-    blocking_drive(-0.6, 0, 1)
-
 ramp = False
 def imu_callback(data):
     global ramp
@@ -40,7 +36,7 @@ def imu_callback(data):
     robot_up = quaternion.rotate_vectors(orientation, z_hat)
     deviation = 1-z_hat.dot(robot_up);
 
-    ramp = deviation > 0.025;
+    ramp = deviation > 0.01;
 
 active_goal_status = 0
 def nav_callback(msg):
@@ -53,17 +49,19 @@ def light_callback(msg):
     simon_light = -2
 
     max_intensity = 0
-    average_intensity = 0
+    min_intensity = 1
     for i, value in enumerate(msg.sensors):
-        average_intensity += value;
         if value > max_intensity:
             max_intensity = value
-            if value > 0.5:
-                simon_light = i
-    average_intensity /= 4
+	    simon_light = i
+        if value < min_intensity:
+            min_intensity = value
 
-    if average_intensity > 0.8:
+    if min_intensity > 0.0001:
         simon_light = -1
+
+    if max_intensity < 0.0001:
+        simon_light = -2
 
 markers = {}
 def marker_callback(msg):
@@ -124,7 +122,7 @@ def drive(drive_speed, turn_speed):
 
 def drive_distance(distance, time=None):
     if time is None: 
-        time = abs(distance) / 0.5
+        time = abs(distance) / 0.25
     blocking_drive(distance / time, 0, time)
 
 def drive_to(waypoint):
@@ -150,17 +148,18 @@ def lower_simon():
     msg.data = -1.6
     simon_arm_cmd.publish(msg)
 
-def do_simon():
+def do_simon(timeout=50):
     start_time = rospy.Time.now();
     servo_states = {
-        0: (-1.0,  0.0),
-        1: ( 0.0,  1.0),
-        2: ( 0.0, -1.0),
-        3: ( 1.0,  0.0)
+        0: (-0.4,  0.0),
+        1: ( 0.0,  0.4),
+        2: ( 0.0, -0.4),
+        3: ( 0.4,  0.0)
     }
-    while simon_light != -1 and rospy.Time.now() - start_time < rospy.Duration(10):
+    while simon_light != -1 and rospy.Time.now() - start_time < rospy.Duration(timeout):
         s = simon_light
         if s >= 0:
+	    print(s)
             msg = Float64()
 
             msg.data = servo_states[s][0]
@@ -183,48 +182,49 @@ def do_simon():
 def cross_ramp():
     print("Driving to ramp...");
     while not ramp:
-       drive(0.5, 0.0)
+       drive(0.25, 0.0)
 
     print("Driving through ramp...");
     while ramp:
-       drive(0.5, 0.0)
+       drive(0.25, 0.0)
 
     print("Reached end of ramp");
     drive(0.0, 0.0)
 
 def competition():
     print("Crossing stage")
-    while True:
-        try:
-            drive_to(get_waypoint("opposite_ramp_top"))
-            break
-        except:
-            print("Attempting recovery")
-            drive_distance(-0.2);
-
-    print("Clearing ramp")
-    cross_ramp()
-    drive_distance(0.5)
-
-    print("Driving to simon")
-    drive_to(get_waypoint("simon_approach"))
-
-    print("Approaching simon")
-    drive_distance(-0.6)
-
-    print("Completing simon")
-    lower_simon()
+#    while True:
+#        try:
+#            drive_to(get_waypoint("opposite_ramp_top"))
+#            break
+#        except:
+#            print("Attempting recovery")
+#            drive_distance(-0.2);
+#
+#    print("Clearing ramp")
+#    cross_ramp()
+#    drive_distance(0.5)
+#
+#    print("Driving to simon")
+#    drive_to(get_waypoint("simon_approach"))
+#
+#    print("Approaching simon")
+#    drive_distance(-0.6)
+#
+#    print("Completing simon")
+#    lower_simon()
     try:
         do_simon()
     except:
         pass
-    raise_simon()
-    drive_distance(0.6)
-
+#    raise_simon()
+#    drive_distance(0.6)
+#
     print("Driving to ramp")
-    drive_to(get_waypoint("opposite_ramp_bottom"))
-    cross_ramp()
-    drive_distance(0.5)
+#    drive_to(get_waypoint("opposite_ramp_bottom"))
+#    cross_ramp()
+#    drive_distance(0.5)
+    rospy.sleep(100)
         
 # Initialization
 rospy.init_node('phoenixbot_behavior_coordinator')
@@ -249,7 +249,7 @@ listener = tf2_ros.TransformListener(tfBuffer)
 
 # rospy.wait_for_service('/move_base/clear_costmaps')
 clear_costmap = rospy.ServiceProxy('/move_base/clear_costmaps', Empty)
-rospy.sleep(5)
+rospy.sleep(1)
 
 # Start
 pose_pub.publish(get_pose("initial_pose"))
