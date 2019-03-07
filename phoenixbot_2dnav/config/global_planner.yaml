@@ -1,0 +1,4 @@
+base_global_planner: global_planner/GlobalPlanner 
+
+allow_unknown: true 
+
