@@ -7,6 +7,17 @@
 
     <!-- Launch the controllers -->
     <rosparam file="$(find phoenixbot_driver)/config/controllers.yaml" command="load"/>
+    <rosparam if="$(arg sim)">
+      chassis_controller:
+        left_wheel:
+          - 'left_wheel_joint'
+          - 'left_front_wheel_joint'
+          - 'left_back_wheel_joint'
+        right_wheel:
+          - 'right_wheel_joint'
+          - 'right_front_wheel_joint'
+          - 'right_back_wheel_joint'
+    </rosparam>
     <node respawn="false"
           name="controller_spawner" pkg="controller_manager" type="spawner"
           args="state_controller chassis_controller left_paddle_controller right_paddle_controller simon_arm_controller"/>
