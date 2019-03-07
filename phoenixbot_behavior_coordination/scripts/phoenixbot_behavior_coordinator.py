@@ -75,29 +75,29 @@ def marker_callback(msg):
 def wait_for_start():
     pass
 
-def get_waypoint(waypoint_name):
+def get_waypoint(waypoint_name, look_at = None):
     pose = PoseStamped()
     pose.header.frame_id = "map"
-    pose.pose.position.x = rospy.get_param('~{}/position/x'.format(waypoint_name))
-    pose.pose.position.y = rospy.get_param('~{}/position/y'.format(waypoint_name))
-    pose.pose.position.z = rospy.get_param('~{}/position/z'.format(waypoint_name))
+    pose.pose.position.x = rospy.get_param('~{}/position/x'.format(waypoint_name), 0)
+    pose.pose.position.y = rospy.get_param('~{}/position/y'.format(waypoint_name), 0)
+    pose.pose.position.z = rospy.get_param('~{}/position/z'.format(waypoint_name), 0)
 
-    if(rospy.has_param('~{}/orientation/r'.format(waypoint_name))):
-        r = rospy.get_param('~{}/orientation/r'.format(waypoint_name))
-        p = rospy.get_param('~{}/orientation/p'.format(waypoint_name))
-        y = rospy.get_param('~{}/orientation/y'.format(waypoint_name))
+    r = math.radians(rospy.get_param('~{}/orientation/r'.format(waypoint_name), 0))
+    p = math.radians(rospy.get_param('~{}/orientation/p'.format(waypoint_name), 0))
+    y = math.radians(rospy.get_param('~{}/orientation/y'.format(waypoint_name), 0))
 
-        quaternion = tf.transformations.quaternion_from_euler(r, p, y)
+    if look_at is not None:
+        look_at = get_waypoint(look_at)
 
-        pose.pose.orientation.w = quaternion[0]
-        pose.pose.orientation.x = quaternion[1]
-        pose.pose.orientation.y = quaternion[2]
-        pose.pose.orientation.z = quaternion[3]
-    else:
-        pose.pose.orientation.x = rospy.get_param('~{}/orientation/x'.format(waypoint_name))
-        pose.pose.orientation.y = rospy.get_param('~{}/orientation/y'.format(waypoint_name))
-        pose.pose.orientation.z = rospy.get_param('~{}/orientation/z'.format(waypoint_name))
-        pose.pose.orientation.w = rospy.get_param('~{}/orientation/w'.format(waypoint_name))
+        y = math.atan2(look_at.pose.position.y - pose.pose.position.y, look_at.pose.position.x - pose.pose.position.x)
+
+    q = quaternion.from_euler_angles(r, p, y)
+
+    pose.pose.orientation.w = q.w
+    pose.pose.orientation.x = q.x
+    pose.pose.orientation.y = q.y
+    pose.pose.orientation.z = q.z
+
     return pose
 
 def get_pose(pose_name):
@@ -125,9 +125,10 @@ def drive_distance(distance, time=None):
         time = abs(distance) / 0.25
     blocking_drive(distance / time, 0, time)
 
-def drive_to(waypoint):
+def drive_to(waypoint, look_at=None):
+    goal = get_waypoint(waypoint, look_at)
     global active_goal_status
-    nav_target.publish(waypoint)
+    nav_target.publish(goal)
     r = rospy.Rate(10)
 
     while active_goal_status != 3:
@@ -159,7 +160,6 @@ def do_simon(timeout=50):
     while simon_light != -1 and rospy.Time.now() - start_time < rospy.Duration(timeout):
         s = simon_light
         if s >= 0:
-	    print(s)
             msg = Float64()
 
             msg.data = servo_states[s][0]
@@ -191,40 +191,41 @@ def cross_ramp():
     print("Reached end of ramp");
     drive(0.0, 0.0)
 
+attempt_bridge = True
 def competition():
-    print("Crossing stage")
-#    while True:
-#        try:
-#            drive_to(get_waypoint("opposite_ramp_top"))
-#            break
-#        except:
-#            print("Attempting recovery")
-#            drive_distance(-0.2);
-#
-#    print("Clearing ramp")
-#    cross_ramp()
-#    drive_distance(0.5)
-#
-#    print("Driving to simon")
-#    drive_to(get_waypoint("simon_approach"))
-#
-#    print("Approaching simon")
-#    drive_distance(-0.6)
-#
-#    print("Completing simon")
-#    lower_simon()
+    while True:
+        try:
+            drive_to("ramp_far_top", "ramp_far_bottom")
+            break
+        except:
+            print("Attempting recovery")
+            drive_distance(-0.2);
+
+    print("Driving to simon")
+    drive_to("simon_approach")
+
+    print("Approaching simon")
+    drive_distance(-0.6)
+
+    print("Completing simon")
+    lower_simon()
     try:
         do_simon()
     except:
         pass
-#    raise_simon()
-#    drive_distance(0.6)
-#
+    raise_simon()
+    drive_distance(0.6)
+
+    drive_to("bridge_far", "bridge_close")
+    drive_to("bridge_close", "bridge_far")
+    drive_to("bridge_far", "bridge_close")
+    drive_to("bridge_close", "ramp_close_bottom")
+
     print("Driving to ramp")
-#    drive_to(get_waypoint("opposite_ramp_bottom"))
-#    cross_ramp()
-#    drive_distance(0.5)
-    rospy.sleep(100)
+    drive_to("ramp_close_bottom", "ramp_close_top")
+    drive_to("ramp_close_top", "ball_pit")
+    drive_to("ball_pit")
+    lower_simon()
         
 # Initialization
 rospy.init_node('phoenixbot_behavior_coordinator')
@@ -249,7 +250,7 @@ listener = tf2_ros.TransformListener(tfBuffer)
 
 # rospy.wait_for_service('/move_base/clear_costmaps')
 clear_costmap = rospy.ServiceProxy('/move_base/clear_costmaps', Empty)
-rospy.sleep(1)
+rospy.sleep(10)
 
 # Start
 pose_pub.publish(get_pose("initial_pose"))
