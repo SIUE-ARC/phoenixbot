@@ -1,10 +1,10 @@
 #base_local_planner: teb_local_planner/TebLocalPlannerROS 
 
 TrajectoryPlannerROS:
-  max_vel_x: 0.5
-  min_vel_x: -0.5
-  min_vel_theta: -0.7
-  max_vel_theta: 0.7
+  max_vel_x: 0.3
+  min_vel_x: -0.3
+  min_vel_theta: -0.5
+  max_vel_theta: 0.5
   min_in_place_vel_theta: 0.3
 
   escape_vel: -0.3

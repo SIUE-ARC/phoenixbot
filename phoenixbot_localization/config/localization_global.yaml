@@ -1,6 +1,8 @@
 # Explicitly override the world frame declared in localization_common
 world_frame: map
 
+two_d_mode: true
+
 pose0: /beacon_pose
 pose0_config: [true,  true,  true, # x, y, z
                false, false, false,  # r, p, y

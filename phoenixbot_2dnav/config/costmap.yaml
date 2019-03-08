@@ -1,4 +1,5 @@
-footprint: [[0.38, 0.38], [0.38, -0.38], [-0.38, -0.38], [-0.38, 0.38]]
+#footprint: [[0.38, 0.38], [0.38, -0.38], [-0.38, -0.38], [-0.38, 0.38]]
+footprint: [[0.30, 0.30], [0.30, -0.30], [-0.30, -0.30], [-0.30, 0.30]]
 #[[0.359537, 0.34925], [0.359537, -0.34925], [-0.359537, -0.34925], [-0.359537, 0.34925]]
 transform_tolerance: 0.5
 
@@ -23,7 +24,7 @@ static_layer:
 
 inflation_layer:
   enabled: true
-  inflation_radius: 0.55
+  inflation_radius: 0.3
   cost_scaling_factor: 10
 
 global_costmap:
