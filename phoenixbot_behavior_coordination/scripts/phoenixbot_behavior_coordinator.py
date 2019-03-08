@@ -57,10 +57,10 @@ def light_callback(msg):
         if value < min_intensity:
             min_intensity = value
 
-    if min_intensity > 0.0001:
+    if min_intensity > 0.5:
         simon_light = -1
 
-    if max_intensity < 0.0001:
+    if max_intensity < 0.5:
         simon_light = -2
 
 markers = {}
@@ -75,12 +75,16 @@ def marker_callback(msg):
 def wait_for_start():
     pass
 
+hot_start = True
 def get_waypoint(waypoint_name, look_at = None):
     pose = PoseStamped()
     pose.header.frame_id = "map"
     pose.pose.position.x = rospy.get_param('~{}/position/x'.format(waypoint_name), 0)
     pose.pose.position.y = rospy.get_param('~{}/position/y'.format(waypoint_name), 0)
     pose.pose.position.z = rospy.get_param('~{}/position/z'.format(waypoint_name), 0)
+
+    if hot_start:
+        pose.pose.position.y *= -1
 
     r = math.radians(rospy.get_param('~{}/orientation/r'.format(waypoint_name), 0))
     p = math.radians(rospy.get_param('~{}/orientation/p'.format(waypoint_name), 0))
@@ -141,21 +145,23 @@ def drive_to(waypoint, look_at=None):
 
 def raise_simon():
     msg = Float64()
-    msg.data = 0
+    msg.data = 0.45
     simon_arm_cmd.publish(msg)
+    rospy.sleep(5)
 
 def lower_simon():
     msg = Float64()
-    msg.data = -1.6
+    msg.data = -1.5
     simon_arm_cmd.publish(msg)
+    rospy.sleep(10)
 
-def do_simon(timeout=50):
+def do_simon(timeout=10):
     start_time = rospy.Time.now();
     servo_states = {
-        0: (-0.4,  0.0),
-        1: ( 0.0,  0.4),
-        2: ( 0.0, -0.4),
-        3: ( 0.4,  0.0)
+        0: (-0.6,  0.0),
+        1: ( 0.0,  0.6),
+        2: ( 0.0, -0.8),
+        3: ( 0.8,  0.0)
     }
     while simon_light != -1 and rospy.Time.now() - start_time < rospy.Duration(timeout):
         s = simon_light

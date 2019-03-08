@@ -4,7 +4,7 @@ initial_pose:
     y:  2.4384
     z:  0.6604
   orientation:
-    y: 135
+    y: 225
 
 ball_pit:
   position:
@@ -46,8 +46,8 @@ ramp_far_top:
 
 ramp_far_bottom:
   position: 
-    x: -5.0
     y: -5.0
+    x: -5.5
     z:  0.0
 
 simon_approach:

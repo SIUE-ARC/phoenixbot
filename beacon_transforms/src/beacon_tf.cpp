@@ -62,7 +62,7 @@ void beacon_position(const marvelmind_nav::hedge_pos_ang msg){
 
 	// Create affine3d from msg
 
-	local_pose = Eigen::Translation3d(msg.x_m, -msg.y_m, msg.z_m - 0.86);
+	local_pose = Eigen::Translation3d(-msg.x_m, msg.y_m, msg.z_m - 0.86);
 
 	// local_pose * transform = global_pose
 	current_pose = local_pose * pose_transform;

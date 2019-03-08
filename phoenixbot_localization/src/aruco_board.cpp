@@ -17,7 +17,7 @@
 
 #include <eigen_conversions/eigen_msg.h>
 
-#define IMAGE_TOPIC "/front_camera/image_raw"
+#define IMAGE_TOPIC "/usb_cam/image_raw"
 
 // Dir     ROS CV
 // forward X  -Z
@@ -199,7 +199,7 @@ void colorCallback(const sensor_msgs::ImageConstPtr &msg) {
         }
     }
 
-    sensor_msgs::ImagePtr debug_msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", imageCopy).toImageMsg();
+    sensor_msgs::ImagePtr debug_msg = cv_bridge::CvImage(std_msgs::Header(), "rgb8", imageCopy).toImageMsg();
     pub.publish(debug_msg);
 }
 
