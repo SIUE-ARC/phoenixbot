@@ -7,8 +7,8 @@
 
     <remap from="cmd_vel" to="teleop/cmd_vel"/>
     <node type="teleop_node" name="teleop_node" pkg="teleop_twist_joy">
-      <param name="scale_linear" value="0.2"/>
-      <param name="scale_angular" value="0.3"/>
+      <param name="scale_linear" value="0.5"/>
+      <param name="scale_angular" value="0.6"/>
     </node>
 
     <node name="rviz" pkg="rviz" type="rviz" required="true"
