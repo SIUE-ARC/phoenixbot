@@ -199,6 +199,34 @@ def cross_ramp():
 
 attempt_bridge = True
 def competition():
+    #cross_ramp()
+    #drive_distance(1.0)
+
+    #print("Driving to simon")
+    #while True:
+    #    try:
+    #        drive_to("simon_approach")
+    #        break
+    #    except:
+    #        drive_to("ramp_far_bottom")
+
+    #print("Approaching simon")
+    #drive_distance(-0.6)
+
+    print("Completing simon")
+    lower_simon()
+    while True:
+        try:
+            do_simon()
+            break
+	except:
+            pass
+    print("SIMON FINSIHED");
+    #raise_simon()
+    #drive_distance(0.6)
+
+    #drive_to("bridge_far", "bridge_close")
+"""
     while True:
         try:
             drive_to("ramp_far_top", "ramp_far_bottom")
@@ -206,21 +234,6 @@ def competition():
         except:
             print("Attempting recovery")
             drive_distance(-0.2);
-
-    print("Driving to simon")
-    drive_to("simon_approach")
-
-    print("Approaching simon")
-    drive_distance(-0.6)
-
-    print("Completing simon")
-    lower_simon()
-    try:
-        do_simon()
-    except:
-        pass
-    raise_simon()
-    drive_distance(0.6)
 
     drive_to("bridge_far", "bridge_close")
     drive_to("bridge_close", "bridge_far")
@@ -232,6 +245,7 @@ def competition():
     drive_to("ramp_close_top", "ball_pit")
     drive_to("ball_pit")
     lower_simon()
+"""
         
 # Initialization
 rospy.init_node('phoenixbot_behavior_coordinator')
@@ -261,5 +275,5 @@ rospy.sleep(10)
 # Start
 pose_pub.publish(get_pose("initial_pose"))
 wait_for_start()
-competition()
+#competition()
 
