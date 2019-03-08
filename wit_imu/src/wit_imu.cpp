@@ -6,6 +6,7 @@
 #include <Eigen/Geometry>
 
 #include <sensor_msgs/Imu.h>
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
 
 #include <eigen_conversions/eigen_msg.h>
 
@@ -21,6 +22,8 @@
 #define ANG_READY 0x04
 #define ORIENTATION_READY 0x08
 
+Eigen::Quaterniond orientationTransform = Eigen::Quaterniond::Identity();
+Eigen::Quaterniond currentOrientation;
 sensor_msgs::Imu prepareMessage(Eigen::Vector3d linear, Eigen::Vector3d angular, Eigen::Vector3d rpy, Eigen::Vector3d calibration) {
   sensor_msgs::Imu imu;
   imu.header.stamp = ros::Time::now();
@@ -31,7 +34,7 @@ sensor_msgs::Imu prepareMessage(Eigen::Vector3d linear, Eigen::Vector3d angular,
       Eigen::AngleAxisd(rpy[1], Eigen::Vector3d::UnitY()) *
       Eigen::AngleAxisd(rpy[2], Eigen::Vector3d::UnitZ());
 
-  tf::quaternionEigenToMsg(orientation, imu.orientation);
+  tf::quaternionEigenToMsg(orientation * orientationTransform, imu.orientation);
   imu.orientation_covariance = {0.01, 0.0, 0.0,  
                                 0.0, 0.01, 0.0,  
                                 0.0, 0.0, 0.01};
@@ -45,6 +48,8 @@ sensor_msgs::Imu prepareMessage(Eigen::Vector3d linear, Eigen::Vector3d angular,
   imu.linear_acceleration_covariance = {0.1, 0.0, 0.0,  
                                         0.0, 0.1, 0.0,  
                                         0.0, 0.0, 0.1};
+
+  currentOrientation = orientation;
   return imu;
 }
 
@@ -94,6 +99,14 @@ uint8_t parsePacket(uint8_t* buffer, Eigen::Vector3d& a, Eigen::Vector3d& omega,
   return 0;
 }
 
+void pose_callback(geometry_msgs::PoseWithCovarianceStamped msg) {
+  ROS_WARN("ALIGN");
+  Eigen::Quaterniond worldOrientation;
+  tf::quaternionMsgToEigen(msg.pose.pose.orientation, worldOrientation);
+
+  orientationTransform = currentOrientation.inverse() * worldOrientation;
+}
+
 int main(int argc, char **argv) {
   ros::init(argc, argv, "wit_imu");
   ros::NodeHandle nh;
@@ -120,6 +133,7 @@ int main(int argc, char **argv) {
   serial::Serial imu(port, baud, serial::Timeout::simpleTimeout(timeout));
 
   ros::Publisher imu_pub = nh.advertise<sensor_msgs::Imu>("imu_data", 50);
+  ros::Subscriber sub = nh.subscribe("/initialpose", 1, pose_callback);
 
   uint8_t buffer[11];
   int b = 0;
@@ -168,6 +182,7 @@ int main(int argc, char **argv) {
         flags &= ~(ACCEL_READY | ANG_READY | ORIENTATION_READY);
       }
     }
+    ros::spinOnce();
   }
 }
 
